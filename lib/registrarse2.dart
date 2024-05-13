@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/registrarse3.dart';
 
 class registrarse2 extends StatelessWidget {
   @override
@@ -55,6 +57,10 @@ class registrarse2 extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: TextButton(
                                   onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => MyApp()),
+                                    );
                                     print('Iniciar');
                                   },
                                   child: const Text(
@@ -72,10 +78,7 @@ class registrarse2 extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
+                                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                                     backgroundColor: MaterialStatePropertyAll(
                                       Colors.blue.shade700,
                                     ),
@@ -138,6 +141,11 @@ class registrarse2 extends StatelessWidget {
                     ),
                     // Form(
                     // ),
+                    ElevatedButton(onPressed: () {Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => registrarse3()),
+                                    );}, child: Text('BORRAR Pasar a siguiente interfaz BORRAR'))
                   ],
                 ),
               ),

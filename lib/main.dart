@@ -35,17 +35,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
-  TextEditingController nombreEditingController = TextEditingController();
-  TextEditingController apellidoPEditingController = TextEditingController();
-  TextEditingController apellidoMEditingController = TextEditingController();
-  TextEditingController rutEditingController = TextEditingController();
-  TextEditingController tipoUsuarioEditingController = TextEditingController();
   TextEditingController emailEditingController = TextEditingController();
-  TextEditingController telefonoEditingController = TextEditingController();
-  TextEditingController patenteEditingController = TextEditingController();
-  TextEditingController marcaEditingController = TextEditingController();
-  TextEditingController modeloEditingController = TextEditingController();
-  TextEditingController aEditingController = TextEditingController();
+  TextEditingController contraEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -184,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             SizedBox(
                               height: 40,
                               child: TextFormField(
+                                controller: contraEditingController,
                                 decoration: InputDecoration(
                                   labelText: 'Contraseña',
                                   suffixIcon: Container(
