@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse3.dart';
 
-class registrarse2 extends StatelessWidget {
+class Registrarse2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -141,11 +141,14 @@ class registrarse2 extends StatelessWidget {
                     ),
                     // Form(
                     // ),
-                    ElevatedButton(onPressed: () {Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => registrarse3()),
-                                    );}, child: Text('BORRAR Pasar a siguiente interfaz BORRAR'))
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Registrarse3()),
+                          );
+                        },
+                        child: Text('BORRAR Pasar a siguiente interfaz BORRAR'))
                   ],
                 ),
               ),

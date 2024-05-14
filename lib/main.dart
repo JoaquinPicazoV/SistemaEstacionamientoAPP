@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/registrarse1.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
 void main() {
@@ -37,6 +39,24 @@ class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController contraEditingController = TextEditingController();
+  /*List<Map<String, dynamic>> data = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+  
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse('localhost:5432'));
+    if (response.statusCode == 200) {
+      setState(() {
+        data = json.decode(response.body);
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blue.shade700),
+                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                                     alignment: Alignment.center,
                                   ),
                                   onPressed: () {
@@ -102,8 +121,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: const Text(
                                     'Iniciar sesión',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white),
+                                    style: TextStyle(fontSize: 16, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -115,8 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Registrarse1()),
+                                      MaterialPageRoute(builder: (context) => Registrarse1()),
                                     );
                                     print('Registrarse');
                                   },
@@ -149,14 +166,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                   labelText: 'Correo electrónico',
                                   suffixIcon: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.grey.shade200, 
-                                      border: Border.all(
-                                          color: Colors
-                                              .blue), 
+                                      color: Colors.grey.shade200,
+                                      border: Border.all(color: Colors.blue),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.email,
-                                          color: Colors.black),
+                                      icon: Icon(Icons.email, color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
@@ -164,14 +178,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 1.0),
+                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
-
                             SizedBox(
                               height: 40,
                               child: TextFormField(
@@ -181,13 +193,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   suffixIcon: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade200,
-                                      border: Border.all(
-                                          color: Colors
-                                              .blue), 
+                                      border: Border.all(color: Colors.blue),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.lock,
-                                          color: Colors.black), 
+                                      icon: Icon(Icons.lock, color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
@@ -195,45 +204,36 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 1.0),
+                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
                             ),
                             SizedBox(height: 20),
-
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Form(
                                 child: Column(
                                   children: [
                                     FractionallySizedBox(
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {                                  
+                                        onPressed: () {
                                           print('Ingresar');
                                         },
-                                        icon: Icon(Icons.login,
-                                            color:
-                                                Colors.white), 
+                                        icon: Icon(Icons.login, color: Colors.white),
                                         label: Text(
                                           'INGRESAR',
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.white), 
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade700,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                10),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
                                       ),
                                     ),
-
                                     SizedBox(height: 10),
                                     TextButton(
                                       onPressed: () {
@@ -242,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       child: Text(
                                         "¿Olvidaste tu contraseña?",
                                         style: TextStyle(
-                                          color: Colors.blue, 
+                                          color: Colors.blue,
                                         ),
                                       ),
                                     ),

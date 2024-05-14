@@ -3,7 +3,7 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter_application_1/main.dart';
 
-class registrarse3 extends StatelessWidget {
+class Registrarse3 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

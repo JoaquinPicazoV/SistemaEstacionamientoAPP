@@ -74,8 +74,7 @@ class Registrarse1 extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyApp()),
+                                      MaterialPageRoute(builder: (context) => MyApp()),
                                     );
                                     print('Iniciar');
                                   },
@@ -94,10 +93,7 @@ class Registrarse1 extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
+                                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                                     backgroundColor: MaterialStatePropertyAll(
                                       Colors.blue.shade700,
                                     ),
@@ -173,34 +169,10 @@ class Registrarse1 extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            textFields(
-                                'Nombres(s)',
-                                'Ingrese su nombre',
-                                nombreEditingController,
-                                TextInputType.name,
-                                _numerosRegex,
-                                'Ingrese un nombre valido'),
-                            textFields(
-                                'Apellido Paterno',
-                                'Ingrese su apellido paterno',
-                                apellidoPEditingController,
-                                TextInputType.name,
-                                _numerosRegex,
-                                'Ingrese un apellido valido'),
-                            textFields(
-                                'Apellido Materno',
-                                'Ingrese su apellido materno',
-                                apellidoMEditingController,
-                                TextInputType.name,
-                                _numerosRegex,
-                                'Ingrese un apellido valido'),
-                            textFields(
-                                'RUT',
-                                'Ej: 20545267-1',
-                                rutEditingController,
-                                TextInputType.text,
-                                _todo,
-                                'Ingrese un RUT valido'),
+                            textFields('Nombres(s)', 'Ingrese su nombre', nombreEditingController, TextInputType.name, _numerosRegex, 'Ingrese un nombre valido'),
+                            textFields('Apellido Paterno', 'Ingrese su apellido paterno', apellidoPEditingController, TextInputType.name, _numerosRegex, 'Ingrese un apellido valido'),
+                            textFields('Apellido Materno', 'Ingrese su apellido materno', apellidoMEditingController, TextInputType.name, _numerosRegex, 'Ingrese un apellido valido'),
+                            textFields('RUT', 'Ej: 20545267-1', rutEditingController, TextInputType.text, _todo, 'Ingrese un RUT valido'),
                             Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 15,
@@ -212,11 +184,8 @@ class Registrarse1 extends StatelessWidget {
                                     "Tipo de Usuario",
                                   ),
                                   DropdownButtonFormField(
-                                    style: TextStyle(
-                                        color: Colors.grey.shade800,
-                                        fontSize: 16),
-                                    decoration: const InputDecoration(
-                                        border: OutlineInputBorder()),
+                                    style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
+                                    decoration: const InputDecoration(border: OutlineInputBorder()),
                                     itemHeight: kMinInteractiveDimension + 14,
                                     isExpanded: true,
                                     items: list
@@ -232,20 +201,8 @@ class Registrarse1 extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            textFields(
-                                'Correo electrónico',
-                                'Ej: correo@dominio.cl',
-                                emailEditingController,
-                                TextInputType.emailAddress,
-                                _emailRegex,
-                                'Ingrese un email valido'),
-                            textFields(
-                                'Teléfono',
-                                'Ej: 958472045',
-                                telefonoEditingController,
-                                TextInputType.phone,
-                                _todo,
-                                'Ingrese un telefono valido'),
+                            textFields('Correo electrónico', 'Ej: correo@dominio.cl', emailEditingController, TextInputType.emailAddress, _emailRegex, 'Ingrese un email valido'),
+                            textFields('Teléfono', 'Ej: 958472045', telefonoEditingController, TextInputType.phone, _todo, 'Ingrese un telefono valido'),
                             const Text(
                               'DATOS VEHÍCULO',
                               style: TextStyle(
@@ -253,34 +210,10 @@ class Registrarse1 extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            textFields(
-                                'Patente',
-                                'Ej: GGXX20',
-                                patenteEditingController,
-                                TextInputType.text,
-                                _todo,
-                                'Ingrese una patente valido'),
-                            textFields(
-                                'Marca',
-                                'Ej: Chevrolet',
-                                marcaEditingController,
-                                TextInputType.text,
-                                _todo,
-                                'Ingrese una marca valido'),
-                            textFields(
-                                'Modelo',
-                                'Ej: Sali',
-                                modeloEditingController,
-                                TextInputType.text,
-                                _todo,
-                                'Ingrese un modelo valido'),
-                            textFields(
-                                'Año',
-                                'Ej: 2014',
-                                aEditingController,
-                                TextInputType.datetime,
-                                _todo,
-                                'Ingrese un año valido'),
+                            textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _todo, 'Ingrese una patente valido'),
+                            textFields('Marca', 'Ej: Chevrolet', marcaEditingController, TextInputType.text, _todo, 'Ingrese una marca valido'),
+                            textFields('Modelo', 'Ej: Sali', modeloEditingController, TextInputType.text, _todo, 'Ingrese un modelo valido'),
+                            textFields('Año', 'Ej: 2014', aEditingController, TextInputType.datetime, _todo, 'Ingrese un año valido'),
                             Center(
                               child: Container(
                                 margin: const EdgeInsets.only(
@@ -293,8 +226,7 @@ class Registrarse1 extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStatePropertyAll(
-                                        Colors.blue.shade700),
+                                    backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
                                   ),
                                   onPressed: () {
                                     print(nombreEditingController.text);
@@ -309,8 +241,7 @@ class Registrarse1 extends StatelessWidget {
                                     print(aEditingController.text);
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => registrarse2()),
+                                      MaterialPageRoute(builder: (context) => Registrarse2()),
                                     );
                                   },
                                   child: const Text(
@@ -338,13 +269,7 @@ class Registrarse1 extends StatelessWidget {
     );
   }
 
-  Container textFields(
-      String entrada,
-      String entradaField,
-      TextEditingController controller,
-      TextInputType tipoInput,
-      RegExp regExp,
-      String invalido) {
+  Container textFields(String entrada, String entradaField, TextEditingController controller, TextInputType tipoInput, RegExp regExp, String invalido) {
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 15,
