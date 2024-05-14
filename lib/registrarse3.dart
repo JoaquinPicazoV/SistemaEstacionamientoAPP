@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/registrarse4.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:pinput/pinput.dart';
 
@@ -216,7 +217,13 @@ class registrarse3 extends StatelessWidget {
                           backgroundColor:
                               MaterialStateProperty.all(Colors.blue.shade700),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => registrarse4()),
+                          );
+                        },
                         child: const Text(
                           'Confirmar',
                           style: TextStyle(
