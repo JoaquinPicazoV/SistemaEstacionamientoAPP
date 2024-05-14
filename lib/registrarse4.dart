@@ -136,7 +136,7 @@ class registrarse4 extends StatelessWidget {
                     ),
                     CircleAvatar(
                       radius: 80,
-                      backgroundColor: Colors.blue.shade500,
+                      backgroundColor: Colors.blue.shade700,
                       child: Icon(
                         Icons.check,
                         color: Colors.white,
