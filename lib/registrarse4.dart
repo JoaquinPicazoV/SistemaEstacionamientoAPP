@@ -140,7 +140,7 @@ class registrarse4 extends StatelessWidget {
                       child: Icon(
                         Icons.check,
                         color: Colors.white,
-                        size: 100, 
+                        size: 100,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -168,6 +168,11 @@ class registrarse4 extends StatelessWidget {
                       style: ButtonStyle(
                         backgroundColor:
                             MaterialStateProperty.all(Colors.blue.shade700),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),

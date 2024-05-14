@@ -358,7 +358,7 @@ class registrarse2 extends StatelessWidget {
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue),
+                              MaterialStateProperty.all<Color>(Colors.blue.shade700),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
