@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/registrarse3.dart';
 
 class registrarse2 extends StatelessWidget {
   @override
@@ -366,6 +367,11 @@ class registrarse2 extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => registrarse3()),
+                          );
                           print('Crear contraseña');
                         },
                         icon: Icon(
