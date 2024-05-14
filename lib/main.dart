@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/registrarse1.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+/*import 'package:http/http.dart' as http;
+import 'dart:convert';*/
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
 void main() {
@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('localhost:5432'));
+    final response = await http.get(Uri.parse('http://127.0.0.1:5432'));
     if (response.statusCode == 200) {
       setState(() {
         data = json.decode(response.body);
