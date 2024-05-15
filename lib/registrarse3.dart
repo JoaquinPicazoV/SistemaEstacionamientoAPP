@@ -100,7 +100,6 @@ class registrarse3 extends StatelessWidget {
                                     ),
                                   ),
                                 ),
-                                //CAJA COMPLETAR DATOS
                               ],
                             ),
                           ),
@@ -115,7 +114,6 @@ class registrarse3 extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                //CIRCULO
                                 Container(
                                   margin: const EdgeInsets.only(right: 10),
                                   width: 30,

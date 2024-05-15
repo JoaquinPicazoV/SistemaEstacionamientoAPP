@@ -1,15 +1,16 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
+
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -35,17 +36,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
-  TextEditingController nombreEditingController = TextEditingController();
-  TextEditingController apellidoPEditingController = TextEditingController();
-  TextEditingController apellidoMEditingController = TextEditingController();
-  TextEditingController rutEditingController = TextEditingController();
-  TextEditingController tipoUsuarioEditingController = TextEditingController();
   TextEditingController emailEditingController = TextEditingController();
-  TextEditingController telefonoEditingController = TextEditingController();
-  TextEditingController patenteEditingController = TextEditingController();
-  TextEditingController marcaEditingController = TextEditingController();
-  TextEditingController modeloEditingController = TextEditingController();
-  TextEditingController aEditingController = TextEditingController();
+  TextEditingController passwordEditingController = TextEditingController();
+  bool obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.blue.shade900,
       body: Align(
         alignment: Alignment.center,
-        // Tamaño Caja blanca
         child: SafeArea(
           child: FractionallySizedBox(
             widthFactor: 0.81,
             heightFactor: 0.7,
-            //Caja Blanca
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -105,9 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Colors.blue.shade700),
                                     alignment: Alignment.center,
                                   ),
-                                  onPressed: () {
-                                    print('Iniciar sesión');
-                                  },
+                                  onPressed: () {},
                                   child: const Text(
                                     'Iniciar sesión',
                                     textAlign: TextAlign.center,
@@ -127,7 +116,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       MaterialPageRoute(
                                           builder: (context) => Registrarse1()),
                                     );
-                                    print('Registrarse');
                                   },
                                   child: const Text(
                                     "Registrarse",
@@ -158,10 +146,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                   labelText: 'Correo electrónico',
                                   suffixIcon: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.grey.shade200, 
+                                      color: Colors.grey.shade200,
                                       border: Border.all(
-                                          color: Colors
-                                              .blue), 
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                     child: IconButton(
                                       icon: Icon(Icons.email,
@@ -180,37 +168,71 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             SizedBox(height: 20),
-
                             SizedBox(
                               height: 40,
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  labelText: 'Contraseña',
-                                  suffixIcon: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      border: Border.all(
-                                          color: Colors
-                                              .blue), 
+                              child: Stack(
+                                children: [
+                                  TextFormField(
+                                    obscureText: obscurePassword,
+                                    controller: passwordEditingController,
+                                    decoration: InputDecoration(
+                                      labelText: 'Contraseña',
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.blue),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.0),
+                                      ),
                                     ),
-                                    child: IconButton(
-                                      icon: Icon(Icons.lock,
-                                          color: Colors.black), 
-                                      onPressed: () {},
+                                  ),
+                                  Positioned(
+                                    right: 50,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          obscurePassword
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                          color: Colors.black,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            obscurePassword = !obscurePassword;
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                      child: IconButton(
+                                        icon: Icon(Icons.lock,
+                                            color: Colors.black),
+                                        onPressed: () {},
+                                      ),
+                                    ),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 1.0),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                             SizedBox(height: 20),
-
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 20),
@@ -220,37 +242,29 @@ class _MyHomePageState extends State<MyHomePage> {
                                     FractionallySizedBox(
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {                                  
-                                          print('Ingresar');
-                                        },
+                                        onPressed: () {},
                                         icon: Icon(Icons.login,
-                                            color:
-                                                Colors.white), 
+                                            color: Colors.white),
                                         label: Text(
                                           'INGRESAR',
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.white), 
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade700,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                                10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                       ),
                                     ),
-
                                     SizedBox(height: 10),
                                     TextButton(
-                                      onPressed: () {
-                                        print('¿Olvidaste tu contraseña?');
-                                      },
+                                      onPressed: () {},
                                       child: Text(
                                         "¿Olvidaste tu contraseña?",
                                         style: TextStyle(
-                                          color: Colors.blue, 
+                                          color: Colors.blue,
                                         ),
                                       ),
                                     ),
