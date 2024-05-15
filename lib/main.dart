@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/registrarse1.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:postgres/postgres.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
 void main() {
@@ -12,7 +11,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,15 +46,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://192.168.1.13:3000/estacionamiento/get'));
-    if (response.statusCode == 200) {
-      setState(() {
-        data = json.decode(response.body);
-        print(data);
-      });
-    } else {
-      throw Exception('Failed to load data');
-    }
+    final db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: ConnectionSettings(sslMode: SslMode.require),
+    );
+    print('has connection!');
+    final result0 = await db.execute("SELECT * FROM estacionamiento WHERE esta_numero = 1");
+    print(result0);
   }
 
   @override
