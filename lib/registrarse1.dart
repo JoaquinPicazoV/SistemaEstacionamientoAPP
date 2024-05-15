@@ -81,7 +81,7 @@ class Registrarse1 extends StatelessWidget {
                                   child: const Text(
                                     "Iniciar sesión",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: Colors.black,
                                     ),
                                   ),
@@ -104,7 +104,7 @@ class Registrarse1 extends StatelessWidget {
                                   child: const Text(
                                     'Registrarse',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: Colors.white,
                                     ),
                                   ),

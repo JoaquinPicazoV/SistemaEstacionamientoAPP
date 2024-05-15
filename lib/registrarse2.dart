@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
@@ -11,12 +11,10 @@ class Registrarse2 extends StatelessWidget {
       backgroundColor: Colors.blue.shade900,
       body: Align(
         alignment: Alignment.center,
-        // Tamaño Caja blanca
         child: SafeArea(
           child: FractionallySizedBox(
             widthFactor: 0.81,
             heightFactor: 0.95,
-            //Caja Blanca
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -25,7 +23,6 @@ class Registrarse2 extends StatelessWidget {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    //IMAGEN
                     FractionallySizedBox(
                       widthFactor: 0.6,
                       child: Container(
@@ -36,7 +33,6 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Texto ESTACIONAMIENTOS ULAGOS
                     const Text(
                       "ESTACIONAMIENTOS ULAGOS",
                       style: TextStyle(
@@ -44,7 +40,6 @@ class Registrarse2 extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    //BOTONES
                     FractionallySizedBox(
                       widthFactor: 0.85,
                       child: Container(
@@ -59,14 +54,15 @@ class Registrarse2 extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => MyApp()),
+                                      MaterialPageRoute(
+                                          builder: (context) => MyApp()),
                                     );
                                     print('Iniciar');
                                   },
                                   child: const Text(
                                     "Iniciar sesión",
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: Colors.black,
                                     ),
                                   ),
@@ -89,7 +85,7 @@ class Registrarse2 extends StatelessWidget {
                                   child: const Text(
                                     'Registrarse',
                                     style: TextStyle(
-                                      fontSize: 18,
+                                      fontSize: 16,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -100,7 +96,6 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                     ),
-                    //CAJA COMPLETAR DATOS
                     FractionallySizedBox(
                       widthFactor: 0.85,
                       child: Container(
@@ -110,7 +105,6 @@ class Registrarse2 extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            //CIRCULO
                             Container(
                               margin: const EdgeInsets.only(right: 10),
                               width: 30,
@@ -139,16 +133,257 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // Form(
-                    // ),
-                    ElevatedButton(
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Contraseña",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: const Text(
+                          "Contraseña",
+                          style: TextStyle(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                      ),
+                      child: TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 8, horizontal: 16),
+                          border: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.remove_red_eye),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: const Text("Confirmar Contraseña"),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 1,
+                        ),
+                      ),
+                      child: TextField(
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 16),
+                          border: InputBorder.none,
+                          suffixIcon: IconButton(
+                            icon: Icon(Icons.remove_red_eye),
+                            onPressed: () {},
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Debe contener al menos 8 carácteres",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Debe contener al menos una letra mayúscula.",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Debe contener al menos una letra minúscula.",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Debe contener al menos un número.",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Wrap(
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.check_circle,
+                                size: 16,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(width: 8),
+                              Flexible(
+                                child: Text(
+                                  "Las contraseñas coinciden.",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 15),
+                      child: ElevatedButton.icon(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.blue.shade700),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Registrarse3()),
+                            MaterialPageRoute(
+                                builder: (context) => Registrarse3()),
                           );
+                          print('Crear contraseña');
                         },
-                        child: Text('BORRAR Pasar a siguiente interfaz BORRAR'))
+                        icon: Icon(
+                          Icons.check,
+                          color: Colors.white,
+                        ),
+                        label: Text(
+                          'Crear contraseña',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

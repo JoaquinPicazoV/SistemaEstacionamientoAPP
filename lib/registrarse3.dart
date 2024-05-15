@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/registrarse4.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:pinput/pinput.dart';
-import 'package:flutter_application_1/main.dart';
 
 class Registrarse3 extends StatelessWidget {
   @override
@@ -55,14 +58,15 @@ class Registrarse3 extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => MyApp()),
+                                          MaterialPageRoute(
+                                              builder: (context) => MyApp()),
                                         );
                                         print('Iniciar');
                                       },
                                       child: const Text(
                                         "Iniciar sesión",
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           color: Colors.black,
                                         ),
                                       ),
@@ -74,8 +78,12 @@ class Registrarse3 extends StatelessWidget {
                                     alignment: Alignment.center,
                                     child: ElevatedButton(
                                       style: ButtonStyle(
-                                        shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                        backgroundColor: MaterialStatePropertyAll(
+                                        shape: MaterialStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
                                           Colors.blue.shade700,
                                         ),
                                       ),
@@ -85,7 +93,7 @@ class Registrarse3 extends StatelessWidget {
                                       child: const Text(
                                         'Registrarse',
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           color: Colors.white,
                                         ),
                                       ),
@@ -102,7 +110,8 @@ class Registrarse3 extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             margin: const EdgeInsets.only(bottom: 20),
-                            decoration: BoxDecoration(color: Colors.blue.shade700),
+                            decoration:
+                                BoxDecoration(color: Colors.blue.shade700),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -154,7 +163,8 @@ class Registrarse3 extends StatelessWidget {
                                 textStyle: const TextStyle(fontSize: 20),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color: Colors.black,
+                                    color:
+                                        const Color.fromRGBO(234, 239, 243, 1),
                                   ),
                                 ),
                               ),
@@ -193,20 +203,27 @@ class Registrarse3 extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       child: ElevatedButton(
                         style: ButtonStyle(
-                          padding: const MaterialStatePropertyAll(
+                          padding: MaterialStateProperty.all(
                             EdgeInsets.symmetric(
                               horizontal: 30,
                               vertical: 10,
                             ),
                           ),
-                          shape: MaterialStatePropertyAll(
+                          shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.blue.shade700),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => registrarse4()),
+                          );
+                        },
                         child: const Text(
                           'Confirmar',
                           style: TextStyle(
