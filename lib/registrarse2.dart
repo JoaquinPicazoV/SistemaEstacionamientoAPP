@@ -1,11 +1,17 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables
-
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse3.dart';
 
-class Registrarse2 extends StatelessWidget {
-  const Registrarse2({super.key});
+class Registrarse2 extends StatefulWidget {
+  @override
+  _Registrarse2State createState() => _Registrarse2State();
+}
+
+class _Registrarse2State extends State<Registrarse2> {
+  bool contrasena1 = false;
+  bool contrasena2 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,6 @@ class Registrarse2 extends StatelessWidget {
                                       MaterialPageRoute(
                                           builder: (context) => MyApp()),
                                     );
-                                    print('Iniciar');
                                   },
                                   child: const Text(
                                     "Iniciar sesión",
@@ -76,14 +81,16 @@ class Registrarse2 extends StatelessWidget {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                    backgroundColor: MaterialStatePropertyAll(
+                                    shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
                                       Colors.blue.shade700,
                                     ),
                                   ),
-                                  onPressed: () {
-                                    print('Registrarse');
-                                  },
+                                  onPressed: () {},
                                   child: const Text(
                                     'Registrarse',
                                     style: TextStyle(
@@ -148,16 +155,6 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: const Text(
-                          "Contraseña",
-                          style: TextStyle(),
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: 8,
                     ),
@@ -171,14 +168,20 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                       child: TextField(
-                        obscureText: true,
+                        obscureText: !contrasena1,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(Icons.remove_red_eye),
-                            onPressed: () {},
+                            icon: Icon(contrasena1
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                contrasena1 = !contrasena1;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -206,14 +209,20 @@ class Registrarse2 extends StatelessWidget {
                         ),
                       ),
                       child: TextField(
-                        obscureText: true,
+                        obscureText: !contrasena2,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 12, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(Icons.remove_red_eye),
-                            onPressed: () {},
+                            icon: Icon(contrasena2
+                                ? Icons.visibility_off
+                                : Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                contrasena2 = !contrasena2;
+                              });
+                            },
                           ),
                         ),
                       ),
@@ -235,7 +244,7 @@ class Registrarse2 extends StatelessWidget {
                               SizedBox(width: 8),
                               Flexible(
                                 child: Text(
-                                  "Debe contener al menos 8 carácteres",
+                                  "Debe contener al menos 8 caracteres",
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
@@ -356,8 +365,8 @@ class Registrarse2 extends StatelessWidget {
                           horizontal: 20, vertical: 15),
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue.shade700),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blue.shade700),
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -366,12 +375,12 @@ class Registrarse2 extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
+                          generarCodigo();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => Registrarse3()),
                           );
-                          print('Crear contraseña');
                         },
                         icon: Icon(
                           Icons.check,
@@ -395,4 +404,20 @@ class Registrarse2 extends StatelessWidget {
       ),
     );
   }
+}
+
+String generarCodigo() {
+  Random nRandom = Random();
+  String codigo = '';
+  for (int i = 0; i < 6; i++) {
+    codigo += nRandom.nextInt(10).toString();
+  }
+  print(codigo);
+  return codigo;
+}
+
+void main() {
+  runApp(MaterialApp(
+    home: Registrarse2(),
+  ));
 }

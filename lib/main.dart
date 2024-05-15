@@ -23,7 +23,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -49,13 +50,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
   TextEditingController emailEditingController = TextEditingController();
-  TextEditingController contraEditingController = TextEditingController();
-  List<dynamic> data = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  TextEditingController passwordEditingController = TextEditingController();
+  bool obscurePassword = true;
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Colors.blue.shade900,
       body: Align(
         alignment: Alignment.center,
-        // Tamaño Caja blanca
         child: SafeArea(
           child: FractionallySizedBox(
             widthFactor: 0.81,
             heightFactor: 0.7,
-            //Caja Blanca
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -114,9 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                                     alignment: Alignment.center,
                                   ),
-                                  onPressed: () {
-                                    print('Iniciar sesión');
-                                  },
+                                  onPressed: () {},
                                   child: const Text(
                                     'Iniciar sesión',
                                     textAlign: TextAlign.center,
@@ -134,7 +126,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                       context,
                                       MaterialPageRoute(builder: (context) => Registrarse1()),
                                     );
-                                    print('Registrarse');
                                   },
                                   child: const Text(
                                     "Registrarse",
@@ -166,7 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   suffixIcon: Container(
                                     decoration: BoxDecoration(
                                       color: Colors.grey.shade200,
-                                      border: Border.all(color: Colors.blue),
+                                      border: Border.all(
+                                        color: Colors.blue,
+                                      ),
                                     ),
                                     child: IconButton(
                                       icon: const Icon(Icons.email, color: Colors.black),
@@ -185,27 +178,66 @@ class _MyHomePageState extends State<MyHomePage> {
                             const SizedBox(height: 20),
                             SizedBox(
                               height: 40,
-                              child: TextFormField(
-                                controller: contraEditingController,
-                                decoration: InputDecoration(
-                                  labelText: 'Contraseña',
-                                  suffixIcon: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      border: Border.all(color: Colors.blue),
+                              child: Stack(
+                                children: [
+                                  TextFormField(
+                                    obscureText: obscurePassword,
+                                    controller: passwordEditingController,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Contraseña',
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide:
+                                            BorderSide(color: Colors.blue),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.0),
+                                      ),
                                     ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.lock, color: Colors.black),
-                                      onPressed: () {},
+                                  ),
+                                  Positioned(
+                                    right: 50,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: IconButton(
+                                        icon: Icon(
+                                          obscurePassword
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
+                                          color: Colors.black,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            obscurePassword = !obscurePassword;
+                                          });
+                                        },
+                                      ),
                                     ),
                                   ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
+                                  Positioned(
+                                    right: 0,
+                                    top: 0,
+                                    bottom: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade200,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(
+                                          color: Colors.blue,
+                                        ),
+                                      ),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.lock,
+                                            color: Colors.black),
+                                        onPressed: () {},
+                                      ),
+                                    ),
                                   ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                  ),
-                                ),
+                                ],
                               ),
                             ),
                             const SizedBox(height: 20),
