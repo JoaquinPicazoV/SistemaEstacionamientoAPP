@@ -5,6 +5,8 @@ import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse3.dart';
 
 class Registrarse2 extends StatelessWidget {
+  const Registrarse2({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

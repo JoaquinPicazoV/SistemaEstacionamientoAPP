@@ -1,12 +1,25 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:postgres/postgres.dart';
+import 'package:flutter_application_1/queries.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
-void main() {
+
+late Connection db;
+void main() async {
   runApp(const MyApp());
+  db = await Connection.open(
+    Endpoint(
+      host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+      database: 'estacionamientosUlagos',
+      username: 'estacionamientosUlagos_owner',
+      password: 'D7HQdX0nweTx',
+    ),
+    settings: const ConnectionSettings(sslMode: SslMode.require),
+  );
+  print('has connection!');
 }
 
 class MyApp extends StatelessWidget {
@@ -42,22 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    fetchData();
-  }
-
-  Future<void> fetchData() async {
-    final db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: ConnectionSettings(sslMode: SslMode.require),
-    );
-    print('has connection!');
-    final result0 = await db.execute("SELECT * FROM estacionamiento WHERE esta_numero = 1");
-    print(result0);
   }
 
   @override
@@ -97,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     FractionallySizedBox(
                       widthFactor: 0.85,
                       child: Container(
@@ -153,7 +150,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Form(
@@ -162,7 +159,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             SizedBox(
                               height: 40,
                               child: TextFormField(
-                                style: TextStyle(fontSize: 12),
+                                style: const TextStyle(fontSize: 12),
                                 controller: emailEditingController,
                                 decoration: InputDecoration(
                                   labelText: 'Correo electrónico',
@@ -172,20 +169,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                       border: Border.all(color: Colors.blue),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.email, color: Colors.black),
+                                      icon: const Icon(Icons.email, color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             SizedBox(
                               height: 40,
                               child: TextFormField(
@@ -198,20 +195,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                       border: Border.all(color: Colors.blue),
                                     ),
                                     child: IconButton(
-                                      icon: Icon(Icons.lock, color: Colors.black),
+                                      icon: const Icon(Icons.lock, color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
-                                  enabledBorder: OutlineInputBorder(
+                                  enabledBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
-                                  focusedBorder: OutlineInputBorder(
+                                  focusedBorder: const OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(height: 20),
+                            const SizedBox(height: 20),
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Form(
@@ -220,13 +217,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                     FractionallySizedBox(
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {
+                                        onPressed: () async {
+                                          print(await getEdificio(db));
                                           print('Ingresar');
                                         },
-                                        icon: Icon(Icons.login, color: Colors.white),
-                                        label: Text(
+                                        icon: const Icon(
+                                          Icons.login,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text(
                                           'INGRESAR',
-                                          style: TextStyle(color: Colors.white),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                          ),
                                         ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade700,
@@ -236,12 +239,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
                                     TextButton(
                                       onPressed: () {
                                         print('¿Olvidaste tu contraseña?');
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         "¿Olvidaste tu contraseña?",
                                         style: TextStyle(
                                           color: Colors.blue,
