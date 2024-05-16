@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
+import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
@@ -248,7 +249,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    menuGuardia()),
+                                                    menuUsuario()),
                                           );
                                         },
                                         icon: Icon(Icons.login,
