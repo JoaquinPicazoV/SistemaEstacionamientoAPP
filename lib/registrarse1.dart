@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse2.dart';
+import 'package:flutter_application_1/newRegistro.dart';
 
 class Registrarse1 extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -10,7 +11,6 @@ class Registrarse1 extends StatelessWidget {
   TextEditingController apellidoPEditingController = TextEditingController();
   TextEditingController apellidoMEditingController = TextEditingController();
   TextEditingController rutEditingController = TextEditingController();
-  TextEditingController tipoUsuarioEditingController = TextEditingController();
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController telefonoEditingController = TextEditingController();
   TextEditingController patenteEditingController = TextEditingController();
@@ -24,6 +24,7 @@ class Registrarse1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const List<String> list = ['Estudiante', 'Invitado'];
+    late String valueDropdown = list[0];
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -184,6 +185,7 @@ class Registrarse1 extends StatelessWidget {
                                     "Tipo de Usuario",
                                   ),
                                   DropdownButtonFormField(
+                                    value: valueDropdown,
                                     style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
                                     decoration: const InputDecoration(border: OutlineInputBorder()),
                                     itemHeight: kMinInteractiveDimension + 14,
@@ -196,7 +198,9 @@ class Registrarse1 extends StatelessWidget {
                                           ),
                                         )
                                         .toList(),
-                                    onChanged: (String? value) {},
+                                    onChanged: (String? value) {
+                                      valueDropdown = value!;
+                                    },
                                   ),
                                 ],
                               ),
@@ -229,16 +233,10 @@ class Registrarse1 extends StatelessWidget {
                                     backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
                                   ),
                                   onPressed: () {
-                                    print(nombreEditingController.text);
-                                    print(apellidoPEditingController.text);
-                                    print(apellidoMEditingController.text);
-                                    print(rutEditingController.text);
-                                    print(emailEditingController.text);
-                                    print(telefonoEditingController.text);
-                                    print(patenteEditingController.text);
-                                    print(marcaEditingController.text);
-                                    print(modeloEditingController.text);
-                                    print(aEditingController.text);
+                                    llenarRegistro(nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text, rutEditingController.text, valueDropdown,
+                                        emailEditingController.text, patenteEditingController.text, marcaEditingController.text, modeloEditingController.text, aEditingController.text);
+
+                                    print(getRegistro());
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => Registrarse2()),

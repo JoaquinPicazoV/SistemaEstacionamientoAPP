@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/menuGuardia.dart';
+import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/queries.dart';
+import 'package:flutter_application_1/newRegistro.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
 
@@ -55,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    vaciarRegistro();
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -186,12 +190,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     decoration: const InputDecoration(
                                       labelText: 'Contraseña',
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.blue),
+                                        borderSide: BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 1.0),
+                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                       ),
                                     ),
                                   ),
@@ -205,9 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       child: IconButton(
                                         icon: Icon(
-                                          obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
+                                          obscurePassword ? Icons.visibility_off : Icons.visibility,
                                           color: Colors.black,
                                         ),
                                         onPressed: () {
@@ -231,8 +231,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                       child: IconButton(
-                                        icon: const Icon(Icons.lock,
-                                            color: Colors.black),
+                                        icon: const Icon(Icons.lock, color: Colors.black),
                                         onPressed: () {},
                                       ),
                                     ),
@@ -249,14 +248,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     FractionallySizedBox(
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
-                                        onPressed: () async {
-                                          print(await getEdificio(db));
-                                          print('Ingresar');
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => menuUsuario()),
+                                          );
                                         },
-                                        icon: const Icon(
-                                          Icons.login,
-                                          color: Colors.white,
-                                        ),
+                                        icon: const Icon(Icons.login, color: Colors.white),
                                         label: const Text(
                                           'INGRESAR',
                                           style: TextStyle(

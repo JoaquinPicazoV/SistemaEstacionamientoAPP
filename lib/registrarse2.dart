@@ -2,6 +2,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/newRegistro.dart';
 import 'package:flutter_application_1/registrarse3.dart';
 
 class Registrarse2 extends StatefulWidget {
@@ -62,8 +63,7 @@ class _Registrarse2State extends State<Registrarse2> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyApp()),
+                                      MaterialPageRoute(builder: (context) => MyApp()),
                                     );
                                   },
                                   child: const Text(
@@ -81,12 +81,8 @@ class _Registrarse2State extends State<Registrarse2> {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    backgroundColor:
-                                        MaterialStateProperty.all<Color>(
+                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                    backgroundColor: MaterialStateProperty.all<Color>(
                                       Colors.blue.shade700,
                                     ),
                                   ),
@@ -170,13 +166,10 @@ class _Registrarse2State extends State<Registrarse2> {
                       child: TextField(
                         obscureText: !contrasena1,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena1
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(contrasena1 ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 contrasena1 = !contrasena1;
@@ -211,13 +204,10 @@ class _Registrarse2State extends State<Registrarse2> {
                       child: TextField(
                         obscureText: !contrasena2,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena2
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(contrasena2 ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 contrasena2 = !contrasena2;
@@ -361,25 +351,22 @@ class _Registrarse2State extends State<Registrarse2> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.blue.shade700),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue.shade700),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ),
                         onPressed: () {
+                          print(getRegistro());
                           generarCodigo();
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => Registrarse3()),
+                            MaterialPageRoute(builder: (context) => Registrarse3()),
                           );
                         },
                         icon: Icon(
