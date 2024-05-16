@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, use_super_parameters
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
@@ -242,7 +243,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                     FractionallySizedBox(
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    menuGuardia()),
+                                          );
+                                        },
                                         icon: Icon(Icons.login,
                                             color: Colors.white),
                                         label: Text(
