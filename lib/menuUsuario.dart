@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/main.dart';
 
 class menuUsuario extends StatelessWidget {
@@ -124,7 +125,13 @@ class menuUsuario extends StatelessWidget {
                           FractionallySizedBox(
                             widthFactor: 0.96,
                             child: ElevatedButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => codigoReserva()),
+                                );
+                              },
                               icon: Icon(Icons.car_crash_outlined,
                                   color: Colors.white),
                               label: Text(

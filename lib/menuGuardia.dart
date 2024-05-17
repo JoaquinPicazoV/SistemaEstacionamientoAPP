@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/confirmarReserva1.dart';
 import 'package:flutter_application_1/main.dart';
 
 class menuGuardia extends StatelessWidget {
@@ -129,7 +130,13 @@ class menuGuardia extends StatelessWidget {
                           FractionallySizedBox(
                             widthFactor: 0.96,
                             child: ElevatedButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => confirmarReserva()),
+                                );
+                              },
                               icon: Icon(Icons.check, color: Colors.white),
                               label: Text(
                                 'CONFIRMAR RESERVA',
