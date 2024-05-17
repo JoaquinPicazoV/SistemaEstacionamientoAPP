@@ -41,6 +41,9 @@ dependencies:
   web_socket_channel: ^3.0.0
   postgres: ^3.2.0
   flutter_svg: ^2.0.10+1
+  barcode_widget: ^2.0.4
+  qrscan: ^0.3.3
+  permission_handler: ^10.0.0
 
 dev_dependencies:
   flutter_test:

@@ -52,8 +52,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
-  TextEditingController emailEditingController = TextEditingController();
-  TextEditingController passwordEditingController = TextEditingController();
+  TextEditingController controladorCorreo = TextEditingController();
+  TextEditingController controladorContrasena = TextEditingController();
   bool obscurePassword = true;
 
   @override
@@ -154,8 +154,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             SizedBox(
                               height: 40,
                               child: TextFormField(
-                                style: const TextStyle(fontSize: 12),
-                                controller: emailEditingController,
+                                style: TextStyle(fontSize: 12),
+                                controller: controladorCorreo,
                                 decoration: InputDecoration(
                                   labelText: 'Correo electrónico',
                                   suffixIcon: Container(
@@ -186,8 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 children: [
                                   TextFormField(
                                     obscureText: obscurePassword,
-                                    controller: passwordEditingController,
-                                    decoration: const InputDecoration(
+                                    controller: controladorContrasena,
+                                    decoration: InputDecoration(
                                       labelText: 'Contraseña',
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: Colors.blue),
@@ -249,10 +249,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => menuUsuario()),
-                                          );
+                                          String email =
+                                              controladorCorreo.text.trim();
+                                          if (email
+                                              .endsWith("@alumnos.ulagos.cl")) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      menuUsuario()),
+                                            );
+                                          } else if (email
+                                              .endsWith("@ulagos.cl")) {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      menuGuardia()),
+                                            );
+                                          }
                                         },
                                         icon: const Icon(Icons.login, color: Colors.white),
                                         label: const Text(
