@@ -1,8 +1,9 @@
-// ignore_for_file: use_key_in_widget_constructors, prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, no_leading_underscores_for_local_identifiers, use_build_context_synchronously, prefer_interpolation_to_compose_strings
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, prefer_const_constructors, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/confirmacionRealizada.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:permission_handler/permission_handler.dart';
 
 class confirmarReserva extends StatelessWidget {
   final controladorRUT = TextEditingController();
@@ -12,14 +13,17 @@ class confirmarReserva extends StatelessWidget {
   Widget build(BuildContext context) {
     String? rut;
     Future<void> _scanQR() async {
-      rut = await scanner.scan();
-      if (rut != null) {
-        Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => confirmacionRealizada(rut: rut),
-      ),
-    );
+      var status = await Permission.camera.request();
+      if (status.isGranted) {
+        rut = await scanner.scan();
+        if (rut != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => confirmacionRealizada(rut: rut),
+            ),
+          );
+        }
       }
     }
 
