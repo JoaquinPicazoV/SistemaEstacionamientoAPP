@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse2.dart';
 import 'package:flutter_application_1/newRegistro.dart';
@@ -17,6 +19,8 @@ class Registrarse1 extends StatelessWidget {
   TextEditingController marcaEditingController = TextEditingController();
   TextEditingController modeloEditingController = TextEditingController();
   TextEditingController aEditingController = TextEditingController();
+  TextEditingController colorEditingController = TextEditingController();
+  TextEditingController tipoEditingController = TextEditingController();
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
   RegExp get _numerosRegex => RegExp(r'^[^\d]*$');
@@ -214,12 +218,10 @@ class Registrarse1 extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            textFields('Tipo', 'Ej: Automovil', tipoEditingController, TextInputType.text, _todo, 'Ingrese un tipo valido'),
                             textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _todo, 'Ingrese una patente valido'),
                             textFields('Tipo', 'Ej: Automovil', tipoEditingController, TextInputType.text, _todo, 'Ingrese un tipo valido'),
                             textFields('Marca', 'Ej: Chevrolet', marcaEditingController, TextInputType.text, _todo, 'Ingrese una marca valido'),
                             textFields('Modelo', 'Ej: Sali', modeloEditingController, TextInputType.text, _todo, 'Ingrese un modelo valido'),
-                            textFields('Color', 'Ej: Rojo', colorEditingController, TextInputType.text, _todo, 'Ingrese un color valido'),
                             textFields('Año', 'Ej: 2014', aEditingController, TextInputType.datetime, _todo, 'Ingrese un año valido'),
                             textFields('Color', 'Ej: Rojo', colorEditingController, TextInputType.text, _todo, 'Ingrese un color valido'),
                             Center(
