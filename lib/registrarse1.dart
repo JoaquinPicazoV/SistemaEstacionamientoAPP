@@ -17,6 +17,9 @@ class Registrarse1 extends StatelessWidget {
   TextEditingController marcaEditingController = TextEditingController();
   TextEditingController modeloEditingController = TextEditingController();
   TextEditingController aEditingController = TextEditingController();
+  TextEditingController tipoEditingController = TextEditingController();
+  TextEditingController colorEditingController = TextEditingController();
+
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
   RegExp get _numerosRegex => RegExp(r'^[^\d]*$');
@@ -214,9 +217,11 @@ class Registrarse1 extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            textFields('Tipo', 'Ej: Automovil', tipoEditingController, TextInputType.text, _todo, 'Ingrese un tipo valido'),
                             textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _todo, 'Ingrese una patente valido'),
                             textFields('Marca', 'Ej: Chevrolet', marcaEditingController, TextInputType.text, _todo, 'Ingrese una marca valido'),
                             textFields('Modelo', 'Ej: Sali', modeloEditingController, TextInputType.text, _todo, 'Ingrese un modelo valido'),
+                            textFields('Color', 'Ej: Rojo', colorEditingController, TextInputType.text, _todo, 'Ingrese un color valido'),
                             textFields('Año', 'Ej: 2014', aEditingController, TextInputType.datetime, _todo, 'Ingrese un año valido'),
                             Center(
                               child: Container(
