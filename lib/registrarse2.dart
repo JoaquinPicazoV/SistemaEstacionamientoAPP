@@ -14,6 +14,8 @@ class _Registrarse2State extends State<Registrarse2> {
   bool contrasena1 = false;
   bool contrasena2 = false;
 
+  TextEditingController contraEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,6 +204,7 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                       child: TextField(
+                        controller: contraEditingController,
                         obscureText: !contrasena2,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -362,6 +365,7 @@ class _Registrarse2State extends State<Registrarse2> {
                           ),
                         ),
                         onPressed: () {
+                          llenarPassword(contraEditingController.text);
                           print(getRegistro());
                           generarCodigo();
                           Navigator.push(

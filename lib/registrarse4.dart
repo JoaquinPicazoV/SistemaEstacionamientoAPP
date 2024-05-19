@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/newRegistro.dart';
 
 class registrarse4 extends StatelessWidget {
   const registrarse4({super.key});
@@ -83,7 +84,7 @@ class registrarse4 extends StatelessWidget {
                                     backgroundColor: MaterialStateProperty.all(
                                         Colors.blue.shade700),
                                   ),
-                                  onPressed: () {
+                                  onPressed: (){
                                     print('Registrarse');
                                   },
                                   child: const Text(

@@ -17,6 +17,8 @@ class Registrarse1 extends StatelessWidget {
   TextEditingController marcaEditingController = TextEditingController();
   TextEditingController modeloEditingController = TextEditingController();
   TextEditingController aEditingController = TextEditingController();
+  TextEditingController tipoEditingController = TextEditingController();
+  TextEditingController colorEditingController = TextEditingController();
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
   RegExp get _numerosRegex => RegExp(r'^[^\d]*$');
@@ -215,9 +217,11 @@ class Registrarse1 extends StatelessWidget {
                               ),
                             ),
                             textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _todo, 'Ingrese una patente valido'),
+                            textFields('Tipo', 'Ej: Automovil', tipoEditingController, TextInputType.text, _todo, 'Ingrese un tipo valido'),
                             textFields('Marca', 'Ej: Chevrolet', marcaEditingController, TextInputType.text, _todo, 'Ingrese una marca valido'),
                             textFields('Modelo', 'Ej: Sali', modeloEditingController, TextInputType.text, _todo, 'Ingrese un modelo valido'),
                             textFields('Año', 'Ej: 2014', aEditingController, TextInputType.datetime, _todo, 'Ingrese un año valido'),
+                            textFields('Color', 'Ej: Rojo', colorEditingController, TextInputType.text, _todo, 'Ingrese un color valido'),
                             Center(
                               child: Container(
                                 margin: const EdgeInsets.only(
@@ -233,8 +237,11 @@ class Registrarse1 extends StatelessWidget {
                                     backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
                                   ),
                                   onPressed: () {
-                                    llenarRegistro(nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text, rutEditingController.text, valueDropdown,
-                                        emailEditingController.text, patenteEditingController.text, marcaEditingController.text, modeloEditingController.text, aEditingController.text);
+                                    llenarRegistro(rutEditingController.text,valueDropdown, nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text, 
+                                    emailEditingController.text, telefonoEditingController.text);
+
+                                    llenarAuto(patenteEditingController.text,tipoEditingController.text,
+                                    marcaEditingController.text, modeloEditingController.text, aEditingController.text,colorEditingController.text);
 
                                     print(getRegistro());
                                     Navigator.push(
