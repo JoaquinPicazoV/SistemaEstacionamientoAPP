@@ -1,8 +1,6 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, must_be_immutable, use_key_in_widget_constructors
+// ignore_for_file: avoid_print, must_be_immutable, use_key_in_widget_constructors
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse2.dart';
 import 'package:flutter_application_1/newRegistro.dart';
@@ -16,18 +14,15 @@ class Registrarse1 extends StatelessWidget {
   TextEditingController emailEditingController = TextEditingController();
   TextEditingController telefonoEditingController = TextEditingController();
   TextEditingController patenteEditingController = TextEditingController();
-  TextEditingController marcaEditingController = TextEditingController();
-  TextEditingController modeloEditingController = TextEditingController();
-  TextEditingController aEditingController = TextEditingController();
-  TextEditingController colorEditingController = TextEditingController();
-  TextEditingController tipoEditingController = TextEditingController();
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
   RegExp get _numerosRegex => RegExp(r'^[^\d]*$');
   RegExp get _todo => RegExp(r'^.*$');
+
+  bool valido = false;
   @override
   Widget build(BuildContext context) {
-    const List<String> list = ['Estudiante', 'Invitado'];
+    const List<String> list = ['Estudiante', 'Externo', 'Funcionario'];
     late String valueDropdown = list[0];
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
@@ -79,7 +74,7 @@ class Registrarse1 extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => MyApp()),
+                                      MaterialPageRoute(builder: (context) => const MyApp()),
                                     );
                                     print('Iniciar');
                                   },
@@ -191,7 +186,16 @@ class Registrarse1 extends StatelessWidget {
                                   DropdownButtonFormField(
                                     value: valueDropdown,
                                     style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
-                                    decoration: const InputDecoration(border: OutlineInputBorder()),
+                                    decoration: const InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                                      border: OutlineInputBorder(),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                      ),
+                                    ),
                                     itemHeight: kMinInteractiveDimension + 14,
                                     isExpanded: true,
                                     items: list
@@ -219,11 +223,6 @@ class Registrarse1 extends StatelessWidget {
                               ),
                             ),
                             textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _todo, 'Ingrese una patente valido'),
-                            textFields('Tipo', 'Ej: Automovil', tipoEditingController, TextInputType.text, _todo, 'Ingrese un tipo valido'),
-                            textFields('Marca', 'Ej: Chevrolet', marcaEditingController, TextInputType.text, _todo, 'Ingrese una marca valido'),
-                            textFields('Modelo', 'Ej: Sali', modeloEditingController, TextInputType.text, _todo, 'Ingrese un modelo valido'),
-                            textFields('Año', 'Ej: 2014', aEditingController, TextInputType.datetime, _todo, 'Ingrese un año valido'),
-                            textFields('Color', 'Ej: Rojo', colorEditingController, TextInputType.text, _todo, 'Ingrese un color valido'),
                             Center(
                               child: Container(
                                 margin: const EdgeInsets.only(
@@ -239,17 +238,21 @@ class Registrarse1 extends StatelessWidget {
                                     backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
                                   ),
                                   onPressed: () {
-                                    llenarRegistro(rutEditingController.text,valueDropdown, nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text, 
-                                    emailEditingController.text, telefonoEditingController.text);
+                                    if (valido) {
+                                      llenarRegistro(rutEditingController.text, valueDropdown, nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text,
+                                          emailEditingController.text, telefonoEditingController.text);
 
-                                    llenarAuto(patenteEditingController.text,tipoEditingController.text,
-                                    marcaEditingController.text, modeloEditingController.text, aEditingController.text,colorEditingController.text);
+                                      llenarAuto(patenteEditingController.text);
 
-                                    print(getRegistro());
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Registrarse2()),
-                                    );
+                                      print(getRegistro());
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Registrarse2()),
+                                      );
+                                    } else {
+                                      print(getRegistro());
+                                      print('no valido');
+                                    }
                                   },
                                   child: const Text(
                                     '> Cree su contraseña',
@@ -291,14 +294,23 @@ class Registrarse1 extends StatelessWidget {
             keyboardType: tipoInput,
             validator: (value) {
               if (value == null || !regExp.hasMatch(value)) {
+                valido = false;
                 return invalido;
               }
+                valido = true;
               return null;
             },
             decoration: InputDecoration(
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: const OutlineInputBorder(),
               labelText: entradaField,
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue, width: 1.0),
+              ),
             ),
             textInputAction: TextInputAction.done,
           ),

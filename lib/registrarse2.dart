@@ -1,5 +1,4 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/newRegistro.dart';
@@ -367,7 +366,6 @@ class _Registrarse2State extends State<Registrarse2> {
                         onPressed: () {
                           llenarPassword(contraEditingController.text);
                           print(getRegistro());
-                          generarCodigo();
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => Registrarse3()),
@@ -395,16 +393,6 @@ class _Registrarse2State extends State<Registrarse2> {
       ),
     );
   }
-}
-
-String generarCodigo() {
-  Random nRandom = Random();
-  String codigo = '';
-  for (int i = 0; i < 6; i++) {
-    codigo += nRandom.nextInt(10).toString();
-  }
-  print(codigo);
-  return codigo;
 }
 
 void main() {
