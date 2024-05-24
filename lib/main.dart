@@ -249,6 +249,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      menuGuardia()),
+                                            );
                                           String email =
                                               controladorCorreo.text.trim();
                                           if (email
