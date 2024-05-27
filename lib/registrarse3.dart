@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, prefer_const_constructors
+// ignore_for_file: avoid_print
 
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/newRegistro.dart';
@@ -9,10 +10,12 @@ import 'package:pinput/pinput.dart';
 import 'package:flutter_application_1/newRegistro.dart';
 
 class Registrarse3 extends StatelessWidget {
-  const Registrarse3({super.key});
+  Registrarse3({super.key});
+  TextEditingController pinTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    String codigo = generarCodigo();
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -62,8 +65,7 @@ class Registrarse3 extends StatelessWidget {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(
-                                              builder: (context) => MyApp()),
+                                          MaterialPageRoute(builder: (context) => const MyApp()),
                                         );
                                         print('Iniciar');
                                       },
@@ -82,12 +84,8 @@ class Registrarse3 extends StatelessWidget {
                                     alignment: Alignment.center,
                                     child: ElevatedButton(
                                       style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                        backgroundColor: MaterialStateProperty.all(
                                           Colors.blue.shade700,
                                         ),
                                       ),
@@ -113,8 +111,7 @@ class Registrarse3 extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             margin: const EdgeInsets.only(bottom: 20),
-                            decoration:
-                                BoxDecoration(color: Colors.blue.shade700),
+                            decoration: BoxDecoration(color: Colors.blue.shade700),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -160,13 +157,13 @@ class Registrarse3 extends StatelessWidget {
                             margin: const EdgeInsets.symmetric(vertical: 50),
                             height: 40,
                             child: Pinput(
+                              controller: pinTextEditingController,
                               length: 6,
                               defaultPinTheme: PinTheme(
                                 textStyle: const TextStyle(fontSize: 20),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(234, 239, 243, 1),
+                                    color: const Color.fromRGBO(234, 239, 243, 1),
                                   ),
                                 ),
                               ),
@@ -206,7 +203,7 @@ class Registrarse3 extends StatelessWidget {
                       child: ElevatedButton(
                         style: ButtonStyle(
                           padding: MaterialStateProperty.all(
-                            EdgeInsets.symmetric(
+                            const EdgeInsets.symmetric(
                               horizontal: 30,
                               vertical: 10,
                             ),
@@ -216,17 +213,18 @@ class Registrarse3 extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                           ),
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.blue.shade700),
+                          backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                         ),
                         onPressed: () async {
-                          await db.execute(r'INSERT INTO usuario VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',parameters: getRegistro());
-                          await db.execute(r'INSERT INTO vehiculo VALUES($1,$2,$3,$4,$5,$6)',parameters: getAuto());
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => registrarse4()),
-                          );
+                          if (pinTextEditingController.text == codigo) {
+                            await db.execute(r'INSERT INTO usuario VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', parameters: getRegistro());
+                            await db.execute(r'INSERT INTO vehiculo VALUES($1)', parameters: getAuto());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const registrarse4()),
+                            );
+                          } else
+                            (print('codigo incorrecto'));
                         },
                         child: const Text(
                           'Confirmar',
@@ -247,4 +245,14 @@ class Registrarse3 extends StatelessWidget {
       ),
     );
   }
+}
+
+String generarCodigo() {
+  Random nRandom = Random();
+  String codigo = '';
+  for (int i = 0; i < 6; i++) {
+    codigo += nRandom.nextInt(10).toString();
+  }
+  print(codigo);
+  return codigo;
 }

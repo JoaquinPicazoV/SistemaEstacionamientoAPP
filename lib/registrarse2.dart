@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, avoid_print
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/newRegistro.dart';
@@ -11,10 +9,45 @@ class Registrarse2 extends StatefulWidget {
 }
 
 class _Registrarse2State extends State<Registrarse2> {
-  bool contrasena1 = false;
-  bool contrasena2 = false;
+  // Estados para controlar la visibilidad de las contraseñas
+  bool contrasena1Visible = false;
+  bool contrasena2Visible = false;
 
-  TextEditingController contraEditingController = TextEditingController();
+  // Controladores para los campos de contraseña
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmacionController = TextEditingController();
+
+  // Estados para controlar si los requisitos de contraseña se cumplen
+  bool tieneAlMenos8Caracteres = false;
+  bool tieneMayuscula = false;
+  bool tieneMinuscula = false;
+  bool tieneNumero = false;
+  bool contrasenasCoinciden = false;
+  bool mostrarAdvertencia = false; // Estado para mostrar la advertencia
+
+  // Función para verificar los requisitos de la contraseña
+  void verificarRequisitos(String password, String confirmacion) {
+    // Verificar longitud mínima
+    tieneAlMenos8Caracteres = password.length >= 8;
+
+    // Verificar al menos una mayúscula
+    tieneMayuscula = password.contains(RegExp(r'[A-Z]'));
+
+    // Verificar al menos una minúscula
+    tieneMinuscula = password.contains(RegExp(r'[a-z]'));
+
+    // Verificar al menos un número
+    tieneNumero = password.contains(RegExp(r'[0-9]'));
+
+    // Verificar si las contraseñas coinciden
+    contrasenasCoinciden = password == confirmacion;
+
+    // Verificar si se cumplen todos los requisitos
+    mostrarAdvertencia = !tieneAlMenos8Caracteres || !tieneMayuscula || !tieneMinuscula || !tieneNumero;
+
+    // Actualizar la interfaz de usuario
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,95 +84,7 @@ class _Registrarse2State extends State<Registrarse2> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    FractionallySizedBox(
-                      widthFactor: 0.85,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => MyApp()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Iniciar sesión",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-                                    backgroundColor: MaterialStateProperty.all<Color>(
-                                      Colors.blue.shade700,
-                                    ),
-                                  ),
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Registrarse',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    FractionallySizedBox(
-                      widthFactor: 0.85,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        margin: const EdgeInsets.only(bottom: 20),
-                        decoration: BoxDecoration(color: Colors.blue.shade700),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(right: 10),
-                              width: 30,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                color: Colors.blue.shade500,
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Text(
-                                "2",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            const Text(
-                              "Crear clave",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    SizedBox(height: 15),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Align(
@@ -153,9 +98,7 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
+                    SizedBox(height: 8),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
@@ -166,24 +109,24 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                       child: TextField(
-                        obscureText: !contrasena1,
+                        controller: passwordController,
+                        obscureText: !contrasena1Visible,
+                        onChanged: onPasswordChanged,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena1 ? Icons.visibility_off : Icons.visibility),
+                            icon: Icon(contrasena1Visible ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
-                                contrasena1 = !contrasena1;
+                                contrasena1Visible = !contrasena1Visible;
                               });
                             },
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 16,
-                    ),
+                    SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Align(
@@ -191,9 +134,7 @@ class _Registrarse2State extends State<Registrarse2> {
                         child: const Text("Confirmar Contraseña"),
                       ),
                     ),
-                    SizedBox(
-                      height: 8,
-                    ),
+                    SizedBox(height: 8),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
@@ -204,160 +145,50 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                       child: TextField(
-                        controller: contraEditingController,
-                        obscureText: !contrasena2,
+                        controller: confirmacionController,
+                        obscureText: !contrasena2Visible,
+                        onChanged: onConfirmationChanged,
                         decoration: InputDecoration(
                           contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena2 ? Icons.visibility_off : Icons.visibility),
+                            icon: Icon(contrasena2Visible ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
-                                contrasena2 = !contrasena2;
+                                contrasena2Visible = !contrasena2Visible;
                               });
                             },
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Debe contener al menos 8 caracteres",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
+                    // Requisitos de contraseña
+                    buildRequirement("Debe contener al menos 8 caracteres", tieneAlMenos8Caracteres),
+                    buildRequirement("Debe contener al menos una letra mayúscula.", tieneMayuscula),
+                    buildRequirement("Debe contener al menos una letra minúscula.", tieneMinuscula),
+                    buildRequirement("Debe contener al menos un número.", tieneNumero),
+                    buildRequirement("Las contraseñas coinciden.", contrasenasCoinciden),
+                    // Mensaje de advertencia
+                    if (mostrarAdvertencia)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        color: Colors.red,
+                        child: Text(
+                          "La contraseña no cumple con los requisitos mínimos.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Debe contener al menos una letra mayúscula.",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Debe contener al menos una letra minúscula.",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Debe contener al menos un número.",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Wrap(
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.check_circle,
-                                size: 16,
-                                color: Colors.grey,
-                              ),
-                              SizedBox(width: 8),
-                              Flexible(
-                                child: Text(
-                                  "Las contraseñas coinciden.",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                    // Botón para crear contraseña
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(Colors.blue.shade700),
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            contrasenasCoinciden ? Colors.green : mostrarAdvertencia ? Colors.grey : Colors.blue.shade700,
+                          ),
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
@@ -365,13 +196,19 @@ class _Registrarse2State extends State<Registrarse2> {
                           ),
                         ),
                         onPressed: () {
-                          llenarPassword(contraEditingController.text);
-                          print(getRegistro());
-                          generarCodigo();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Registrarse3()),
-                          );
+                          if (contrasenasCoinciden) {
+                            llenarPassword(passwordController.text);
+                            print(getRegistro());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Registrarse3()),
+                            );
+                          } else {
+                            // Mostrar mensaje de error o realizar alguna acción adicional
+                            setState(() {
+                              mostrarAdvertencia = true;
+                            });
+                          }
                         },
                         icon: Icon(
                           Icons.check,
@@ -395,16 +232,69 @@ class _Registrarse2State extends State<Registrarse2> {
       ),
     );
   }
-}
 
-String generarCodigo() {
-  Random nRandom = Random();
-  String codigo = '';
-  for (int i = 0; i < 6; i++) {
-    codigo += nRandom.nextInt(10).toString();
+  // Widget para mostrar un requisito de contraseña
+  Widget buildRequirement(String text, bool condition) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Wrap(
+        children: [
+          Row(
+            children: [
+              buildIcon(condition),
+              SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: condition ? Colors.green : Colors.grey,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
-  print(codigo);
-  return codigo;
+
+  // Widget para mostrar un ícono de verificación o un ícono de advertencia
+  Widget buildIcon(bool condition) {
+    return Icon(
+      condition ? Icons.check_circle : Icons.warning,
+      size: 16,
+      color: condition ? Colors.green : Colors.grey,
+    );
+  }
+
+  // Evento de cambio para el campo de contraseña
+  void onPasswordChanged(String password) {
+    verificarRequisitos(password, confirmacionController.text);
+  }
+
+  // Evento de cambio para el campo de confirmación de contraseña
+  void onConfirmationChanged(String confirmation) {
+    verificarRequisitos(passwordController.text, confirmation);
+  }
+
+  // Función para validar y procesar la contraseña
+  void llenarPassword(String password) {
+    // Lógica para procesar la contraseña y almacenarla, si es necesario
+    // Aquí deberías implementar la lógica necesaria
+    // Por ejemplo, podrías almacenar la contraseña en un lugar seguro
+    // o realizar verificaciones adicionales
+    // Por ahora, simplemente imprimiremos la contraseña
+    print("Contraseña ingresada: $password");
+  }
+
+  @override
+  void dispose() {
+    // Limpiar controladores al salir de la página
+    passwordController.dispose();
+    confirmacionController.dispose();
+    super.dispose();
+  }
 }
 
 void main() {
