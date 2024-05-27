@@ -211,6 +211,7 @@ class _Registrarse2State extends State<Registrarse2> {
                           }
                         },
                         icon: Icon(
+
                           Icons.check,
                           color: Colors.white,
                         ),

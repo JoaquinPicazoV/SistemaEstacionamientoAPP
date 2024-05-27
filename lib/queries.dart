@@ -20,9 +20,9 @@ Future<Result> getRegistrousuariovehiculo(Connection db) async {
   return result;
 }
 
-Future<Result> getReserva(Connection db) async {
+Future<Object?> getReserva(Connection db) async {
   final result = await db.execute('SELECT * FROM reserva');
-  return result;
+  return result[0];
 }
 
 Future<Result> getSeccion(Connection db) async {

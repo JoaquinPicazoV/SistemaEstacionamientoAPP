@@ -154,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             SizedBox(
                               height: 40,
                               child: TextFormField(
-                                style: TextStyle(fontSize: 12),
+                                style: const TextStyle(fontSize: 12),
                                 controller: controladorCorreo,
                                 decoration: InputDecoration(
                                   labelText: 'Correo electrónico',
@@ -187,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   TextFormField(
                                     obscureText: obscurePassword,
                                     controller: controladorContrasena,
-                                    decoration: InputDecoration(
+                                    decoration: const InputDecoration(
                                       labelText: 'Contraseña',
                                       enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: Colors.blue),
@@ -249,6 +249,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      menuGuardia()),
+                                            );
                                           String email =
                                               controladorCorreo.text.trim();
                                           if (email
