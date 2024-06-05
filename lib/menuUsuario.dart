@@ -1,13 +1,51 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:postgres/postgres.dart';
 
-class menuUsuario extends StatelessWidget {
-  // Variable para la disponibilidad de estacionamientos
-  int estacionamientosDisponibles = 4;
+class menuUsuario extends StatefulWidget {
+  @override
+  _menuUsuarioState createState() => _menuUsuarioState();
+}
+
+class _menuUsuarioState extends State<menuUsuario> {
+
+  int estacionamientosDisponibles = 0;
+  late Connection _db;
+  String texto = 'Consultando disponibilidad...';
+
+  Future<void> ConsultarDisponibilidad() async {
+    print('inicio funcion');
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final results = await _db.execute(
+        "SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
+    print(results);
+    print('final funcion, todo salio bacan');
+
+    setState(() {
+      estacionamientosDisponibles = int.parse(results[0][0].toString());
+      texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    ConsultarDisponibilidad();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +77,9 @@ class menuUsuario extends StatelessWidget {
                               SizedBox(
                                 width: 50,
                                 height: 50,
-                                child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
+                                child: SvgPicture.asset(
+                                    'assets/img/logo.87d5c665 1.svg',
+                                    semanticsLabel: 'Logo Ulagos'),
                               ),
                             ],
                           ),
@@ -56,10 +96,10 @@ class menuUsuario extends StatelessWidget {
                               ),
                               TextButton.icon(
                                 style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  alignment: Alignment.centerRight
-                                ),
+                                    padding: EdgeInsets.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    alignment: Alignment.centerRight),
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -117,7 +157,7 @@ class menuUsuario extends StatelessWidget {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "¡$estacionamientosDisponibles ESTACIONAMIENTOS DISPONIBLES!",
+                        "$texto",
                         style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
@@ -137,12 +177,12 @@ class menuUsuario extends StatelessWidget {
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(
                                 onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => codigoReserva()),
-                                );
-                              },
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => codigoReserva()),
+                                  );
+                                },
                                 icon: const Icon(Icons.car_crash_outlined,
                                     color: Colors.white),
                                 label: const Text(
@@ -165,7 +205,8 @@ class menuUsuario extends StatelessWidget {
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(
                                 onPressed: () {},
-                                icon: const Icon(Icons.history, color: Colors.white),
+                                icon: const Icon(Icons.history,
+                                    color: Colors.white),
                                 label: const Text(
                                   'MIS RESERVAS',
                                   style: TextStyle(color: Colors.white),
@@ -186,8 +227,8 @@ class menuUsuario extends StatelessWidget {
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(
                                 onPressed: () {},
-                                icon:
-                                    const Icon(Icons.location_on, color: Colors.white),
+                                icon: const Icon(Icons.location_on,
+                                    color: Colors.white),
                                 label: const Text(
                                   'MAPA DE ESTACIONAMIENTO',
                                   style: TextStyle(color: Colors.white),
@@ -207,7 +248,15 @@ class menuUsuario extends StatelessWidget {
                             FractionallySizedBox(
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          actualizarVehiculo(),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(Icons.directions_car,
                                     color: Colors.white),
                                 label: const Text(

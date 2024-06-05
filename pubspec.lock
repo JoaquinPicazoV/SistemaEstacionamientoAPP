@@ -247,8 +247,7 @@ packages:
       sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
       url: "https://pub.dev"
     source: hosted
-<<<<<<< HEAD
-    version: "1.12.0"
+    version: "1.11.0"
   mime:
     dependency: transitive
     description:
@@ -257,9 +256,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
-=======
-    version: "1.11.0"
->>>>>>> 1814bee8214311fd078c000820e6b2e058d5b643
   path:
     dependency: transitive
     description:

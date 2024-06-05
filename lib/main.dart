@@ -13,6 +13,7 @@ const List<String> list = <String>['Estudiante', 'Invitado'];
 late Connection db;
 void main() async {
   runApp(const MyApp());
+  
   db = await Connection.open(
     Endpoint(
       host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
@@ -253,7 +254,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      menuGuardia()),
+                                                      menuUsuario()),
                                             );
                                           String email =
                                               controladorCorreo.text.trim();
