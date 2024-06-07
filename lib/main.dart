@@ -1,11 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/menuGuardia.dart';
+
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:postgres/postgres.dart';
-import 'package:flutter_application_1/queries.dart';
 import 'package:flutter_application_1/newRegistro.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
@@ -13,7 +12,7 @@ const List<String> list = <String>['Estudiante', 'Invitado'];
 late Connection db;
 void main() async {
   runApp(const MyApp());
-  
+
   db = await Connection.open(
     Endpoint(
       host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
@@ -56,6 +55,31 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController controladorCorreo = TextEditingController();
   TextEditingController controladorContrasena = TextEditingController();
   bool obscurePassword = true;
+  late Connection _db;
+  int coincidencias = 0;
+  Future<void> AnalizarCredenciales(correo, pswrd) async {
+    print('inicio funcion');
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final results = await _db.execute(
+        "SELECT COUNT(*) FROM usuario WHERE usua_correo='" +
+            correo +
+            "' AND usua_clave='" +
+            pswrd +
+            "'");
+    print(results[0][0]);
+    coincidencias = int.parse(results[0][0].toString());
+    ;
+    print('final funcion, todo salio bacan');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,14 +134,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.blue.shade700),
                                     alignment: Alignment.center,
                                   ),
                                   onPressed: () {},
                                   child: const Text(
                                     'Iniciar sesión',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 16, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -129,7 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => Registrarse1()),
+                                      MaterialPageRoute(
+                                          builder: (context) => Registrarse1()),
                                     );
                                   },
                                   child: const Text(
@@ -167,7 +194,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     ),
                                     child: IconButton(
-                                      icon: const Icon(Icons.email, color: Colors.black),
+                                      icon: const Icon(Icons.email,
+                                          color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
@@ -175,7 +203,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
                                   focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                    borderSide: BorderSide(
+                                        color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
@@ -191,10 +220,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     decoration: const InputDecoration(
                                       labelText: 'Contraseña',
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue),
+                                        borderSide:
+                                            BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.0),
                                       ),
                                     ),
                                   ),
@@ -208,7 +239,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       child: IconButton(
                                         icon: Icon(
-                                          obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                          obscurePassword
+                                              ? Icons.visibility_off
+                                              : Icons.visibility,
                                           color: Colors.black,
                                         ),
                                         onPressed: () {
@@ -232,7 +265,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                       child: IconButton(
-                                        icon: const Icon(Icons.lock, color: Colors.black),
+                                        icon: const Icon(Icons.lock,
+                                            color: Colors.black),
                                         onPressed: () {},
                                       ),
                                     ),
@@ -242,7 +276,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             const SizedBox(height: 20),
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
                               child: Form(
                                 child: Column(
                                   children: [
@@ -250,33 +285,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      menuUsuario()),
-                                            );
                                           String email =
                                               controladorCorreo.text.trim();
-                                          if (email
-                                              .endsWith("@alumnos.ulagos.cl")) {
+                                          String clave =
+                                              controladorContrasena.text.trim();
+                                          AnalizarCredenciales(email, clave);
+                                          print(email);
+                                          print(clave);
+                                          if (coincidencias == 1) {
+                                            print("CONTRASEÑA CORRECTA");
+                                            /* FALTA REDIRECCIONAR A INTERFACES SEGUN EL  DOMINIO
+                                            @ULAGOS.CL O @ALUMNOS.ULAGOS.CL PERO ES SENCILLO */
+
+                                            /* TAMBIEN FALTA CREAR SESIONES Y ASI TRABAJAR MAS FACIL CON 
+                                            LAS INTERFACES SIGUIENTES PARA NO INICIAR SESION MUCHAS VECES*/
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       menuUsuario()),
                                             );
-                                          } else if (email
-                                              .endsWith("@ulagos.cl")) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      menuGuardia()),
-                                            );
+                                          } else {
+                                            print("CONTRASEÑA INCORRECTA");
                                           }
                                         },
-                                        icon: const Icon(Icons.login, color: Colors.white),
+                                        icon: const Icon(Icons.login,
+                                            color: Colors.white),
                                         label: const Text(
                                           'INGRESAR',
                                           style: TextStyle(
@@ -286,7 +320,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade700,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
                                           ),
                                         ),
                                       ),
