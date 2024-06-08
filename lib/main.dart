@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     while (RUT == '') {}
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => menuGuardia()),
+      MaterialPageRoute(builder: (context) => menuUsuario(RUT:RUT)),
     );
   }
 

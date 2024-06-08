@@ -113,7 +113,7 @@ class _codigoReserva extends State<codigoReserva> {
       settings: const ConnectionSettings(sslMode: SslMode.require),
     );
     DateTime actual = DateTime.now();
-    String fechaFormato = DateFormat('dd-MM-yy').format(actual);
+    String fechaFormato = DateFormat('MM-dd-yy').format(actual);
 
     String horaFormato = DateFormat('HH:mm:ss').format(actual);
 

@@ -116,7 +116,7 @@ class menuGuardia extends StatelessWidget {
                             Navigator.push(
                               context,
                             MaterialPageRoute(
-                              builder: (context) => historiaGuardia(),
+                              builder: (context) => historialGuardia(),
                             ));
                           },
                           icon: Icon(Icons.history, color: Colors.white),

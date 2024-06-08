@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, prefer_interpolation_to_compose_strings, camel_case_types, library_private_types_in_public_api, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';

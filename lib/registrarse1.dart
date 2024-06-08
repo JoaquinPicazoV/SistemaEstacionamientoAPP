@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_final_fields, prefer_const_constructors, avoid_print, unused_element, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse2.dart';

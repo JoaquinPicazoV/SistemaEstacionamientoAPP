@@ -1,21 +1,54 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/queries.dart';
-import 'package:flutter_application_1/main.dart';
+import 'package:postgres/postgres.dart';
 
-class historiaGuardia extends StatefulWidget {
+class historialGuardia extends StatefulWidget {
   @override
-  _historiaGuardiaState createState() => _historiaGuardiaState();
+  _HistorialGuardiaState createState() => _HistorialGuardiaState();
 }
 
-void main() async {
-  runApp(
-    MaterialApp(
-      home: historiaGuardia(),
-    ),
-  );
-}
+class _HistorialGuardiaState extends State<historialGuardia> {
+  late Connection _db;
+  List<List<dynamic>> reservas = [];
 
-class _historiaGuardiaState extends State<historiaGuardia> {
+  @override
+  void initState() {
+    super.initState();
+    buscarHistorial();
+  }
+
+  Future<void> buscarHistorial() async {
+    print('buscando');
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final size = await _db.execute("SELECT COUNT(*) FROM RESERVA");
+    final tam = size[0][0] as int;
+
+    final datosReserva = await _db.execute("SELECT rese_usua_rut, rese_vehi_patente, rese_esta_id, TO_CHAR(rese_fecha, 'DD-MM-YY') AS rese_fecha, rese_estado FROM RESERVA");
+
+    setState(() {
+      reservas.clear();
+      for (var i = 0; i < tam; i++) {
+        reservas.add([
+          datosReserva[i][0].toString(),
+          datosReserva[i][1].toString(),
+          datosReserva[i][2].toString().replaceFirst("CHI","").trim(),
+          datosReserva[i][3].toString(),
+          datosReserva[i][4].toString(),
+        ]);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +66,6 @@ class _historiaGuardiaState extends State<historiaGuardia> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    //IMAGEN
                     FractionallySizedBox(
                       widthFactor: 0.6,
                       child: Container(
@@ -45,10 +77,24 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                       ),
                     ),
                     const Text(
-                      "HISTORIAL ESTACIONAMIENTO",
+                      "HISTORIAL RESERVAS",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: buscarHistorial,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade800,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      icon: Icon(Icons.refresh, color: Colors.white),
+                      label: Text(
+                        'Actualizar',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
                     FractionallySizedBox(
@@ -59,7 +105,6 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                             width: 1,
                           ),
                         ),
-                        // ignore: prefer_const_constructors
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -77,14 +122,6 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                                       flex: 1,
                                       fit: FlexFit.tight,
                                       child: Text(
-                                        'ID',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: Text(
                                         'RUT',
                                         textAlign: TextAlign.center,
                                       ),
@@ -93,7 +130,7 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                                       flex: 2,
                                       fit: FlexFit.tight,
                                       child: Text(
-                                        'Etacionamiento',
+                                        'Patente',
                                         textAlign: TextAlign.center,
                                         softWrap: true,
                                       ),
@@ -102,7 +139,7 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                                       flex: 1,
                                       fit: FlexFit.tight,
                                       child: Text(
-                                        'Patente',
+                                        'nº Est',
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
@@ -125,12 +162,60 @@ class _historiaGuardiaState extends State<historiaGuardia> {
                                   ],
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  print(await getReserva(db));
-                                },
-                                child: Text('Historial'),
-                              ),
+                              for (var reserva in reservas)
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        width: 1,
+                                      ),
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          reserva[0].toString(), 
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 2,
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          reserva[1].toString(), 
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          reserva[2].toString(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          reserva[3].toString(), 
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        fit: FlexFit.tight,
+                                        child: Text(
+                                          reserva[4].toString(),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                             ],
                           ),
                         ),
