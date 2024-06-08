@@ -47,7 +47,7 @@ class _confirmacionRealizada extends State<confirmacionRealizada> {
           return AlertDialog(
             title: Text('AVISO'),
             content: Text(
-                'No tiene reserva. ¿Qué pudo pasar?. Quizás no realizó su reserva correctamente o se presentó después de que pasaron los 30 min desde que hizo la reserva, el cual es el tiempo límite para presentarse, de caso contrario se cancela su reserva automáticamente. Si está seguro que estos motivos no son la causa, notifique el error al administrador para enviar reporte al grupo de desarrollo.'),
+                'No tiene reserva. ¿Qué pudo pasar?. Quizás no realizó su reserva correctamente, ingresó mal el RUT o se presentó después de que pasaron los 30 min desde que hizo la reserva, el cual es el tiempo límite para presentarse, de caso contrario se cancela su reserva automáticamente. Si está seguro que estos motivos no son la causa, notifique el error al administrador para enviar reporte al grupo de desarrollo.'),
             actions: [
               TextButton(
                 onPressed: () {

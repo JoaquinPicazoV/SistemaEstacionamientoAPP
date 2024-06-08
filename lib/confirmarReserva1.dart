@@ -132,14 +132,14 @@ class confirmarReserva extends StatelessWidget {
                         SizedBox(height: 30),
                         ElevatedButton.icon(
                           onPressed: () {
-                            String? rut = controladorRUT.text;
-                            String? dv = controladorDV.text;
+                            String rut = controladorRUT.text;
+                            String dv = controladorDV.text;
                             rut = rut + '-' + dv;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    confirmacionRealizada(RUT: RUT.toString()),
+                                    confirmacionRealizada(RUT: rut),
                               ),
                             );
                           },
