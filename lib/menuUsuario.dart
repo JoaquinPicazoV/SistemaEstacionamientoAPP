@@ -8,18 +8,48 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
 class menuUsuario extends StatefulWidget {
+  final String RUT;
+
+  const menuUsuario({Key? key, required this.RUT}) : super(key: key);
   @override
   _menuUsuarioState createState() => _menuUsuarioState();
 }
 
 class _menuUsuarioState extends State<menuUsuario> {
+  late String RUT='BUSCANDO';
+  @override
+  void initState() {
+    BuscarNombre(RUT);
+    RUT = widget.RUT;
+    super.initState(); 
+  }
+  
+
 
   int estacionamientosDisponibles = 0;
   late Connection _db;
   String texto = 'Consultando disponibilidad...';
+  String nombreUsuario='Buscando nombre...';
 
+  Future<void> BuscarNombre(rut) async{
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='"+RUT+"'");
+
+    setState(() {
+      nombreUsuario=nombre[0][0].toString()+''+nombre[0][1].toString();
+    });
+
+  }
   Future<void> ConsultarDisponibilidad() async {
-    print('inicio funcion');
     _db = await Connection.open(
       Endpoint(
         host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
@@ -32,23 +62,22 @@ class _menuUsuarioState extends State<menuUsuario> {
 
     final results = await _db.execute(
         "SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
-    print(results);
-    print('final funcion, todo salio bacan');
-
     setState(() {
       estacionamientosDisponibles = int.parse(results[0][0].toString());
       texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    ConsultarDisponibilidad();
-  }
+  
 
   @override
   Widget build(BuildContext context) {
+    ConsultarDisponibilidad();
+    
+
+
+
+
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -87,7 +116,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                'Nombre_Usuario',
+                                '$nombreUsuario',
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue.shade900,
@@ -180,7 +209,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => codigoReserva()),
+                                        builder: (context) => codigoReserva(RUT:RUT)),
                                   );
                                 },
                                 icon: const Icon(Icons.car_crash_outlined,

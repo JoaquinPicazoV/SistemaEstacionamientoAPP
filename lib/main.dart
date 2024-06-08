@@ -57,6 +57,24 @@ class _MyHomePageState extends State<MyHomePage> {
   bool obscurePassword = true;
   late Connection _db;
   int coincidencias = 0;
+  String RUT = '';
+  Future<void> buscarRut(correo, pswrd) async {
+    
+
+    final results = await _db.execute(
+        "SELECT usua_rut FROM USUARIO WHERE usua_correo='" +
+            correo +
+            "' AND usua_clave='" +
+            pswrd +
+            "'");
+    RUT = results[0][0].toString();
+    while (RUT == '') {}
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
+    );
+  }
+
   Future<void> AnalizarCredenciales(correo, pswrd) async {
     print('inicio funcion');
     _db = await Connection.open(
@@ -77,8 +95,17 @@ class _MyHomePageState extends State<MyHomePage> {
             "'");
     print(results[0][0]);
     coincidencias = int.parse(results[0][0].toString());
-    ;
-    print('final funcion, todo salio bacan');
+    if (coincidencias == 1) {
+      print("CONTRASEÑA CORRECTA");
+      buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim());
+      /* FALTA REDIRECCIONAR A INTERFACES SEGUN EL  DOMINIO
+                                            @ULAGOS.CL O @ALUMNOS.ULAGOS.CL PERO ES SENCILLO */
+
+      /* TAMBIEN FALTA CREAR SESIONES Y ASI TRABAJAR MAS FACIL CON 
+                                            LAS INTERFACES SIGUIENTES PARA NO INICIAR SESION MUCHAS VECES*/
+    } else {
+      print("CONTRASEÑA INCORRECTA");
+    }
   }
 
   @override
@@ -290,24 +317,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                           String clave =
                                               controladorContrasena.text.trim();
                                           AnalizarCredenciales(email, clave);
-                                          print(email);
-                                          print(clave);
-                                          if (coincidencias == 1) {
-                                            print("CONTRASEÑA CORRECTA");
-                                            /* FALTA REDIRECCIONAR A INTERFACES SEGUN EL  DOMINIO
-                                            @ULAGOS.CL O @ALUMNOS.ULAGOS.CL PERO ES SENCILLO */
-
-                                            /* TAMBIEN FALTA CREAR SESIONES Y ASI TRABAJAR MAS FACIL CON 
-                                            LAS INTERFACES SIGUIENTES PARA NO INICIAR SESION MUCHAS VECES*/
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      menuUsuario()),
-                                            );
-                                          } else {
-                                            print("CONTRASEÑA INCORRECTA");
-                                          }
                                         },
                                         icon: const Icon(Icons.login,
                                             color: Colors.white),
