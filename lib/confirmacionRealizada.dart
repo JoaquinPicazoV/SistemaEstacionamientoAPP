@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, library_private_types_in_public_api, camel_case_types, use_super_parameters, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, library_private_types_in_public_api, camel_case_types, use_super_parameters, use_build_context_synchronously, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
@@ -55,7 +55,7 @@ class _confirmacionRealizada extends State<confirmacionRealizada> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => menuGuardia(),
+                      builder: (context) => menuGuardia(RUT : RUT),
                     ),
                   );
                 },
@@ -211,7 +211,7 @@ class _confirmacionRealizada extends State<confirmacionRealizada> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => menuGuardia(),
+                            builder: (context) => menuGuardia(RUT : RUT),
                           ),
                         );
                       },
