@@ -1,9 +1,10 @@
-// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters
+// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
+import 'package:flutter_application_1/testSeesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/newRegistro.dart';
 
@@ -23,6 +24,38 @@ void main() async {
     settings: const ConnectionSettings(sslMode: SslMode.require),
   );
   print('has connection!');
+}
+
+Future<void> funcionSession(context) async {
+  Connection _db = await Connection.open(
+    Endpoint(
+      host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+      database: 'estacionamientosUlagos',
+      username: 'estacionamientosUlagos_owner',
+      password: 'D7HQdX0nweTx',
+    ),
+    settings: const ConnectionSettings(sslMode: SslMode.require),
+  );
+  String? correo = await getSession();
+  if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
+    final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo.toString() + "'");
+    String stringRut = testRut[0][0].toString();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => menuGuardia(RUT: stringRut),
+      ),
+    );
+  }else if(await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())){
+    final testRut = await _db.execute("SELECT usua_rut FROM usuario WHERE usua_correo='" + correo.toString() + "'");
+    String stringRut = testRut[0][0].toString();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => menuUsuario(RUT: stringRut),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -69,6 +102,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       settings: const ConnectionSettings(sslMode: SslMode.require),
     );
+
+    saveSession(correo);
+
     if (alumno) {
       final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='" + correo + "'");
       RUT = results[0][0].toString();
@@ -120,6 +156,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
+    funcionSession(context);
     vaciarRegistro();
     return Scaffold(
       backgroundColor: Colors.blue.shade900,

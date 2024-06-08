@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
@@ -115,6 +116,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                               TextButton.icon(
                                 style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
                                 onPressed: () {
+                                  clearSession();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
