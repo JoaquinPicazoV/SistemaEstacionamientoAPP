@@ -1,21 +1,98 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, library_private_types_in_public_api, camel_case_types, use_super_parameters, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
+import 'package:postgres/postgres.dart';
+import 'package:intl/intl.dart';
 
-class confirmacionRealizada extends StatelessWidget {
-  final String? rut;
-  confirmacionRealizada({required this.rut});
+class confirmacionRealizada extends StatefulWidget {
+  final String RUT;
 
-  String nombre = "Sebastián Nicolás Leiva Almonacid";
-  late String? RUT;
-  String rol = 'Estudiante';
-  String nEstacionamiento = '52';
+  const confirmacionRealizada({Key? key, required this.RUT}) : super(key: key);
+  @override
+  _confirmacionRealizada createState() => _confirmacionRealizada();
+}
+
+class _confirmacionRealizada extends State<confirmacionRealizada> {
+  @override
+  void initState() {
+    RUT = widget.RUT;
+    super.initState();
+    BuscarDatos(RUT);
+  }
+
+  late String RUT = '';
+  String nombre = "Buscando...";
+  String rol = 'Buscando...';
+  String nEstacionamiento = 'Buscando...';
+
+  late Connection _db;
+  Future<void> BuscarDatos(RUT) async {
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final datosUsuario = await _db.execute(
+        "SELECT usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_tipo FROM USUARIO WHERE usua_rut='$RUT'");
+    if (datosUsuario.toString() == '[]') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('AVISO'),
+            content: Text(
+                'No tiene reserva. ¿Qué pudo pasar?. Quizás no realizó su reserva correctamente o se presentó después de que pasaron los 30 min desde que hizo la reserva, el cual es el tiempo límite para presentarse, de caso contrario se cancela su reserva automáticamente. Si está seguro que estos motivos no son la causa, notifique el error al administrador para enviar reporte al grupo de desarrollo.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => menuGuardia(),
+                    ),
+                  );
+                },
+                child: Text('¡Entendido!'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      final reserva = await _db.execute(
+          "SELECT rese_esta_id FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
+      final ID = reserva[0][0].toString();
+      final nEsta = await _db.execute(
+          "SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='$ID'");
+
+      setState(() {
+        nombre = datosUsuario[0][0].toString() +
+            datosUsuario[0][1].toString() +
+            '' +
+            datosUsuario[0][2].toString();
+        rol = datosUsuario[0][3].toString();
+        nEstacionamiento = nEsta[0][0].toString();
+      });
+      DateTime actual = DateTime.now();
+      String fechaFormato = DateFormat('dd-MM-yy').format(actual);
+
+      String horaFormato = DateFormat('HH:mm:ss').format(actual);
+      final actualizarReserva = await _db.execute(
+          "UPDATE RESERVA SET rese_estado='CONFIRMADA', rese_hora_llegada='$horaFormato' WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
+      final actualizarEstacionamiento = await _db.execute(
+          "UPDATE ESTACIONAMIENTO SET esta_estado='OCUPADO' WHERE esta_id='$ID'");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    RUT = rut;
-
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Center(

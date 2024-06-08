@@ -48,6 +48,7 @@ dependencies:
   sembast: 3.7.1
   http: ^1.2.1
   shared_preferences: ^2.2.3
+  intl: ^0.17.0
 
 
 

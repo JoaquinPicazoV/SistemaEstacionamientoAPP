@@ -1,8 +1,7 @@
-// ignore_for_file: prefer_const_constructors, avoid_print
+// ignore_for_file: prefer_const_constructors, avoid_print, camel_case_types
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/newRegistro.dart';
 
 class registrarse4 extends StatelessWidget {
   const registrarse4({super.key});

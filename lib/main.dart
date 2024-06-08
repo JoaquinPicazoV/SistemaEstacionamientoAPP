@@ -1,7 +1,7 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:postgres/postgres.dart';
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
     while (RUT == '') {}
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
+      MaterialPageRoute(builder: (context) => menuGuardia()),
     );
   }
 

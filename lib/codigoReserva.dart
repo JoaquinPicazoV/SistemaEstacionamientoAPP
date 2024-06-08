@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_string_interpolations, non_constant_identifier_names, use_build_context_synchronously, avoid_print, prefer_const_declarations, camel_case_types, library_private_types_in_public_api, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
@@ -18,7 +18,7 @@ class codigoReserva extends StatefulWidget {
 class _codigoReserva extends State<codigoReserva> {
   @override
   void initState() {
-    RUT = widget.RUT; // Asignar el valor de widget.RUT a la variable RUT
+    RUT = widget.RUT; 
     BuscarNombre(RUT);
     super.initState();
     TieneReserva(RUT);
@@ -50,7 +50,8 @@ class _codigoReserva extends State<codigoReserva> {
       nombreUsuario = nombre[0][0].toString() + '' + nombre[0][1].toString();
     });
   }
-  Future<void> DatosReserva(RUT) async{
+
+  Future<void> DatosReserva(RUT) async {
     _db = await Connection.open(
       Endpoint(
         host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
@@ -60,23 +61,24 @@ class _codigoReserva extends State<codigoReserva> {
       ),
       settings: const ConnectionSettings(sslMode: SslMode.require),
     );
-      final datosReserva = await _db.execute(
-          "SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='" +
-              RUT +
-              "' AND rese_estado='EN ESPERA'");
+    final datosReserva = await _db.execute(
+        "SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='" +
+            RUT +
+            "' AND rese_estado='EN ESPERA'");
 
-      final nEst = await _db.execute(
-          "SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='" +
-              datosReserva[0][0].toString() +
-              "'");
+    final nEst = await _db.execute(
+        "SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='" +
+            datosReserva[0][0].toString() +
+            "'");
 
-      setState(() {
-        horarioMaximo = datosReserva[0][1].toString();
-        estacionamiento = nEst[0][0].toString();
-        txtestacionamiento = 'ESTACIONAMIENTO: $estacionamiento';
-        txthorarioMaximo = 'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo';
-      });
+    setState(() {
+      horarioMaximo = datosReserva[0][1].toString();
+      estacionamiento = nEst[0][0].toString();
+      txtestacionamiento = 'ESTACIONAMIENTO: $estacionamiento';
+      txthorarioMaximo = 'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo';
+    });
   }
+
   Future<void> CancelarReserva(RUT) async {
     _db = await Connection.open(
       Endpoint(
@@ -214,7 +216,6 @@ class _codigoReserva extends State<codigoReserva> {
                 onPressed: () {
                   Navigator.of(context).pop();
                   Reservar(RUT);
-                  
                 },
                 child: Text('Si'),
               ),
@@ -354,10 +355,12 @@ class _codigoReserva extends State<codigoReserva> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                   Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => menuUsuario(RUT: RUT,)),
-                                );
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => menuUsuario(
+                                              RUT: RUT,
+                                            )),
+                                  );
                                 },
                                 child: Text('¡Entendido!'),
                               ),
