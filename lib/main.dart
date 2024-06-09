@@ -2,39 +2,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
+import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/newRegistro.dart';
+import 'package:flutter_application_1/database.dart';
 
 const List<String> list = <String>['Estudiante', 'Invitado'];
 
 late Connection db;
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Asegura la inicialización
+  await DatabaseHelper().initialize();
   runApp(const MyApp());
-
-  db = await Connection.open(
-    Endpoint(
-      host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-      database: 'estacionamientosUlagos',
-      username: 'estacionamientosUlagos_owner',
-      password: 'D7HQdX0nweTx',
-    ),
-    settings: const ConnectionSettings(sslMode: SslMode.require),
-  );
   print('has connection!');
 }
 
 Future<void> funcionSession(context) async {
-  Connection _db = await Connection.open(
-    Endpoint(
-      host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-      database: 'estacionamientosUlagos',
-      username: 'estacionamientosUlagos_owner',
-      password: 'D7HQdX0nweTx',
-    ),
-    settings: const ConnectionSettings(sslMode: SslMode.require),
-  );
+  Connection _db = DatabaseHelper().connection;
   String? correo = await getSession();
   if (await getExistSession() &&
       RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
@@ -100,15 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late Connection _db;
 
   Future<void> buscarRut(correo, pswrd, bool alumno) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    _db = DatabaseHelper().connection;
 
     saveSession(correo);
 
@@ -135,15 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> AnalizarCredenciales(correo, pswrd) async {
     print('inicio funcion');
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    _db = DatabaseHelper().connection;
 
     final results = await _db.execute(
         "SELECT COUNT(*) FROM (SELECT usua_correo FROM usuario WHERE usua_correo = '$correo' AND usua_clave = '$pswrd' UNION SELECT guar_correo FROM guardia WHERE guar_correo = '$correo'AND guar_clave = '$pswrd') AS combined_emails");

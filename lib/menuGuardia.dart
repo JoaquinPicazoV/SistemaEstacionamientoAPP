@@ -7,6 +7,7 @@ import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
+import 'package:flutter_application_1/database.dart';
 
 class menuGuardia extends StatefulWidget {
   final String RUT;
@@ -22,6 +23,7 @@ class _menuGuardiaState extends State<menuGuardia> {
   void initState() {
     BuscarNombre(RUT);
     RUT = widget.RUT;
+    ConsultarDisponibilidad();
     super.initState();
   }
 
@@ -31,35 +33,21 @@ class _menuGuardiaState extends State<menuGuardia> {
   String nombreUsuario = 'Buscando nombre...';
 
   Future<void> BuscarNombre(rut) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    _db = DatabaseHelper().connection;
 
-    final nombre = await _db.execute("SELECT guar_nombre, guar_apellido_paterno FROM guardia WHERE guar_rut='$RUT'");
+    final nombre = await _db.execute(
+        "SELECT guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_rut='21008896-2'");
 
     setState(() {
-      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
+      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]} ${nombre[0][2]}';
     });
   }
 
   Future<void> ConsultarDisponibilidad() async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    _db = DatabaseHelper().connection;
 
-    final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
+    final results = await _db.execute(
+        "SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
     setState(() {
       estacionamientosDisponibles = int.parse(results[0][0].toString());
       texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
@@ -68,8 +56,6 @@ class _menuGuardiaState extends State<menuGuardia> {
 
   @override
   Widget build(BuildContext context) {
-    ConsultarDisponibilidad();
-
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -98,7 +84,9 @@ class _menuGuardiaState extends State<menuGuardia> {
                               SizedBox(
                                 width: 50,
                                 height: 50,
-                                child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
+                                child: SvgPicture.asset(
+                                    'assets/img/logo.87d5c665 1.svg',
+                                    semanticsLabel: 'Logo Ulagos'),
                               ),
                             ],
                           ),
@@ -114,7 +102,11 @@ class _menuGuardiaState extends State<menuGuardia> {
                                 ),
                               ),
                               TextButton.icon(
-                                style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    alignment: Alignment.centerRight),
                                 onPressed: () {
                                   clearSession();
                                   Navigator.push(
@@ -154,17 +146,52 @@ class _menuGuardiaState extends State<menuGuardia> {
                   ),
                   Column(
                     children: [
+                      // Alerta roja
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: Colors.red,
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            'ATENCIÓN',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        "$texto",
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Column(
+                    children: [
                       FractionallySizedBox(
                         widthFactor: 0.96,
                         child: ElevatedButton.icon(
                           onPressed: () {},
-                          icon: Icon(Icons.car_crash_outlined, color: Colors.white),
+                          icon: Icon(Icons.car_crash_outlined,
+                              color: Colors.white),
                           label: Text(
                             'ADMINISTRAR ESTACIONAMIENTO',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -192,7 +219,8 @@ class _menuGuardiaState extends State<menuGuardia> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -221,7 +249,8 @@ class _menuGuardiaState extends State<menuGuardia> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
