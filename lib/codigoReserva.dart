@@ -19,7 +19,7 @@ class codigoReserva extends StatefulWidget {
 class _codigoReserva extends State<codigoReserva> {
   @override
   void initState() {
-    RUT = widget.RUT; 
+    RUT = widget.RUT;
     BuscarNombre(RUT);
     super.initState();
     TieneReserva(RUT);
@@ -344,7 +344,14 @@ class _codigoReserva extends State<codigoReserva> {
                   ),
                   SizedBox(height: 10),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => menuUsuario(RUT: RUT),
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.home, color: Colors.white),
                     label: Text(
                       'VOLVER AL INICIO',
