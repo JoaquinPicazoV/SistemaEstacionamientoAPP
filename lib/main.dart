@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:postgres/postgres.dart';
@@ -59,8 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int coincidencias = 0;
   String RUT = '';
   Future<void> buscarRut(correo, pswrd) async {
-    
-
     final results = await _db.execute(
         "SELECT usua_rut FROM USUARIO WHERE usua_correo='" +
             correo +
@@ -71,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     while (RUT == '') {}
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => menuUsuario(RUT:RUT)),
+      MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
     );
   }
 
@@ -97,7 +94,8 @@ class _MyHomePageState extends State<MyHomePage> {
     coincidencias = int.parse(results[0][0].toString());
     if (coincidencias == 1) {
       print("CONTRASEÑA CORRECTA");
-      buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim());
+      buscarRut(
+          controladorCorreo.text.trim(), controladorContrasena.text.trim());
       /* FALTA REDIRECCIONAR A INTERFACES SEGUN EL  DOMINIO
                                             @ULAGOS.CL O @ALUMNOS.ULAGOS.CL PERO ES SENCILLO */
 

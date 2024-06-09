@@ -20,17 +20,22 @@ class _Registrarse1State extends State<Registrarse1> {
   TextEditingController telefonoEditingController = TextEditingController();
   TextEditingController patenteEditingController = TextEditingController();
 
-  List<bool> camposValidos = [false, false, false, false, false, false, false]; // Lista de validación de campos
-    bool _isButtonDisabled = false;
-
+  List<bool> camposValidos = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ]; // Lista de validación de campos
+  bool _isButtonDisabled = false;
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
   RegExp get _numerosRegex => RegExp(r'^[0-9]*$');
-  RegExp get _rutRegex => RegExp(r'^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$');
-  RegExp get _patenteRegex => RegExp(r'^[a-zA-Z]{2}\d{2,4}$');
+  RegExp get _patenteRegex => RegExp(r'^[a-zA-Z]{4}\d{2}$');
   RegExp get _telefonoRegex => RegExp(r'^9[0-9]{8}$');
   RegExp get _nombreApellidoRegex => RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$');
-
 
   bool valido = false;
   late String valueDropdown;
@@ -94,7 +99,8 @@ class _Registrarse1State extends State<Registrarse1> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => const MyApp()),
+                                      MaterialPageRoute(
+                                          builder: (context) => const MyApp()),
                                     );
                                     print('Iniciar');
                                   },
@@ -113,7 +119,10 @@ class _Registrarse1State extends State<Registrarse1> {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                    shape: MaterialStatePropertyAll(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
                                     backgroundColor: MaterialStatePropertyAll(
                                       Colors.blue.shade700,
                                     ),
@@ -166,7 +175,8 @@ class _Registrarse1State extends State<Registrarse1> {
                             const Text(
                               "Completar datos",
                               style: TextStyle(
-                                color: Colors.white,                              ),
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -187,10 +197,42 @@ class _Registrarse1State extends State<Registrarse1> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            textFields('Nombres(s)', 'Ingrese su nombre', nombreEditingController, TextInputType.name, _nombreApellidoRegex, 'Ingrese un nombre válido', 0),
-                            textFields('Apellido Paterno', 'Ingrese su apellido paterno', apellidoPEditingController, TextInputType.name, _nombreApellidoRegex, 'Ingrese un apellido válido', 1),
-                            textFields('Apellido Materno', 'Ingrese su apellido materno', apellidoMEditingController, TextInputType.name, _nombreApellidoRegex, 'Ingrese un apellido válido', 2),
-                            textFields('RUT', 'Ej: 20545267-1', rutEditingController, TextInputType.text, _rutRegex, 'Ingrese un RUT válido', 3),
+                            textFields(
+                                'Nombres(s)',
+                                'Ingrese su nombre',
+                                nombreEditingController,
+                                TextInputType.name,
+                                _nombreApellidoRegex.hasMatch,
+                                'Ingrese un nombre válido',
+                                30,
+                                0),
+                            textFields(
+                                'Apellido Paterno',
+                                'Ingrese su apellido paterno',
+                                apellidoPEditingController,
+                                TextInputType.name,
+                                _nombreApellidoRegex.hasMatch,
+                                'Ingrese un apellido válido',
+                                30,
+                                1),
+                            textFields(
+                                'Apellido Materno',
+                                'Ingrese su apellido materno',
+                                apellidoMEditingController,
+                                TextInputType.name,
+                                _nombreApellidoRegex.hasMatch,
+                                'Ingrese un apellido válido',
+                                30,
+                                2),
+                            textFields(
+                                'RUT',
+                                'Ej: 20545267-1',
+                                rutEditingController,
+                                TextInputType.text,
+                                validarRut,
+                                'Ingrese un RUT válido',
+                                10,
+                                3),
                             Container(
                               margin: const EdgeInsets.symmetric(
                                 vertical: 15,
@@ -203,15 +245,20 @@ class _Registrarse1State extends State<Registrarse1> {
                                   ),
                                   DropdownButtonFormField(
                                     value: valueDropdown,
-                                    style: TextStyle(color: Colors.grey.shade800, fontSize: 16),
+                                    style: TextStyle(
+                                        color: Colors.grey.shade800,
+                                        fontSize: 16),
                                     decoration: const InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: 0, horizontal: 10),
                                       border: OutlineInputBorder(),
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue),
+                                        borderSide:
+                                            BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 1.0),
                                       ),
                                     ),
                                     itemHeight: kMinInteractiveDimension + 14,
@@ -233,8 +280,24 @@ class _Registrarse1State extends State<Registrarse1> {
                                 ],
                               ),
                             ),
-                            textFields('Correo electrónico', 'Ej: correo@dominio.cl', emailEditingController, TextInputType.emailAddress, _emailRegex, 'Ingrese un email válido', 4),
-                            textFields('Teléfono', 'Ej: 958472045', telefonoEditingController, TextInputType.phone, _telefonoRegex, 'Ingrese un teléfono válido', 5),
+                            textFields(
+                                'Correo electrónico',
+                                'Ej: correo@dominio.cl',
+                                emailEditingController,
+                                TextInputType.emailAddress,
+                                _emailRegex.hasMatch,
+                                'Ingrese un email válido',
+                                50,
+                                4),
+                            textFields(
+                                'Teléfono',
+                                'Ej: 958472045',
+                                telefonoEditingController,
+                                TextInputType.phone,
+                                _telefonoRegex.hasMatch,
+                                'Ingrese un teléfono válido',
+                                9,
+                                5),
                             const Text(
                               'DATOS VEHÍCULO',
                               style: TextStyle(
@@ -242,49 +305,72 @@ class _Registrarse1State extends State<Registrarse1> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            textFields('Patente', 'Ej: GGXX20', patenteEditingController, TextInputType.text, _patenteRegex, 'Ingrese una patente válida', 6),
+                            textFields(
+                                'Patente',
+                                'Ej: GGXX20',
+                                patenteEditingController,
+                                TextInputType.text,
+                                _patenteRegex.hasMatch,
+                                'Ingrese una patente válida',
+                                6,
+                                6),
                             Center(
                               child: Container(
                                 margin: const EdgeInsets.only(
                                   bottom: 15,
                                 ),
                                 child: ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStatePropertyAll(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                backgroundColor: MaterialStatePropertyAll(Colors.blue.shade700),
-              ),
-              onPressed: _isButtonDisabled ? null : () {
-                if (camposValidos.every((campoValido) => campoValido)) {
-                  llenarRegistro(rutEditingController.text, valueDropdown, nombreEditingController.text, apellidoPEditingController.text, apellidoMEditingController.text,
-                      emailEditingController.text, telefonoEditingController.text);
-                  llenarAuto(patenteEditingController.text);
-                  print(getRegistro());
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Registrarse2()),
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Por favor, complete todos los campos antes de continuar.'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                }
-              },
-              child: const Text(
-                '> Cree su contraseña',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+                                  style: ButtonStyle(
+                                    shape: MaterialStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        Colors.blue.shade700),
+                                  ),
+                                  onPressed: _isButtonDisabled
+                                      ? null
+                                      : () {
+                                          if (camposValidos.every(
+                                              (campoValido) => campoValido)) {
+                                            llenarRegistro(
+                                                rutEditingController.text,
+                                                valueDropdown,
+                                                nombreEditingController.text,
+                                                apellidoPEditingController.text,
+                                                apellidoMEditingController.text,
+                                                emailEditingController.text,
+                                                telefonoEditingController.text);
+                                            llenarAuto(
+                                                patenteEditingController.text);
+                                            print(getRegistro());
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Registrarse2()),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Por favor, complete todos los campos antes de continuar.'),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          }
+                                        },
+                                  child: const Text(
+                                    '> Cree su contraseña',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
                           ],
@@ -301,7 +387,15 @@ class _Registrarse1State extends State<Registrarse1> {
     );
   }
 
-  Container textFields(String entrada, String entradaField, TextEditingController controller, TextInputType tipoInput, RegExp regExp, String invalido, int index) {
+  Container textFields(
+      String entrada,
+      String entradaField,
+      TextEditingController controller,
+      TextInputType tipoInput,
+      bool Function(String) validatorFunction,
+      String invalido,
+      int maxLength,
+      int index) {
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 15,
@@ -311,11 +405,12 @@ class _Registrarse1State extends State<Registrarse1> {
         children: [
           Text(entrada),
           TextFormField(
+            maxLength: maxLength,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: controller,
             keyboardType: tipoInput,
             validator: (value) {
-              if (value == null || !regExp.hasMatch(value)) {
+              if (value == null || !validatorFunction(value)) {
                 camposValidos[index] = false; // Marcar el campo como inválido
                 return invalido;
               }
@@ -323,7 +418,8 @@ class _Registrarse1State extends State<Registrarse1> {
               return null;
             },
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: const OutlineInputBorder(),
               labelText: entradaField,
@@ -333,11 +429,53 @@ class _Registrarse1State extends State<Registrarse1> {
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blue, width: 1.0),
               ),
+              counterText: '',
             ),
             textInputAction: TextInputAction.done,
           ),
         ],
       ),
     );
+  }
+}
+
+bool validarRut(String input) {
+  RegExp regex = RegExp(r'^\d{7,8}-[\dkK]$');
+
+  if (regex.hasMatch(input)) {
+    List<String> rutSplit = input.split('-');
+    String rut = rutSplit[0];
+    String digV = rutSplit[1];
+    int sum = 0;
+    int j = 2;
+
+    if (digV == 'K') {
+      digV = 'k';
+    }
+
+    for (int i = rut.length - 1; i >= 0; i--) {
+      sum += int.parse(rut[i]) * j;
+      j++;
+      if (j > 7) {
+        j = 2;
+      }
+    }
+
+    int vDiv = sum ~/ 11;
+    int vMult = vDiv * 11;
+    int vRes = sum - vMult;
+    int vFinal = 11 - vRes;
+
+    if (digV == 'k' && vFinal == 10) {
+      return true;
+    } else if (digV == '0' && vFinal == 11) {
+      return true;
+    } else if (int.parse(digV) == vFinal) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
   }
 }
