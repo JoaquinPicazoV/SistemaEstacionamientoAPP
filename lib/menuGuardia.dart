@@ -1,13 +1,75 @@
-// ignore_for_file: file_names, prefer_const_constructors
+// ignore_for_file: file_names, prefer_const_constructors, camel_case_types, non_constant_identifier_names, use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/confirmarReserva1.dart';
 import 'package:flutter_application_1/historialGuardia.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:postgres/postgres.dart';
 
-class menuGuardia extends StatelessWidget {
+class menuGuardia extends StatefulWidget {
+  final String RUT;
+
+  const menuGuardia({Key? key, required this.RUT}) : super(key: key);
+  @override
+  _menuGuardiaState createState() => _menuGuardiaState();
+}
+
+class _menuGuardiaState extends State<menuGuardia> {
+  late String RUT = 'BUSCANDO';
+  @override
+  void initState() {
+    BuscarNombre(RUT);
+    RUT = widget.RUT;
+    super.initState();
+  }
+
+  int estacionamientosDisponibles = 0;
+  late Connection _db;
+  String texto = 'Consultando disponibilidad...';
+  String nombreUsuario = 'Buscando nombre...';
+
+  Future<void> BuscarNombre(rut) async {
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final nombre = await _db.execute("SELECT guar_nombre, guar_apellido_paterno FROM guardia WHERE guar_rut='$RUT'");
+
+    setState(() {
+      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
+    });
+  }
+
+  Future<void> ConsultarDisponibilidad() async {
+    _db = await Connection.open(
+      Endpoint(
+        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
+        database: 'estacionamientosUlagos',
+        username: 'estacionamientosUlagos_owner',
+        password: 'D7HQdX0nweTx',
+      ),
+      settings: const ConnectionSettings(sslMode: SslMode.require),
+    );
+
+    final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
+    setState(() {
+      estacionamientosDisponibles = int.parse(results[0][0].toString());
+      texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    ConsultarDisponibilidad();
+
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -44,7 +106,7 @@ class menuGuardia extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                'Nombre_Usuario',
+                                nombreUsuario,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue.shade900,
@@ -54,6 +116,7 @@ class menuGuardia extends StatelessWidget {
                               TextButton.icon(
                                 style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
                                 onPressed: () {
+                                  clearSession();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -79,12 +142,14 @@ class menuGuardia extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Image.asset(
                     'assets/img/CCHPM.jpg',
                     fit: BoxFit.cover,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Column(
@@ -108,16 +173,18 @@ class menuGuardia extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       FractionallySizedBox(
                         widthFactor: 0.96,
                         child: ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
-                              context,
-                            MaterialPageRoute(
-                              builder: (context) => historialGuardia(),
-                            ));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => historialGuardia(),
+                                ));
                           },
                           icon: Icon(Icons.history, color: Colors.white),
                           label: Text(
@@ -134,18 +201,22 @@ class menuGuardia extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       FractionallySizedBox(
                         widthFactor: 0.96,
                         child: ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => confirmarReserva()),
+                              MaterialPageRoute(
+                                builder: (context) => confirmarReserva(),
+                              ),
                             );
                           },
-                          icon: Icon(Icons.check, color: Colors.white),
-                          label: Text(
+                          icon: const Icon(Icons.check, color: Colors.white),
+                          label: const Text(
                             'CONFIRMAR RESERVA',
                             style: TextStyle(color: Colors.white),
                           ),

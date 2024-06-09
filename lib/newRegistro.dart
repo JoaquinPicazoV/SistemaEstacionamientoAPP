@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 late String nombre, apellidoPaterno, apellidoMaterno, rut, tipoUsuario, email, password, telefono, patente;
 
 void vaciarRegistro() {

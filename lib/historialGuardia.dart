@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:postgres/postgres.dart';
@@ -41,7 +41,7 @@ class _HistorialGuardiaState extends State<historialGuardia> {
         reservas.add([
           datosReserva[i][0].toString(),
           datosReserva[i][1].toString(),
-          datosReserva[i][2].toString().replaceFirst("CHI","").trim(),
+          datosReserva[i][2].toString().replaceFirst("CHI", "").trim(),
           datosReserva[i][3].toString(),
           datosReserva[i][4].toString(),
         ]);
@@ -177,7 +177,7 @@ class _HistorialGuardiaState extends State<historialGuardia> {
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          reserva[0].toString(), 
+                                          reserva[0].toString(),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -185,7 +185,7 @@ class _HistorialGuardiaState extends State<historialGuardia> {
                                         flex: 2,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          reserva[1].toString(), 
+                                          reserva[1].toString(),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -201,7 +201,7 @@ class _HistorialGuardiaState extends State<historialGuardia> {
                                         flex: 1,
                                         fit: FlexFit.tight,
                                         child: Text(
-                                          reserva[3].toString(), 
+                                          reserva[3].toString(),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -218,6 +218,39 @@ class _HistorialGuardiaState extends State<historialGuardia> {
                                 ),
                             ],
                           ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 150,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                            Colors.blue.shade800,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Atras',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
