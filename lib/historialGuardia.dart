@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
 
 class historialGuardia extends StatefulWidget {
@@ -20,15 +21,7 @@ class _HistorialGuardiaState extends State<historialGuardia> {
 
   Future<void> buscarHistorial() async {
     print('buscando');
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final size = await _db.execute("SELECT COUNT(*) FROM RESERVA");
     final tam = size[0][0] as int;

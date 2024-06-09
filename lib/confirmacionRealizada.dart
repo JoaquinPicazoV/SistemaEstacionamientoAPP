@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, library_private_types_in_public_api, camel_case_types, use_super_parameters, use_build_context_synchronously, file_names
+// ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations, non_constant_identifier_names, use_key_in_widget_constructors, unused_local_variable, prefer_interpolation_to_compose_strings, library_private_types_in_public_api, camel_case_types, use_super_parameters, use_build_context_synchronously, file_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
@@ -28,15 +29,7 @@ class _confirmacionRealizada extends State<confirmacionRealizada> {
 
   late Connection _db;
   Future<void> BuscarDatos(RUT) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final datosUsuario = await _db.execute(
         "SELECT usua_nombre, usua_apellido_paterno, usua_apellido_materno, usua_tipo FROM USUARIO WHERE usua_rut='$RUT'");

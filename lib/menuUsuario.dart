@@ -1,8 +1,9 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, prefer_interpolation_to_compose_strings, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
+// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, prefer_interpolation_to_compose_strings, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,15 +32,7 @@ class _menuUsuarioState extends State<menuUsuario> {
   String nombreUsuario = 'Buscando nombre...';
 
   Future<void> BuscarNombre(rut) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='" + RUT + "'");
 
@@ -49,15 +42,7 @@ class _menuUsuarioState extends State<menuUsuario> {
   }
 
   Future<void> ConsultarDisponibilidad() async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
     setState(() {

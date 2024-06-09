@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures
+// ignore_for_file: avoid_print, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures, prefer_const_constructors, library_private_types_in_public_api, use_super_parameters
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
@@ -6,7 +6,6 @@ import 'package:flutter_application_1/newRegistro.dart';
 import 'package:flutter_application_1/registrarse4.dart';
 import 'package:pinput/pinput.dart';
 import 'package:flutter_application_1/utils.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'dart:async';
 
 class Registrarse3 extends StatefulWidget {
