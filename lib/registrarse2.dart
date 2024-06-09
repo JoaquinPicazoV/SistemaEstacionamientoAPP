@@ -209,7 +209,7 @@ class _Registrarse2State extends State<Registrarse2> {
                           horizontal: 20, vertical: 15),
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.all<Color>(
+                          backgroundColor: MaterialStateProperty.all<Color>(
                             contrasenasCoinciden
                                 ? Colors.green
                                 : mostrarAdvertencia
@@ -217,7 +217,7 @@ class _Registrarse2State extends State<Registrarse2> {
                                     : Colors.blue.shade700,
                           ),
                           shape:
-                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
