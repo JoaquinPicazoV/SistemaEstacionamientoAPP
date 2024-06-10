@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/codigoReserva.dart';
 
 class mapa extends StatefulWidget {
-  const mapa(Key? key);
+  final String RUT;
+  const mapa({Key? key, required this.RUT}) : super(key: key);
   @override
   _mapaState createState() => _mapaState();
 }
@@ -36,11 +38,23 @@ class _mapaState extends State<mapa> {
                       ),
                     ),
                     const Text(
-                      "ESTACIONAMIENTOS ULAGOS",
+                      "MAPA",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
+                    ),
+                    IconButton(
+                      iconSize: 36,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => codigoReserva(RUT: widget.RUT),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.chevron_right_sharp),
                     ),
                   ],
                 ),
