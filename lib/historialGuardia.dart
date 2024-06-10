@@ -1,52 +1,178 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:postgres/postgres.dart';
+import 'package:flutter_application_1/database.dart';
+import 'package:flutter_application_1/historialGuardiaResultados.dart';
+import 'package:intl/intl.dart';
 
 class historialGuardia extends StatefulWidget {
   @override
   _HistorialGuardiaState createState() => _HistorialGuardiaState();
 }
 
-class _HistorialGuardiaState extends State<historialGuardia> {
+class _HistorialGuardiaState extends State<historialGuardia>
+    with TickerProviderStateMixin {
   late Connection _db;
   List<List<dynamic>> reservas = [];
+  late TabController _tabController;
+  TextEditingController _plateController = TextEditingController();
+  TextEditingController _rutController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _dateController2 = TextEditingController();
+  TextEditingController _dateController3 = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey3 = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    buscarHistorial();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
-  Future<void> buscarHistorial() async {
-    print('buscando');
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+  Future<dynamic> buscarHistorialPorPatente(patente, fecha) async {
+    try {
+      _db = DatabaseHelper().connection;
+      final existeVehiculo = await _db.execute(
+          "SELECT * FROM VEHICULO WHERE vehi_patente = '${patente.toUpperCase()}'");
+      // ignore: prefer_is_empty
+      if (existeVehiculo.length == 0) {
+        return 'El vehículo no se encuentra registrado en la base de datos';
+      } else {
+        var query =
+            "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+        if (fecha.isNotEmpty) {
+          List<String> partes = fecha.split('/');
 
-    final size = await _db.execute("SELECT COUNT(*) FROM RESERVA");
-    final tam = size[0][0] as int;
+          // Reordena las partes de la fecha en el formato deseado
+          String nuevaFecha = '${partes[2]}/${partes[1]}/${partes[0]}';
+          query =
+              "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' AND rese_fecha = '$nuevaFecha' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+        }
 
-    final datosReserva = await _db.execute("SELECT rese_usua_rut, rese_vehi_patente, rese_esta_id, TO_CHAR(rese_fecha, 'DD-MM-YY') AS rese_fecha, rese_estado FROM RESERVA");
-
-    setState(() {
-      reservas.clear();
-      for (var i = 0; i < tam; i++) {
-        reservas.add([
-          datosReserva[i][0].toString(),
-          datosReserva[i][1].toString(),
-          datosReserva[i][2].toString().replaceFirst("CHI", "").trim(),
-          datosReserva[i][3].toString(),
-          datosReserva[i][4].toString(),
-        ]);
+        final result = await _db.execute(query);
+        // ignore: prefer_is_empty
+        if (result.length == 0) {
+          if (fecha.isNotEmpty) {
+            return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
+          } else {
+            return 'No se encontraron registros asociados a la patente ingresada';
+          }
+        } else {
+          List<Map<String, dynamic>> reservations = result
+              .map((row) => {
+                    'rese_usua_rut': row[0],
+                    'rese_hora_llegada': row[1],
+                    'rese_vehi_patente': row[2],
+                    'rese_hora_salida': row[3],
+                    'rese_fecha': row[4],
+                    'esta_numero': row[5],
+                    'usua_nombre': row[6],
+                    'usua_apellido_paterno': row[7],
+                    'usua_apellido_materno': row[8],
+                    'usua_tipo': row[9],
+                  })
+              .toList();
+          print(reservations);
+          return reservations;
+        }
       }
-    });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<dynamic> buscarHistorialPorRut(rut, fecha) async {
+    try {
+      _db = DatabaseHelper().connection;
+      final existeVehiculo = await _db.execute(
+          "SELECT * FROM USUARIO WHERE usua_rut = '${rut.toUpperCase()}'");
+      // ignore: prefer_is_empty
+      if (existeVehiculo.length == 0) {
+        return 'El usuario no se encuentra registrado en la base de datos';
+      } else {
+        var query =
+            "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_usua_rut = '${rut.toUpperCase()}' AND rese_estado = 'CONFIRMADA' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+        if (fecha.isNotEmpty) {
+          List<String> partes = fecha.split('/');
+
+          // Reordena las partes de la fecha en el formato deseado
+          String nuevaFecha = '${partes[2]}/${partes[1]}/${partes[0]}';
+          query =
+              "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_usua_rut = '${rut.toUpperCase()}' AND rese_estado = 'CONFIRMADA' AND rese_fecha = '$nuevaFecha' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+        }
+
+        final result = await _db.execute(query);
+
+        // ignore: prefer_is_empty
+        if (result.length == 0) {
+          if (fecha.isNotEmpty) {
+            return 'No se encontraron registros asociados al RUT ingresado y la fecha seleccionada';
+          } else {
+            return 'No se encontraron registros asociados al RUT ingresado';
+          }
+        } else {
+          List<Map<String, dynamic>> reservations = result
+              .map((row) => {
+                    'rese_usua_rut': row[0],
+                    'rese_hora_llegada': row[1],
+                    'rese_vehi_patente': row[2],
+                    'rese_hora_salida': row[3],
+                    'rese_fecha': row[4],
+                    'esta_numero': row[5],
+                    'usua_nombre': row[6],
+                    'usua_apellido_paterno': row[7],
+                    'usua_apellido_materno': row[8],
+                    'usua_tipo': row[9],
+                  })
+              .toList();
+          print(reservations);
+          return reservations;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<dynamic> buscarHistorialPorFecha(fecha) async {
+    try {
+      _db = DatabaseHelper().connection;
+      List<String> partes = fecha.split('/');
+
+      // Reordena las partes de la fecha en el formato deseado
+      String nuevaFecha = '${partes[2]}/${partes[1]}/${partes[0]}';
+      var query =
+          "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_estado = 'CONFIRMADA' AND rese_fecha = '$nuevaFecha' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+
+      final result = await _db.execute(query);
+
+      // ignore: prefer_is_empty
+
+      if (result.length == 0) {
+        return 'No se encontraron registros asociados a la fecha seleccionada';
+      } else {
+        List<Map<String, dynamic>> reservations = result
+            .map((row) => {
+                  'rese_usua_rut': row[0],
+                  'rese_hora_llegada': row[1],
+                  'rese_vehi_patente': row[2],
+                  'rese_hora_salida': row[3],
+                  'rese_fecha': row[4],
+                  'esta_numero': row[5],
+                  'usua_nombre': row[6],
+                  'usua_apellido_paterno': row[7],
+                  'usua_apellido_materno': row[8],
+                  'usua_tipo': row[9],
+                })
+            .toList();
+        return reservations;
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -83,175 +209,32 @@ class _HistorialGuardiaState extends State<historialGuardia> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    ElevatedButton.icon(
-                      onPressed: buscarHistorial,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue.shade800,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      icon: Icon(Icons.refresh, color: Colors.white),
-                      label: Text(
-                        'Actualizar',
-                        style: TextStyle(color: Colors.white),
+                    const Text(
+                      "Buscar por",
+                      style: TextStyle(
+                        fontSize: 20,
                       ),
                     ),
-                    FractionallySizedBox(
-                      widthFactor: 0.95,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 1,
-                          ),
-                        ),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      width: 1,
-                                    ),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        'RUT',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 2,
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        'Patente',
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        'nº Est',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        'Fecha',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      fit: FlexFit.tight,
-                                      child: Text(
-                                        'Estado',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              for (var reserva in reservas)
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          reserva[0].toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 2,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          reserva[1].toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          reserva[2].toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          reserva[3].toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                      Flexible(
-                                        flex: 1,
-                                        fit: FlexFit.tight,
-                                        child: Text(
-                                          reserva[4].toString(),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    TabBar(
+                      controller: _tabController,
+                      tabs: [
+                        Tab(text: 'Fecha'),
+                        Tab(text: 'Patente'),
+                        Tab(text: 'Rut'),
+                      ],
                     ),
                     SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(
-                            Colors.blue.shade800,
-                          ),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
-                            Icon(
-                              Icons.exit_to_app,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              'Atras',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
+                      height: 600,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          // Aquí va el formulario de búsqueda por fecha
+                          buildFechaSearchForm(),
+                          // Aquí va el formulario de búsqueda por patente
+                          buildPatenteSearchForm(),
+                          // Aquí va el formulario de búsqueda por rut
+                          buildRutSearchForm(),
+                        ],
                       ),
                     ),
                   ],
@@ -262,5 +245,659 @@ class _HistorialGuardiaState extends State<historialGuardia> {
         ),
       ),
     );
+  }
+
+  Widget buildPatenteSearchForm() {
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Container(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Patente',
+                    ),
+                    TextFormField(
+                      maxLength: 6,
+                      controller: _plateController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        RegExp regex = RegExp(r'^[a-zA-Z]{4}\d{2}$');
+                        if (value!.isEmpty || !regex.hasMatch(value)) {
+                          return 'Ingrese una patente válida';
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Ej: GGXX20',
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 1.0),
+                        ),
+                        counterText: '',
+                      ),
+                      textInputAction: TextInputAction.done,
+                    ),
+                  ],
+                )),
+            Container(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Fecha (opcional)', textAlign: TextAlign.start),
+                    TextFormField(
+                      controller: _dateController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return null; // Si el valor es nulo o vacío, no hacemos ninguna validación
+                        }
+                        RegExp regex = RegExp(r'^\d{0,2}\/\d{0,2}\/\d{0,4}$');
+                        if (!regex.hasMatch(value)) {
+                          return 'Ingrese una fecha válida';
+                        } else {
+                          DateTime? selectedDate =
+                              DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
+                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                            return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
+                          }
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'DD/MM/AAAA',
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 1.0),
+                        ),
+                        counterText: '',
+                        suffixIcon: _dateController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    _dateController.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      textInputAction: TextInputAction.done,
+                      readOnly: true, // Hace que el campo sea solo de lectura
+                      enableInteractiveSelection: false,
+                      onTap: () {
+                        _seleccionarFecha(_dateController);
+                      },
+                    ),
+                  ],
+                )),
+            SizedBox(height: 75),
+            Container(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formKey.currentState?.validate() ?? false) {
+                          final result = await buscarHistorialPorPatente(
+                              _plateController.text, _dateController.text);
+                          if (result is String) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text(result),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HistorialGuardiaresultados(
+                                  texto:
+                                      'patente ${_plateController.text.toUpperCase()}',
+                                  historial: result,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Buscar',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Volver al menu principal',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Future<void> _seleccionarFecha(TextEditingController controller) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2024),
+      lastDate: DateTime.now(),
+    );
+
+    if (picked != null) {
+      final formattedDate = DateFormat('dd/MM/yyyy').format(picked);
+      setState(() {
+        controller.text = formattedDate;
+      });
+    }
+  }
+
+  Widget buildRutSearchForm() {
+    return Form(
+        key: _formKey2,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Container(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'RUT',
+                    ),
+                    TextFormField(
+                      maxLength: 10,
+                      controller: _rutController,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value!.isEmpty || !validarRut(value)) {
+                          return 'Ingrese un rut válido';
+                        } else {
+                          return null;
+                        }
+                      },
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Ej: 20545267-1',
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 1.0),
+                        ),
+                        counterText: '',
+                      ),
+                      textInputAction: TextInputAction.done,
+                    ),
+                  ],
+                )),
+            Container(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Fecha (opcional)', textAlign: TextAlign.start),
+                    TextFormField(
+                      controller: _dateController2,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return null; // Si el valor es nulo o vacío, no hacemos ninguna validación
+                        }
+                        RegExp regex = RegExp(r'^\d{0,2}\/\d{0,2}\/\d{0,4}$');
+                        if (!regex.hasMatch(value)) {
+                          return 'Ingrese una fecha válida';
+                        } else {
+                          DateTime? selectedDate =
+                              DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
+                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                            return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
+                          }
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'DD/MM/AAAA',
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 1.0),
+                        ),
+                        counterText: '',
+                        suffixIcon: _dateController2.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    _dateController2.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      textInputAction: TextInputAction.done,
+                      readOnly: true, // Hace que el campo sea solo de lectura
+                      enableInteractiveSelection: false,
+                      onTap: () {
+                        _seleccionarFecha(_dateController2);
+                      },
+                    ),
+                  ],
+                )),
+            SizedBox(height: 75),
+            Container(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formKey2.currentState?.validate() ?? false) {
+                          final result = await buscarHistorialPorRut(
+                              _rutController.text, _dateController2.text);
+                          if (result is String) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text(result),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HistorialGuardiaresultados(
+                                  texto:
+                                      'RUT ${_rutController.text.toUpperCase()}',
+                                  historial: result,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Buscar',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Volver al menu principal',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+
+  Widget buildFechaSearchForm() {
+    return Form(
+        key: _formKey3,
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            Container(
+                padding:
+                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Fecha', textAlign: TextAlign.start),
+                    TextFormField(
+                      controller: _dateController3,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) {
+                        if (value == null || value.isEmpty || value == '') {
+                          return 'Ingrese una fecha válida';
+                        }
+                        RegExp regex = RegExp(r'^\d{0,2}\/\d{0,2}\/\d{0,4}$');
+                        if (!regex.hasMatch(value)) {
+                          return 'Ingrese una fecha válida';
+                        } else {
+                          DateTime? selectedDate =
+                              DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
+                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                            return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
+                          }
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'DD/MM/AAAA',
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 0, horizontal: 10),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        border: const OutlineInputBorder(),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 1.0),
+                        ),
+                        counterText: '',
+                        suffixIcon: _dateController3.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    _dateController3.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                      textInputAction: TextInputAction.done,
+                      readOnly: true, // Hace que el campo sea solo de lectura
+                      enableInteractiveSelection: false,
+                      onTap: () {
+                        _seleccionarFecha(_dateController3);
+                      },
+                    ),
+                  ],
+                )),
+            SizedBox(height: 75),
+            Container(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                children: [
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (_formKey3.currentState?.validate() ?? false) {
+                          final result = await buscarHistorialPorFecha(
+                              _dateController3.text);
+                          if (result is String) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Error'),
+                                  content: Text(result),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    HistorialGuardiaresultados(
+                                  texto:
+                                      'la fecha ${_dateController3.text.toUpperCase()}',
+                                  historial: result,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.search,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Buscar',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(
+                          Colors.blue.shade800,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Icon(
+                              Icons.exit_to_app,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Volver al menu principal',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          ],
+        ));
+  }
+}
+
+bool validarRut(String input) {
+  RegExp regex = RegExp(r'^\d{7,8}-[\dkK]$');
+
+  if (regex.hasMatch(input)) {
+    List<String> rutSplit = input.split('-');
+    String rut = rutSplit[0];
+    String digV = rutSplit[1];
+    int sum = 0;
+    int j = 2;
+
+    if (digV == 'K') {
+      digV = 'k';
+    }
+
+    for (int i = rut.length - 1; i >= 0; i--) {
+      sum += int.parse(rut[i]) * j;
+      j++;
+      if (j > 7) {
+        j = 2;
+      }
+    }
+
+    int vDiv = sum ~/ 11;
+    int vMult = vDiv * 11;
+    int vRes = sum - vMult;
+    int vFinal = 11 - vRes;
+
+    if (digV == 'k' && vFinal == 10) {
+      return true;
+    } else if (digV == '0' && vFinal == 11) {
+      return true;
+    } else if (int.parse(digV) == vFinal) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
   }
 }
