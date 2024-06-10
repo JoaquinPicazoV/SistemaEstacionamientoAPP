@@ -22,25 +22,19 @@ void main() async {
 Future<void> funcionSession(context) async {
   Connection _db = DatabaseHelper().connection;
   String? correo = await getSession();
-  if (await getExistSession() &&
-      RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
-    final testRut = await _db.execute(
-        "SELECT guar_rut FROM guardia WHERE guar_correo='" +
-            correo.toString() +
-            "'");
+  print(await getSession());
+  if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
+    final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo.toString() + "'");
     String stringRut = testRut[0][0].toString();
+    print(stringRut);
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => menuGuardia(RUT: stringRut),
       ),
     );
-  } else if (await getExistSession() &&
-      RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
-    final testRut = await _db.execute(
-        "SELECT usua_rut FROM usuario WHERE usua_correo='" +
-            correo.toString() +
-            "'");
+  } else if (await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
+    final testRut = await _db.execute("SELECT usua_rut FROM usuario WHERE usua_correo='" + correo.toString() + "'");
     String stringRut = testRut[0][0].toString();
     Navigator.push(
       context,
@@ -91,8 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
     saveSession(correo);
 
     if (alumno) {
-      final results = await _db.execute(
-          "SELECT usua_rut FROM USUARIO WHERE usua_correo='" + correo + "'");
+      final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='" + correo + "'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
       Navigator.push(
@@ -100,8 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
       );
     } else {
-      final results = await _db.execute(
-          "SELECT guar_rut FROM guardia WHERE guar_correo='" + correo + "'");
+      final results = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo + "'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
       Navigator.push(
@@ -121,15 +113,13 @@ class _MyHomePageState extends State<MyHomePage> {
     coincidencias = int.parse(results[0][0].toString());
     if (coincidencias == 1 && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo)) {
       print("CONTRASEÑA CORRECTA alumno");
-      buscarRut(controladorCorreo.text.trim(),
-          controladorContrasena.text.trim(), true);
+      buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim(), true);
 
       /* TAMBIEN FALTA CREAR SESIONES Y ASI TRABAJAR MAS FACIL CON 
                                             LAS INTERFACES SIGUIENTES PARA NO INICIAR SESION MUCHAS VECES*/
     } else if (coincidencias == 1 && RegExp(r'@ulagos.cl').hasMatch(correo)) {
       print("CONTRASEÑA CORRECTA guardia");
-      buscarRut(controladorCorreo.text.trim(),
-          controladorContrasena.text.trim(), false);
+      buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim(), false);
     } else {
       print("CONTRASEÑA INCORRECTA");
     }
@@ -189,16 +179,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blue.shade700),
+                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                                     alignment: Alignment.center,
                                   ),
                                   onPressed: () {},
                                   child: const Text(
                                     'Iniciar sesión',
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16, color: Colors.white),
+                                    style: TextStyle(fontSize: 16, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -210,8 +198,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Registrarse1()),
+                                      MaterialPageRoute(builder: (context) => Registrarse1()),
                                     );
                                   },
                                   child: const Text(
@@ -249,8 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                     ),
                                     child: IconButton(
-                                      icon: const Icon(Icons.email,
-                                          color: Colors.black),
+                                      icon: const Icon(Icons.email, color: Colors.black),
                                       onPressed: () {},
                                     ),
                                   ),
@@ -258,8 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     borderSide: BorderSide(color: Colors.blue),
                                   ),
                                   focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 1.0),
+                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                   ),
                                 ),
                               ),
@@ -275,12 +260,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                     decoration: const InputDecoration(
                                       labelText: 'Contraseña',
                                       enabledBorder: OutlineInputBorder(
-                                        borderSide:
-                                            BorderSide(color: Colors.blue),
+                                        borderSide: BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 1.0),
+                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                       ),
                                     ),
                                   ),
@@ -294,9 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ),
                                       child: IconButton(
                                         icon: Icon(
-                                          obscurePassword
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
+                                          obscurePassword ? Icons.visibility_off : Icons.visibility,
                                           color: Colors.black,
                                         ),
                                         onPressed: () {
@@ -320,8 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                       child: IconButton(
-                                        icon: const Icon(Icons.lock,
-                                            color: Colors.black),
+                                        icon: const Icon(Icons.lock, color: Colors.black),
                                         onPressed: () {},
                                       ),
                                     ),
@@ -331,8 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             const SizedBox(height: 20),
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
                               child: Form(
                                 child: Column(
                                   children: [
@@ -340,14 +319,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                       widthFactor: 0.85,
                                       child: ElevatedButton.icon(
                                         onPressed: () {
-                                          String email =
-                                              controladorCorreo.text.trim();
-                                          String clave =
-                                              controladorContrasena.text.trim();
+                                          String email = controladorCorreo.text.trim();
+                                          String clave = controladorContrasena.text.trim();
                                           AnalizarCredenciales(email, clave);
                                         },
-                                        icon: const Icon(Icons.login,
-                                            color: Colors.white),
+                                        icon: const Icon(Icons.login, color: Colors.white),
                                         label: const Text(
                                           'INGRESAR',
                                           style: TextStyle(
@@ -357,8 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors.blue.shade700,
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                         ),
                                       ),
