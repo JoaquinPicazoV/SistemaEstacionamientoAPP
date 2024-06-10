@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_string_interpolations, non_constant_identifier_names, use_build_context_synchronously, avoid_print, prefer_const_declarations, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
+// ignore_for_file: prefer_const_constructors, prefer_interpolation_to_compose_strings, unused_local_variable, unnecessary_string_interpolations, non_constant_identifier_names, use_build_context_synchronously, avoid_print, prefer_const_declarations, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -18,7 +19,7 @@ class codigoReserva extends StatefulWidget {
 class _codigoReserva extends State<codigoReserva> {
   @override
   void initState() {
-    RUT = widget.RUT; 
+    RUT = widget.RUT;
     BuscarNombre(RUT);
     super.initState();
     TieneReserva(RUT);
@@ -31,15 +32,7 @@ class _codigoReserva extends State<codigoReserva> {
   late Connection _db;
   String nombreUsuario = 'Buscando nombre...';
   Future<void> BuscarNombre(rut) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final nombre = await _db.execute(
         "SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='" +
@@ -52,15 +45,7 @@ class _codigoReserva extends State<codigoReserva> {
   }
 
   Future<void> DatosReserva(RUT) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
     final datosReserva = await _db.execute(
         "SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='" +
             RUT +
@@ -80,15 +65,7 @@ class _codigoReserva extends State<codigoReserva> {
   }
 
   Future<void> CancelarReserva(RUT) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
     final datos = await _db.execute(
         "SELECT rese_id, rese_esta_id FROM RESERVA WHERE rese_usua_rut='" +
             RUT +
@@ -103,15 +80,7 @@ class _codigoReserva extends State<codigoReserva> {
   }
 
   Future<void> Reservar(RUT) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
     DateTime actual = DateTime.now();
     String fechaFormato = DateFormat('MM-dd-yy').format(actual);
 
@@ -148,15 +117,7 @@ class _codigoReserva extends State<codigoReserva> {
   }
 
   Future<void> TieneReserva(RUT) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     final tiene = await _db.execute(
         "SELECT COUNT(*) FROM RESERVA WHERE rese_usua_rut='" +
@@ -383,7 +344,14 @@ class _codigoReserva extends State<codigoReserva> {
                   ),
                   SizedBox(height: 10),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => menuUsuario(RUT: RUT),
+                        ),
+                      );
+                    },
                     icon: Icon(Icons.home, color: Colors.white),
                     label: Text(
                       'VOLVER AL INICIO',

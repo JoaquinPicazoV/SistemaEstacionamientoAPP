@@ -1,6 +1,7 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names, camel_case_types, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names, camel_case_types, use_key_in_widget_constructors, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
 
 class actualizarVehiculo extends StatefulWidget {
@@ -22,15 +23,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
   }
 
   Future<void> _connectToDatabase() async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
+    Connection _db = DatabaseHelper().connection;
 
     String rut = '21008896-2';
 

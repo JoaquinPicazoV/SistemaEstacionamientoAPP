@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_final_fields, prefer_const_constructors, avoid_print, unused_element, library_private_types_in_public_api, use_key_in_widget_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/registrarse2.dart';
 import 'package:flutter_application_1/newRegistro.dart';
+import 'package:postgres/postgres.dart';
 
 class Registrarse1 extends StatefulWidget {
   @override
@@ -28,7 +30,7 @@ class _Registrarse1State extends State<Registrarse1> {
     false,
     false,
     false
-  ]; // Lista de validación de campos
+  ];
   bool _isButtonDisabled = false;
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
@@ -37,14 +39,29 @@ class _Registrarse1State extends State<Registrarse1> {
   RegExp get _telefonoRegex => RegExp(r'^9[0-9]{8}$');
   RegExp get _nombreApellidoRegex => RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$');
 
-  bool valido = false;
+  bool valido = true;
+
   late String valueDropdown;
 
+  late Connection _db;
+
   @override
-  void initState() {
+  void initState(){
+    
     super.initState();
     valueDropdown = 'Estudiante';
+   
   }
+
+  Future<void> BuscarCorreo(String correo) async {
+  _db = DatabaseHelper().connection;
+  final existe = await _db.execute("SELECT COUNT(*) FROM USUARIO WHERE usua_correo='$correo'");
+  final existeCorreo = existe[0][0] == 1;
+  setState(() {
+    valido = !existeCorreo;
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,11 +136,11 @@ class _Registrarse1State extends State<Registrarse1> {
                                 alignment: Alignment.center,
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
+                                    shape: MaterialStateProperty.all(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10))),
-                                    backgroundColor: MaterialStatePropertyAll(
+                                            BorderRadius.circular(10))),
+                                    backgroundColor: MaterialStateProperty.all(
                                       Colors.blue.shade700,
                                     ),
                                   ),
@@ -254,7 +271,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                       border: OutlineInputBorder(),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide:
-                                            BorderSide(color: Colors.blue),
+                                        BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -265,11 +282,10 @@ class _Registrarse1State extends State<Registrarse1> {
                                     isExpanded: true,
                                     items: list
                                         .map<DropdownMenuItem<String>>(
-                                          (value) => DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(value),
-                                          ),
-                                        )
+                                            (value) => DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        ))
                                         .toList(),
                                     onChanged: (String? value) {
                                       setState(() {
@@ -286,7 +302,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                 emailEditingController,
                                 TextInputType.emailAddress,
                                 _emailRegex.hasMatch,
-                                'Ingrese un email válido',
+                                valido ? 'Ingrese un email válido' : 'Este correo ya existe',
                                 50,
                                 4),
                             textFields(
@@ -321,47 +337,47 @@ class _Registrarse1State extends State<Registrarse1> {
                                 ),
                                 child: ElevatedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
+                                    shape: MaterialStateProperty.all(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStatePropertyAll(
+                                    backgroundColor: MaterialStateProperty.all(
                                         Colors.blue.shade700),
                                   ),
                                   onPressed: _isButtonDisabled
                                       ? null
                                       : () {
-                                          if (camposValidos.every(
-                                              (campoValido) => campoValido)) {
-                                            llenarRegistro(
-                                                rutEditingController.text,
-                                                valueDropdown,
-                                                nombreEditingController.text,
-                                                apellidoPEditingController.text,
-                                                apellidoMEditingController.text,
-                                                emailEditingController.text,
-                                                telefonoEditingController.text);
-                                            llenarAuto(
-                                                patenteEditingController.text);
-                                            print(getRegistro());
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Registrarse2()),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                    'Por favor, complete todos los campos antes de continuar.'),
-                                                duration: Duration(seconds: 1),
-                                              ),
-                                            );
-                                          }
-                                        },
+                                    if (camposValidos.every(
+                                            (campoValido) => campoValido)) {
+                                      llenarRegistro(
+                                          rutEditingController.text,
+                                          valueDropdown,
+                                          nombreEditingController.text,
+                                          apellidoPEditingController.text,
+                                          apellidoMEditingController.text,
+                                          emailEditingController.text,
+                                          telefonoEditingController.text);
+                                      llenarAuto(
+                                          patenteEditingController.text);
+                                      print(getRegistro());
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                Registrarse2()),
+                                      );
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'Por favor, complete todos los campos antes de continuar.'),
+                                          duration: Duration(seconds: 1),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   child: const Text(
                                     '> Cree su contraseña',
                                     style: TextStyle(
@@ -411,15 +427,26 @@ class _Registrarse1State extends State<Registrarse1> {
             keyboardType: tipoInput,
             validator: (value) {
               if (value == null || !validatorFunction(value)) {
-                camposValidos[index] = false; // Marcar el campo como inválido
+                camposValidos[index] = false; 
                 return invalido;
               }
-              camposValidos[index] = true; // Marcar el campo como válido
+              camposValidos[index] = true;
               return null;
+            },
+            onChanged: (value) {
+              if (entrada == 'Correo electrónico') {
+                if (value.isEmpty) {
+                  setState(() {
+                    valido = true;
+                  });
+                } else {
+                  BuscarCorreo(value);
+                }
+              }
             },
             decoration: InputDecoration(
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: const OutlineInputBorder(),
               labelText: entradaField,
@@ -430,6 +457,7 @@ class _Registrarse1State extends State<Registrarse1> {
                 borderSide: BorderSide(color: Colors.blue, width: 1.0),
               ),
               counterText: '',
+              errorText: entrada == 'Correo electrónico' && !valido ? 'Este correo ya existe.' : null,
             ),
             textInputAction: TextInputAction.done,
           ),
