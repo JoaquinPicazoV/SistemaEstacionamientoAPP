@@ -13,7 +13,6 @@ class actualizarVehiculo extends StatefulWidget {
 }
 
 class _ActualizarVehiculoState extends State<actualizarVehiculo> {
-  
   List<Map<String, dynamic>> _vehicles = [];
   bool _isLoading = true;
   late String RUT = 'BUSCANDO';
@@ -23,7 +22,6 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
     RUT = widget.RUT;
     _connectToDatabase();
     super.initState();
-
   }
 
   Future<void> _connectToDatabase() async {
@@ -132,11 +130,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
                       SizedBox(height: 30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _isLoading
-                            ? [Center(child: CircularProgressIndicator())]
-                            : _vehicles
-                                .map((vehicle) => _buildVehicleContainer(vehicle))
-                                .toList(),
+                        children: _isLoading ? [Center(child: CircularProgressIndicator())] : _vehicles.map((vehicle) => _buildVehicleContainer(vehicle)).toList(),
                       ),
                       SizedBox(height: 200),
                     ],
@@ -150,73 +144,71 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
     );
   }
 
-Widget _buildVehicleContainer(Map<String, dynamic> vehicleData) {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 10),
-    padding: EdgeInsets.all(10),
-    decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(8),
-    border: Border.all(color: Colors.green, width: 2), // Ajusta el ancho del borde aquí
-  ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildDataRow("Patente:", vehicleData["vehi_patente"]),
-        _buildDataRow("Marca:", vehicleData["vehi_marca"]),
-        _buildDataRow("Modelo:", vehicleData["vehi_modelo"]),
-        _buildDataRow("Año:", vehicleData["vehi_anio"].toString()),
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildButton("Editar", Icons.edit, () {
-              // Aquí va la lógica para editar el vehículo
-            }, Colors.blue), // Color verde para el botón "Editar"
-            _buildButton("Eliminar", Icons.delete, () {
-              // Aquí va la lógica para eliminar el vehículo
-            }, Colors.red), // Color rojo para el botón "Eliminar"
-          ],
+  Widget _buildVehicleContainer(Map<String, dynamic> vehicleData) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.green, width: 2), // Ajusta el ancho del borde aquí
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDataRow("Patente:", vehicleData["vehi_patente"]),
+          _buildDataRow("Marca:", vehicleData["vehi_marca"]),
+          _buildDataRow("Modelo:", vehicleData["vehi_modelo"]),
+          _buildDataRow("Año:", vehicleData["vehi_anio"].toString()),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildButton("Editar", Icons.edit, () {
+                // Aquí va la lógica para editar el vehículo
+              }, Colors.blue), // Color verde para el botón "Editar"
+              _buildButton("Eliminar", Icons.delete, () {
+                // Aquí va la lógica para eliminar el vehículo
+              }, Colors.red), // Color rojo para el botón "Eliminar"
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildButton("Usar", Icons.verified, () {
+                // Aquí va la lógica para usar el vehículo
+              }, Colors.green), // Color azul para el botón "Usar"
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildButton(String text, IconData icon, Function() onPressed, Color color) {
+    return Container(
+      width: 140, // Ancho fijo para los botones
+      decoration: BoxDecoration(
+        color: color, // Color de fondo del contenedor
+        borderRadius: BorderRadius.circular(10), // Radio del borde del contenedor
+      ),
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: Icon(
+          icon,
+          color: Colors.white, // Color blanco para el icono
         ),
-        SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildButton("Usar", Icons.verified, () {
-              // Aquí va la lógica para usar el vehículo
-            }, Colors.green), // Color azul para el botón "Usar"
-          ],
+        label: Text(
+          text,
+          style: TextStyle(color: Colors.white), // Color blanco para el texto del botón
         ),
-      ],
-    ),
-  );
-}
-
-Widget _buildButton(String text, IconData icon, Function() onPressed, Color color) {
-  return Container(
-    width: 140, // Ancho fijo para los botones
-    decoration: BoxDecoration(
-      color: color, // Color de fondo del contenedor
-      borderRadius: BorderRadius.circular(10), // Radio del borde del contenedor
-    ),
-    child: ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(
-        icon,
-        color: Colors.white, // Color blanco para el icono
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent, // Establece el color transparente para el botón
+          shadowColor: Colors.transparent,
+        ),
       ),
-      label: Text(
-        text,
-        style: TextStyle(color: Colors.white), // Color blanco para el texto del botón
-      ),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent, // Establece el color transparente para el botón
-        shadowColor: Colors.transparent, 
-      ),
-    ),
-  );
-}
-
-
+    );
+  }
 
   Widget _buildDataRow(String title, String? data) {
     return Column(

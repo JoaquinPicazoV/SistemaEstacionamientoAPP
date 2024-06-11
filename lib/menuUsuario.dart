@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
-import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/mapa.dart';
 import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/usuarioReservas.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
@@ -51,7 +51,7 @@ class _menuUsuarioState extends State<menuUsuario> {
   }
 
   Future<void> ConsultarDisponibilidad() async {
-   _db = DatabaseHelper().connection;
+    _db = DatabaseHelper().connection;
 
     final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
     setState(() {
@@ -214,7 +214,14 @@ class _menuUsuarioState extends State<menuUsuario> {
                             FractionallySizedBox(
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => usuarioReservas(RUT:widget.RUT),
+                                    ),
+                                  );
+                                },
                                 icon: const Icon(Icons.history, color: Colors.white),
                                 label: const Text(
                                   'MIS RESERVAS',
@@ -262,7 +269,9 @@ class _menuUsuarioState extends State<menuUsuario> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => actualizarVehiculo(RUT: widget.RUT,),
+                                      builder: (context) => actualizarVehiculo(
+                                        RUT: widget.RUT,
+                                      ),
                                     ),
                                   );
                                 },

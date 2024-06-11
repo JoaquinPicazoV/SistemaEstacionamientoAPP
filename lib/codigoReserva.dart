@@ -42,10 +42,10 @@ class _codigoReserva extends State<codigoReserva> {
 
   Future<void> DatosReserva(RUT) async {
     Connection _db = DatabaseHelper().connection;
-    final datosReserva = await _db
-        .execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
+    final datosReserva =
+        await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
 
-    final nEst = await _db.execute("SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='" + datosReserva[0][0].toString() + "'");
+    final nEst = await _db.execute("SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='${datosReserva[0][0]}'");
 
     setState(() {
       horarioMaximo = datosReserva[0][1].toString();
@@ -80,11 +80,14 @@ class _codigoReserva extends State<codigoReserva> {
     print(fechaFormato);
     print(horaFormato);
 
+    print('rut guardia:$rutGuardia, RUT: $RUT, ID:$ID, patente:$patente, fecha formato:$fechaFormato, hora formato:$horaFormato');
+
     final reservar = await _db.execute(
       "INSERT INTO RESERVA(rese_guar_rut, rese_usua_rut, rese_esta_id, rese_vehi_patente, rese_fecha, rese_estado, rese_hora_inicio) VALUES('$rutGuardia', '$RUT', '${ID[0][0]}', '${patente[0][0]}', '$fechaFormato', 'EN ESPERA', '$horaFormato')",
     );
+    print('{ID[0][0].toString()}:${ID[0][0].toString()}');
+    final estadoEstacionamiento = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='RESERVADO' WHERE esta_id='${ID[0][0]}'");
 
-    final estadoEstacionamiento = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='RESERVADO' WHERE esta_id='" + ID[0][0].toString() + "'");
     print(reservar);
     print(estadoEstacionamiento);
     DatosReserva(RUT);
@@ -95,8 +98,8 @@ class _codigoReserva extends State<codigoReserva> {
 
     final tiene = await _db.execute("SELECT COUNT(*) FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
     if (tiene[0][0].toString() == '1') {
-      final datosReserva = await _db
-          .execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
+      final datosReserva =
+          await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
 
       final nEst = await _db.execute("SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='" + datosReserva[0][0].toString() + "'");
 

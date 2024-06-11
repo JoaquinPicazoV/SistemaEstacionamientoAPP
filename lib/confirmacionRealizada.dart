@@ -27,7 +27,6 @@ class _confirmacionRealizada extends State<confirmacionRealizada> {
   String rol = 'Buscando...';
   String nEstacionamiento = 'Buscando...';
 
-  late Connection _db;
   Future<void> BuscarDatos(RUT) async {
     Connection _db = DatabaseHelper().connection;
 

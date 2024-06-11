@@ -12,8 +12,7 @@ class historialGuardia extends StatefulWidget {
   _HistorialGuardiaState createState() => _HistorialGuardiaState();
 }
 
-class _HistorialGuardiaState extends State<historialGuardia>
-    with TickerProviderStateMixin {
+class _HistorialGuardiaState extends State<historialGuardia> with TickerProviderStateMixin {
   late Connection _db;
   List<List<dynamic>> reservas = [];
   late TabController _tabController;
@@ -35,8 +34,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
   Future<dynamic> buscarHistorialPorPatente(patente, fecha) async {
     try {
       _db = DatabaseHelper().connection;
-      final existeVehiculo = await _db.execute(
-          "SELECT * FROM VEHICULO WHERE vehi_patente = '${patente.toUpperCase()}'");
+      final existeVehiculo = await _db.execute("SELECT * FROM VEHICULO WHERE vehi_patente = '${patente.toUpperCase()}'");
       // ignore: prefer_is_empty
       if (existeVehiculo.length == 0) {
         return 'El vehículo no se encuentra registrado en la base de datos';
@@ -87,8 +85,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
   Future<dynamic> buscarHistorialPorRut(rut, fecha) async {
     try {
       _db = DatabaseHelper().connection;
-      final existeVehiculo = await _db.execute(
-          "SELECT * FROM USUARIO WHERE usua_rut = '${rut.toUpperCase()}'");
+      final existeVehiculo = await _db.execute("SELECT * FROM USUARIO WHERE usua_rut = '${rut.toUpperCase()}'");
       // ignore: prefer_is_empty
       if (existeVehiculo.length == 0) {
         return 'El usuario no se encuentra registrado en la base de datos';
@@ -254,8 +251,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
           children: [
             SizedBox(height: 20),
             Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -277,16 +273,14 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         labelText: 'Ej: GGXX20',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 1.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
                       ),
@@ -295,8 +289,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
                   ],
                 )),
             Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -312,10 +305,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                         if (!regex.hasMatch(value)) {
                           return 'Ingrese una fecha válida';
                         } else {
-                          DateTime? selectedDate =
-                              DateFormat('dd/MM/yyyy').parse(value, true);
-                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
-                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                          DateTime? selectedDate = DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) || selectedDate.isAfter(DateTime.now())) {
                             return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
                           }
                         }
@@ -323,16 +314,14 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       },
                       decoration: InputDecoration(
                         labelText: 'DD/MM/AAAA',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 1.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
                         suffixIcon: _dateController.text.isNotEmpty
@@ -368,8 +357,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       ),
                       onPressed: () async {
                         if (_formKey.currentState?.validate() ?? false) {
-                          final result = await buscarHistorialPorPatente(
-                              _plateController.text, _dateController.text);
+                          final result = await buscarHistorialPorPatente(_plateController.text, _dateController.text);
                           if (result is String) {
                             showDialog(
                               context: context,
@@ -392,10 +380,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HistorialGuardiaresultados(
-                                  texto:
-                                      'patente ${_plateController.text.toUpperCase()}',
+                                builder: (context) => HistorialGuardiaresultados(
+                                  texto: 'patente ${_plateController.text.toUpperCase()}',
                                   historial: result,
                                 ),
                               ),
@@ -483,8 +469,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
           children: [
             SizedBox(height: 20),
             Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -505,16 +490,14 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       keyboardType: TextInputType.text,
                       decoration: InputDecoration(
                         labelText: 'Ej: 20545267-1',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 1.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
                       ),
@@ -523,8 +506,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
                   ],
                 )),
             Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -540,10 +522,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                         if (!regex.hasMatch(value)) {
                           return 'Ingrese una fecha válida';
                         } else {
-                          DateTime? selectedDate =
-                              DateFormat('dd/MM/yyyy').parse(value, true);
-                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
-                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                          DateTime? selectedDate = DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) || selectedDate.isAfter(DateTime.now())) {
                             return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
                           }
                         }
@@ -551,16 +531,14 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       },
                       decoration: InputDecoration(
                         labelText: 'DD/MM/AAAA',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 1.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
                         suffixIcon: _dateController2.text.isNotEmpty
@@ -596,8 +574,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       ),
                       onPressed: () async {
                         if (_formKey2.currentState?.validate() ?? false) {
-                          final result = await buscarHistorialPorRut(
-                              _rutController.text, _dateController2.text);
+                          final result = await buscarHistorialPorRut(_rutController.text, _dateController2.text);
                           if (result is String) {
                             showDialog(
                               context: context,
@@ -620,10 +597,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HistorialGuardiaresultados(
-                                  texto:
-                                      'RUT ${_rutController.text.toUpperCase()}',
+                                builder: (context) => HistorialGuardiaresultados(
+                                  texto: 'RUT ${_rutController.text.toUpperCase()}',
                                   historial: result,
                                 ),
                               ),
@@ -695,8 +670,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
           children: [
             SizedBox(height: 20),
             Container(
-                padding:
-                    EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -712,10 +686,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                         if (!regex.hasMatch(value)) {
                           return 'Ingrese una fecha válida';
                         } else {
-                          DateTime? selectedDate =
-                              DateFormat('dd/MM/yyyy').parse(value, true);
-                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) ||
-                              selectedDate.isAfter(DateTime(2024, 6, 9))) {
+                          DateTime? selectedDate = DateFormat('dd/MM/yyyy').parse(value, true);
+                          if (selectedDate.isBefore(DateTime(2024, 1, 1)) || selectedDate.isAfter(DateTime(2024, 6, 9))) {
                             return 'Ingrese una fecha entre 01/01/2024 y 09/06/2024';
                           }
                         }
@@ -723,16 +695,14 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       },
                       decoration: InputDecoration(
                         labelText: 'DD/MM/AAAA',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 10),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
                         border: const OutlineInputBorder(),
                         enabledBorder: const OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
                         focusedBorder: const OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Colors.blue, width: 1.0),
+                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
                         suffixIcon: _dateController3.text.isNotEmpty
@@ -768,8 +738,7 @@ class _HistorialGuardiaState extends State<historialGuardia>
                       ),
                       onPressed: () async {
                         if (_formKey3.currentState?.validate() ?? false) {
-                          final result = await buscarHistorialPorFecha(
-                              _dateController3.text);
+                          final result = await buscarHistorialPorFecha(_dateController3.text);
                           if (result is String) {
                             showDialog(
                               context: context,
@@ -792,10 +761,8 @@ class _HistorialGuardiaState extends State<historialGuardia>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    HistorialGuardiaresultados(
-                                  texto:
-                                      'la fecha ${_dateController3.text.toUpperCase()}',
+                                builder: (context) => HistorialGuardiaresultados(
+                                  texto: 'la fecha ${_dateController3.text.toUpperCase()}',
                                   historial: result,
                                 ),
                               ),
