@@ -22,15 +22,7 @@ class _Registrarse1State extends State<Registrarse1> {
   TextEditingController telefonoEditingController = TextEditingController();
   TextEditingController patenteEditingController = TextEditingController();
 
-  List<bool> camposValidos = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+  List<bool> camposValidos = [false, false, false, false, false, false, false];
   bool _isButtonDisabled = false;
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
@@ -46,26 +38,24 @@ class _Registrarse1State extends State<Registrarse1> {
   late Connection _db;
 
   @override
-  void initState(){
-    
+  void initState() {
     super.initState();
     valueDropdown = 'Estudiante';
-   
   }
 
   Future<void> BuscarCorreo(String correo) async {
-  _db = DatabaseHelper().connection;
-  final existe = await _db.execute("SELECT COUNT(*) FROM USUARIO WHERE usua_correo='$correo'");
-  final existeCorreo = existe[0][0] == 1;
-  setState(() {
-    valido = !existeCorreo;
-  });
-}
-
+    _db = DatabaseHelper().connection;
+    final existe = await _db
+        .execute("SELECT COUNT(*) FROM USUARIO WHERE usua_correo='$correo'");
+    final existeCorreo = existe[0][0] == 1;
+    setState(() {
+      valido = !existeCorreo;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    const List<String> list = ['Estudiante', 'Externo', 'Funcionario'];
+    const List<String> list = ['Estudiante', 'Profesor', 'Funcionario'];
     return Scaffold(
       backgroundColor: Colors.blue.shade900,
       body: Align(
@@ -139,7 +129,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                     shape: MaterialStateProperty.all(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                            BorderRadius.circular(10))),
+                                                BorderRadius.circular(10))),
                                     backgroundColor: MaterialStateProperty.all(
                                       Colors.blue.shade700,
                                     ),
@@ -271,7 +261,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                       border: OutlineInputBorder(),
                                       enabledBorder: OutlineInputBorder(
                                         borderSide:
-                                        BorderSide(color: Colors.blue),
+                                            BorderSide(color: Colors.blue),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
@@ -283,9 +273,9 @@ class _Registrarse1State extends State<Registrarse1> {
                                     items: list
                                         .map<DropdownMenuItem<String>>(
                                             (value) => DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        ))
+                                                  value: value,
+                                                  child: Text(value),
+                                                ))
                                         .toList(),
                                     onChanged: (String? value) {
                                       setState(() {
@@ -302,7 +292,9 @@ class _Registrarse1State extends State<Registrarse1> {
                                 emailEditingController,
                                 TextInputType.emailAddress,
                                 _emailRegex.hasMatch,
-                                valido ? 'Ingrese un email válido' : 'Este correo ya existe',
+                                valido
+                                    ? 'Ingrese un email válido'
+                                    : 'Este correo ya existe',
                                 50,
                                 4),
                             textFields(
@@ -348,36 +340,36 @@ class _Registrarse1State extends State<Registrarse1> {
                                   onPressed: _isButtonDisabled
                                       ? null
                                       : () {
-                                    if (camposValidos.every(
-                                            (campoValido) => campoValido)) {
-                                      llenarRegistro(
-                                          rutEditingController.text,
-                                          valueDropdown,
-                                          nombreEditingController.text,
-                                          apellidoPEditingController.text,
-                                          apellidoMEditingController.text,
-                                          emailEditingController.text,
-                                          telefonoEditingController.text);
-                                      llenarAuto(
-                                          patenteEditingController.text);
-                                      print(getRegistro());
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                Registrarse2()),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'Por favor, complete todos los campos antes de continuar.'),
-                                          duration: Duration(seconds: 1),
-                                        ),
-                                      );
-                                    }
-                                  },
+                                          if (camposValidos.every(
+                                              (campoValido) => campoValido)) {
+                                            llenarRegistro(
+                                                rutEditingController.text,
+                                                valueDropdown,
+                                                nombreEditingController.text,
+                                                apellidoPEditingController.text,
+                                                apellidoMEditingController.text,
+                                                emailEditingController.text,
+                                                telefonoEditingController.text);
+                                            llenarAuto(
+                                                patenteEditingController.text);
+                                            print(getRegistro());
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      Registrarse2()),
+                                            );
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                    'Por favor, complete todos los campos antes de continuar.'),
+                                                duration: Duration(seconds: 1),
+                                              ),
+                                            );
+                                          }
+                                        },
                                   child: const Text(
                                     '> Cree su contraseña',
                                     style: TextStyle(
@@ -427,7 +419,7 @@ class _Registrarse1State extends State<Registrarse1> {
             keyboardType: tipoInput,
             validator: (value) {
               if (value == null || !validatorFunction(value)) {
-                camposValidos[index] = false; 
+                camposValidos[index] = false;
                 return invalido;
               }
               camposValidos[index] = true;
@@ -446,7 +438,7 @@ class _Registrarse1State extends State<Registrarse1> {
             },
             decoration: InputDecoration(
               contentPadding:
-              const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
               floatingLabelBehavior: FloatingLabelBehavior.never,
               border: const OutlineInputBorder(),
               labelText: entradaField,
@@ -457,7 +449,9 @@ class _Registrarse1State extends State<Registrarse1> {
                 borderSide: BorderSide(color: Colors.blue, width: 1.0),
               ),
               counterText: '',
-              errorText: entrada == 'Correo electrónico' && !valido ? 'Este correo ya existe.' : null,
+              errorText: entrada == 'Correo electrónico' && !valido
+                  ? 'Este correo ya existe.'
+                  : null,
             ),
             textInputAction: TextInputAction.done,
           ),

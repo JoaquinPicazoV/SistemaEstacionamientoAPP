@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/database.dart';
+import 'package:postgres/postgres.dart';
+
 import 'package:flutter_application_1/newRegistro.dart';
 import 'package:flutter_application_1/registrarse4.dart';
 import 'package:pinput/pinput.dart';
@@ -23,6 +26,7 @@ class _Registrarse3State extends State<Registrarse3> {
   bool mostrarBotonConfirmar = true;
   int secondsLeft = 300; // 5 minutos en segundos
   late StreamSubscription<int> timerSubscription;
+  late Connection _db;
 
   @override
   void initState() {
@@ -267,11 +271,12 @@ class _Registrarse3State extends State<Registrarse3> {
                               onPressed: () async {
                                 if (pinTextEditingController.text ==
                                     widget.codigo) {
-                                  await db.execute(
+                                  _db = DatabaseHelper().connection;
+                                  await _db.execute(
                                     r'INSERT INTO usuario VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',
                                     parameters: getRegistro(),
                                   );
-                                  await db.execute(
+                                  await _db.execute(
                                     r'INSERT INTO vehiculo VALUES($1)',
                                     parameters: getAuto(),
                                   );
