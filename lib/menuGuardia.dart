@@ -18,11 +18,11 @@ class menuGuardia extends StatefulWidget {
 }
 
 class _menuGuardiaState extends State<menuGuardia> {
-  late String RUT = 'BUSCANDO';
+  late String RUT = RUT;
   @override
   void initState() {
-    BuscarNombre(RUT);
     RUT = widget.RUT;
+    BuscarNombre();
     ConsultarDisponibilidad();
     super.initState();
   }
@@ -32,12 +32,11 @@ class _menuGuardiaState extends State<menuGuardia> {
   String texto = 'Consultando disponibilidad...';
   String nombreUsuario = 'Buscando nombre...';
 
-  Future<void> BuscarNombre(rut) async {
+  Future<void> BuscarNombre() async {
     _db = DatabaseHelper().connection;
-
-    final nombre = await _db.execute(
-        "SELECT guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_rut='21008896-2'");
-
+    
+    final nombre = await _db.execute("SELECT guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_rut='$RUT'");
+    
     setState(() {
       nombreUsuario = '${nombre[0][0]} ${nombre[0][1]} ${nombre[0][2]}';
     });
@@ -46,8 +45,7 @@ class _menuGuardiaState extends State<menuGuardia> {
   Future<void> ConsultarDisponibilidad() async {
     _db = DatabaseHelper().connection;
 
-    final results = await _db.execute(
-        "SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
+    final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
     setState(() {
       estacionamientosDisponibles = int.parse(results[0][0].toString());
       texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
@@ -84,9 +82,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                               SizedBox(
                                 width: 50,
                                 height: 50,
-                                child: SvgPicture.asset(
-                                    'assets/img/logo.87d5c665 1.svg',
-                                    semanticsLabel: 'Logo Ulagos'),
+                                child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
                               ),
                             ],
                           ),
@@ -102,11 +98,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                                 ),
                               ),
                               TextButton.icon(
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    alignment: Alignment.centerRight),
+                                style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
                                 onPressed: () {
                                   clearSession();
                                   Navigator.push(
@@ -183,15 +175,13 @@ class _menuGuardiaState extends State<menuGuardia> {
                         widthFactor: 0.96,
                         child: ElevatedButton.icon(
                           onPressed: () {},
-                          icon: Icon(Icons.car_crash_outlined,
-                              color: Colors.white),
+                          icon: Icon(Icons.car_crash_outlined, color: Colors.white),
                           label: Text(
                             'ADMINISTRAR ESTACIONAMIENTO',
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -219,8 +209,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -249,8 +238,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                             style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(Colors.blue.shade700),
+                            backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),

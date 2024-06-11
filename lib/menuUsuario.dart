@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, prefer_interpolation_to_compose_strings, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
+// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/mapa.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
@@ -21,8 +22,8 @@ class _menuUsuarioState extends State<menuUsuario> {
   late String RUT = 'BUSCANDO';
   @override
   void initState() {
-    BuscarNombre(RUT);
     RUT = widget.RUT;
+    BuscarNombre(RUT);
     super.initState();
   }
 
@@ -42,10 +43,10 @@ class _menuUsuarioState extends State<menuUsuario> {
       settings: const ConnectionSettings(sslMode: SslMode.require),
     );
 
-    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='" + RUT + "'");
+    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
 
     setState(() {
-      nombreUsuario = nombre[0][0].toString() + '' + nombre[0][1].toString();
+      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
     });
   }
 
@@ -169,7 +170,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        "$texto",
+                        texto,
                         style: const TextStyle(
                           color: Colors.red,
                           fontWeight: FontWeight.bold,
@@ -191,7 +192,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => codigoReserva(RUT: RUT)),
+                                    MaterialPageRoute(builder: (context) => mapa(RUT: RUT)),
                                   );
                                 },
                                 icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
@@ -261,7 +262,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => actualizarVehiculo(),
+                                      builder: (context) => actualizarVehiculo(RUT: widget.RUT,),
                                     ),
                                   );
                                 },

@@ -5,6 +5,9 @@ import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
 
 class actualizarVehiculo extends StatefulWidget {
+  final String RUT;
+
+  const actualizarVehiculo({Key? key, required this.RUT}) : super(key: key);
   @override
   _ActualizarVehiculoState createState() => _ActualizarVehiculoState();
 }
@@ -12,25 +15,28 @@ class actualizarVehiculo extends StatefulWidget {
 class _ActualizarVehiculoState extends State<actualizarVehiculo> {
   
   List<Map<String, dynamic>> _vehicles = [];
-  late Connection _db;
   bool _isLoading = true;
-
+  late String RUT = 'BUSCANDO';
+  String nombreUsuario = 'Buscando nombre...';
   @override
   void initState() {
-    super.initState();
+    RUT = widget.RUT;
     _connectToDatabase();
+    super.initState();
 
   }
 
   Future<void> _connectToDatabase() async {
     Connection _db = DatabaseHelper().connection;
 
-    String rut = '21008896-2';
+    String rut = widget.RUT;
 
     final results = await _db.execute(
         "SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio FROM vehiculo v JOIN registrousuariovehiculo ruv ON v.vehi_patente = ruv.regi_vehi_patente WHERE ruv.regi_usua_rut = '$rut'");
+    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
 
     setState(() {
+      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
       _vehicles = [];
       for (List<dynamic> row in results) {
         Map<String, dynamic> vehicleMap = {
@@ -84,7 +90,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                'Nombre_Usuario',
+                                nombreUsuario,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: Colors.blue.shade900,
