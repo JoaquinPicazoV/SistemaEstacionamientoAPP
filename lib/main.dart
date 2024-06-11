@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
+import 'package:flutter_application_1/recuperarClave.dart';
 import 'package:flutter_application_1/registrarse1.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:postgres/postgres.dart';
@@ -368,7 +369,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        print('¿Olvidaste tu contraseña?');
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RecuperarClave(),
+                                            ));
                                       },
                                       child: const Text(
                                         "¿Olvidaste tu contraseña?",
