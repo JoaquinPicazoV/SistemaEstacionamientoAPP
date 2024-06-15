@@ -2,17 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/ReservarGuardia.dart';
+import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
-import 'package:flutter_application_1/menuGuardia.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:postgres/postgres.dart';
 
-class GuardiaMapa extends StatefulWidget {
+class Usuariomapa extends StatefulWidget {
+  final String RUT;
+
+  const Usuariomapa({Key? key, required this.RUT}) : super(key: key);
   @override
-  _GuardiaMapaState createState() => _GuardiaMapaState();
+  _Usuariomapa createState() => _Usuariomapa();
 }
 
-class _GuardiaMapaState extends State<GuardiaMapa>
+class _Usuariomapa extends State<Usuariomapa>
     with SingleTickerProviderStateMixin {
+  late String RUT = '';
   late Connection _db;
   int tamA = 0;
   int tamB = 0;
@@ -25,6 +31,16 @@ class _GuardiaMapaState extends State<GuardiaMapa>
   List<String> D = [];
   List<String> E = [];
   int nEst = 0;
+
+  Future<void> BuscarNombre(rut) async {
+    _db = DatabaseHelper().connection;
+
+    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
+
+    setState(() {
+      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
+    });
+  }
 
   Future<void> ObtenerTam() async {
     _db = DatabaseHelper().connection;
@@ -89,6 +105,8 @@ class _GuardiaMapaState extends State<GuardiaMapa>
 
   @override
   void initState() {
+    RUT = widget.RUT;
+    BuscarNombre(RUT);
     super.initState();
     ControlladorBarra = TabController(length: 5, vsync: this);
     estaSeleccionado = List.generate(104, (index) => false);
@@ -618,8 +636,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ReservarGuardia(
-                                    nEsta: (nEst + 1).toString()),
+                                builder: (context) => codigoReserva(nEst: (nEst+1).toString(), RUT:RUT),
                               ),
                             );
                           },
@@ -641,7 +658,12 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                         SizedBox(height: 20,),
                         ElevatedButton.icon(
                           onPressed: () {
-                     
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => menuUsuario(RUT:RUT),
+                              ),
+                            );
                             
                           },
                           icon: Icon(

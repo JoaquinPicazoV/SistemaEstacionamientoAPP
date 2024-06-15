@@ -1,10 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/Usuariomapa.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/mapa.dart';
 import 'package:flutter_application_1/testSeesion.dart';
 import 'package:flutter_application_1/usuarioReservas.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -192,7 +192,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                 onPressed: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(builder: (context) => mapa(RUT: RUT)),
+                                    MaterialPageRoute(builder: (context) => Usuariomapa(RUT:RUT)),
                                   );
                                 },
                                 icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
@@ -240,28 +240,8 @@ class _menuUsuarioState extends State<menuUsuario> {
                             const SizedBox(
                               height: 20,
                             ),
-                            FractionallySizedBox(
-                              widthFactor: 0.96,
-                              child: ElevatedButton.icon(
-                                onPressed: () {},
-                                icon: const Icon(Icons.location_on, color: Colors.white),
-                                label: const Text(
-                                  'MAPA DE ESTACIONAMIENTO',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                  shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
+                            
+                      
                             FractionallySizedBox(
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(

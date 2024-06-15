@@ -10,19 +10,22 @@ import 'package:intl/intl.dart';
 
 class codigoReserva extends StatefulWidget {
   final String RUT;
+  final String nEst;
 
-  const codigoReserva({Key? key, required this.RUT}) : super(key: key);
+  const codigoReserva({Key? key, required this.nEst, required this.RUT}) : super(key: key);
   @override
   _codigoReserva createState() => _codigoReserva();
 }
 
 class _codigoReserva extends State<codigoReserva> {
+  late String nEst = '';
   @override
   void initState() {
     RUT = widget.RUT;
+    nEst = widget.nEst;
     BuscarNombre(RUT);
     super.initState();
-    TieneReserva(RUT);
+    Reservar(RUT);
   }
 
   String txtestacionamiento = '';
@@ -45,11 +48,10 @@ class _codigoReserva extends State<codigoReserva> {
     final datosReserva =
         await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
 
-    final nEst = await _db.execute("SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='${datosReserva[0][0]}'");
 
     setState(() {
       horarioMaximo = datosReserva[0][1].toString();
-      estacionamiento = nEst[0][0].toString();
+      estacionamiento = nEst;
       txtestacionamiento = 'ESTACIONAMIENTO: $estacionamiento';
       txthorarioMaximo = 'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo';
     });
@@ -59,7 +61,7 @@ class _codigoReserva extends State<codigoReserva> {
     Connection _db = DatabaseHelper().connection;
     final datos = await _db.execute("SELECT rese_id, rese_esta_id FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
 
-    final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_id='" + datos[0][1].toString() + "'");
+    final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_numero='" + nEst + "'");
     final eliminar = await _db.execute("DELETE FROM RESERVA WHERE rese_id='" + datos[0][0].toString() + "'");
   }
 
@@ -71,8 +73,8 @@ class _codigoReserva extends State<codigoReserva> {
     String horaFormato = DateFormat('HH:mm:ss').format(actual);
 
     final patente = await _db.execute("SELECT regi_vehi_patente FROM REGISTROUSUARIOVEHICULO WHERE regi_usua_rut='$RUT' AND regi_estado='activo'");
-    final nEstacionamiento = await _db.execute("SELECT MAX(esta_numero) FROM ESTACIONAMIENTO WHERE esta_estado='LIBRE'");
-    final ID = await _db.execute("SELECT esta_id FROM ESTACIONAMIENTO WHERE esta_numero='" + nEstacionamiento[0][0].toString() + "'");
+    final nEstacionamiento = nEst;
+    final ID = await _db.execute("SELECT esta_id FROM ESTACIONAMIENTO WHERE esta_numero='" + nEstacionamiento + "'");
     final rutGuardia = '21008896-2';
 
     print(patente[0][0]);
@@ -93,66 +95,7 @@ class _codigoReserva extends State<codigoReserva> {
     DatosReserva(RUT);
   }
 
-  Future<void> TieneReserva(RUT) async {
-    Connection _db = DatabaseHelper().connection;
 
-    final tiene = await _db.execute("SELECT COUNT(*) FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
-    if (tiene[0][0].toString() == '1') {
-      final datosReserva =
-          await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
-
-      final nEst = await _db.execute("SELECT esta_numero FROM ESTACIONAMIENTO WHERE esta_id='" + datosReserva[0][0].toString() + "'");
-
-      setState(() {
-        horarioMaximo = datosReserva[0][1].toString();
-        estacionamiento = nEst[0][0].toString();
-        txtestacionamiento = 'ESTACIONAMIENTO: $estacionamiento';
-        txthorarioMaximo = 'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo';
-      });
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('AVISO'),
-            content: Text('Usted ya tiene una reserva activa. Para realizar otra nueva, primero debe eliminar esta (reserva activa).'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('¡Entendido!'),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('CONSULTA'),
-            content: Text('No tiene reservas hechas. ¿Desea realizar una reserva ahora?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('No'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Reservar(RUT);
-                },
-                child: Text('Si'),
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
 
   late String RUT;
 
@@ -261,7 +204,7 @@ class _codigoReserva extends State<codigoReserva> {
                     ),
                   ),
                   Text(
-                    'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo',
+                    '$txthorarioMaximo',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
