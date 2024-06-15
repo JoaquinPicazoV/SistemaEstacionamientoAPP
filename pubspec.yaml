@@ -82,6 +82,7 @@ flutter:
     - assets/img/CCHPM.jpg
     - assets/img/logo.87d5c665 1.svg
     - assets/img/XMLID_6_.svg
+    - assets/img/Mapa.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

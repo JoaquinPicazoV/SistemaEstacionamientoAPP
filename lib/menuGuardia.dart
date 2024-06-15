@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, camel_case_types, non_constant_identifier_names, use_super_parameters, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/adminGuardia1.dart';
 import 'package:flutter_application_1/confirmarReserva1.dart';
 import 'package:flutter_application_1/historialGuardia.dart';
 import 'package:flutter_application_1/main.dart';
@@ -174,7 +175,13 @@ class _menuGuardiaState extends State<menuGuardia> {
                       FractionallySizedBox(
                         widthFactor: 0.96,
                         child: ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => adminGuardia1(),
+                                ));
+                          },
                           icon: Icon(Icons.car_crash_outlined, color: Colors.white),
                           label: Text(
                             'ADMINISTRAR ESTACIONAMIENTO',
