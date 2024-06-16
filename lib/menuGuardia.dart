@@ -194,7 +194,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "$texto",
+                          texto,
                           style: const TextStyle(
                             color: Colors.red,
                             fontWeight: FontWeight.bold,

@@ -37,23 +37,24 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
         return 'El vehículo no se encuentra registrado en la base de datos';
       } else {
         var query =
-            "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+            "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' AND rese_usua_rut = '${widget.RUT}' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
         if (fecha.isNotEmpty) {
           List<String> partes = fecha.split('/');
 
           // Reordena las partes de la fecha en el formato deseado
           String nuevaFecha = '${partes[2]}/${partes[1]}/${partes[0]}';
           query =
-              "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' AND rese_fecha = '$nuevaFecha' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
+              "SELECT r.rese_usua_rut, r.rese_hora_llegada, r.rese_vehi_patente, r.rese_hora_salida, r.rese_fecha, e.esta_numero, u.usua_nombre, u.usua_apellido_paterno, u.usua_apellido_materno, u.usua_tipo FROM reserva r INNER JOIN estacionamiento e ON r.rese_esta_id = e.esta_id INNER JOIN usuario u ON u.usua_rut = r.rese_usua_rut WHERE rese_vehi_patente = '${patente.toUpperCase()}' AND rese_estado = 'CONFIRMADA' AND rese_fecha = '$nuevaFecha' AND rese_usua_rut = '${widget.RUT}' ORDER BY r.rese_fecha DESC, r.rese_hora_llegada DESC";
         }
 
         final result = await _db.execute(query);
         // ignore: prefer_is_empty
         if (result.length == 0) {
           if (fecha.isNotEmpty) {
-            
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
           } else {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada';
           }
         } else {
@@ -72,6 +73,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                   })
               .toList();
           print(reservations);
+          Navigator.of(context, rootNavigator: true).pop('dialog');
           return reservations;
         }
       }
@@ -95,6 +97,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
       // ignore: prefer_is_empty
 
       if (result.length == 0) {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         return 'No se encontraron registros asociados a la fecha seleccionada';
       } else {
         List<Map<String, dynamic>> reservations = result
@@ -111,6 +114,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                   'usua_tipo': row[9],
                 })
             .toList();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         return reservations;
       }
     } catch (e) {
@@ -505,6 +509,26 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                       ),
                     ),
                     onPressed: () async {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => const AlertDialog(
+                            content: SizedBox(
+                              height: 250,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 7,
+                                    semanticsLabel: 'Circular progress indicator',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            elevation: 24,
+                          ),
+                        );
                       if (_formKey3.currentState?.validate() ?? false) {
                         final result = await buscarHistorialPorFecha(_dateController3.text);
                         if (result is String) {

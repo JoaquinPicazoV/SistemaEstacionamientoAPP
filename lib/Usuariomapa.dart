@@ -1,10 +1,8 @@
 // ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/ReservarGuardia.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
-import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:postgres/postgres.dart';
 

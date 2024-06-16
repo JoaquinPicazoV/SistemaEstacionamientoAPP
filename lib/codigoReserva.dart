@@ -76,7 +76,7 @@ class _codigoReserva extends State<codigoReserva> {
 
     final patente = await _db.execute("SELECT regi_vehi_patente FROM REGISTROUSUARIOVEHICULO WHERE regi_usua_rut='$RUT' AND regi_estado='activo'");
     final nEstacionamiento = nEst;
-    final ID = await _db.execute("SELECT esta_id FROM ESTACIONAMIENTO WHERE esta_numero='" + nEstacionamiento + "'");
+    final ID = await _db.execute("SELECT esta_id FROM ESTACIONAMIENTO WHERE esta_numero='$nEstacionamiento'");
     final rutGuardia = '21008896-2';
 
     print(patente[0][0]);

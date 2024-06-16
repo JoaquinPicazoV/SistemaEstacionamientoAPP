@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
@@ -39,7 +37,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
           child: FractionallySizedBox(
               widthFactor: 0.95,
               child: Container(
-                padding: EdgeInsets.only(top: 40, bottom: 40),
+                padding: const EdgeInsets.only(top: 40, bottom: 40),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -64,12 +62,12 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Align(
+                        child: const Align(
                           alignment: Alignment.centerLeft,
-                          child: const Text(
+                          child: Text(
                             "Cree su nueva contraseña",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -78,12 +76,12 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Align(
+                        child: const Align(
                           alignment: Alignment.centerLeft,
-                          child: const Text("Contraseña"),
+                          child: Text("Contraseña"),
                         ),
                       ),
                       Container(
@@ -116,15 +114,15 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Align(
+                        child: const Align(
                           alignment: Alignment.centerLeft,
-                          child: const Text("Confirmar Contraseña"),
+                          child: Text("Confirmar Contraseña"),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
@@ -155,7 +153,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       // Requisitos de contraseña
                       buildRequirement("Debe contener al menos 8 caracteres",
                           tieneAlMenos8Caracteres),
@@ -175,7 +173,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 8),
                           color: Colors.red,
-                          child: Text(
+                          child: const Text(
                             "La contraseña no cumple con los requisitos mínimos.",
                             style: TextStyle(
                               color: Colors.white,
@@ -211,7 +209,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => recuperarClave4()),
+                                      builder: (context) => const recuperarClave4()),
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -228,11 +226,11 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                               });
                             }
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.check,
                             color: Colors.white,
                           ),
-                          label: Text(
+                          label: const Text(
                             'Crear contraseña',
                             style: TextStyle(
                               color: Colors.white,
@@ -284,7 +282,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
           Row(
             children: [
               buildIcon(condition),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Flexible(
                 child: Text(
                   text,

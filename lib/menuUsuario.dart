@@ -77,14 +77,14 @@ class _menuUsuarioState extends State<menuUsuario> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Confirmación'),
-              content: Text('¿Quiere salir?'),
+              title: const Text('Confirmación'),
+              content: const Text('¿Quiere salir?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancelar'),
+                  child: const Text('Cancelar'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -97,7 +97,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                       ),
                     );
                   },
-                  child: Text('Si'),
+                  child: const Text('Si'),
                 ),
               ],
             );
@@ -106,8 +106,7 @@ class _menuUsuarioState extends State<menuUsuario> {
       },
       child: Scaffold(
         backgroundColor: Colors.blue.shade900,
-        body: Align(
-          alignment: Alignment.center,
+        body: Center(
           child: SafeArea(
             child: FractionallySizedBox(
               widthFactor: 0.81,
@@ -117,203 +116,205 @@ class _menuUsuarioState extends State<menuUsuario> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FractionallySizedBox(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FractionallySizedBox(
                         widthFactor: 0.85,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  nombreUsuario,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.blue.shade900,
-                                    fontWeight: FontWeight.bold,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top:10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
                                   ),
-                                ),
-                                TextButton.icon(
-                                  style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
-                                  onPressed: () {
-                                    clearSession();
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const MyApp(),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(
-                                    Icons.exit_to_app,
-                                    color: Colors.red,
-                                  ),
-                                  label: const Text(
-                                    'Cerrar Sesión',
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    nombreUsuario,
                                     style: TextStyle(
                                       fontSize: 16,
+                                      color: Colors.blue.shade900,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextButton.icon(
+                                    style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
+                                    onPressed: () {
+                                      clearSession();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const MyApp(),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.exit_to_app,
                                       color: Colors.red,
                                     ),
+                                    label: const Text(
+                                      'Cerrar Sesión',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Image.asset(
-                      'assets/img/CCHPM.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    // Alerta roja y disponibilidad de estacionamientos
-                    Column(
-                      children: [
-                        // Alerta roja
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.error_outline,
-                              color: Colors.red,
-                            ),
-                            SizedBox(width: 5),
-                            Text(
-                              'ATENCIÓN',
-                              style: TextStyle(
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
+                                ],
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          texto,
-                          style: const TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    FractionallySizedBox(
-                      widthFactor: 0.85,
-                      child: Column(
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Image.asset(
+                        'assets/img/CCHPM.jpg',
+                        fit: BoxFit.cover,
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      // Alerta roja y disponibilidad de estacionamientos
+                      Column(
                         children: [
-                          Column(
+                          // Alerta roja
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              FractionallySizedBox(
-                                widthFactor: 0.96,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Usuariomapa(RUT: RUT)),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
-                                  label: const Text(
-                                    'RESERVAR ESTACIONAMIENTO',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                              Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
                               ),
-                              const SizedBox(height: 20),
-                              FractionallySizedBox(
-                                widthFactor: 0.96,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => usuarioReservas(RUT: widget.RUT),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.history, color: Colors.white),
-                                  label: const Text(
-                                    'MIS RESERVAS',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              FractionallySizedBox(
-                                widthFactor: 0.96,
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => actualizarVehiculo(
-                                          RUT: widget.RUT,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.directions_car, color: Colors.white),
-                                  label: const Text(
-                                    'ACTUALIZAR DATOS DE VEHÍCULO',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                  ),
+                              SizedBox(width: 5),
+                              Text(
+                                'ATENCIÓN',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
                                 ),
                               ),
                             ],
                           ),
+                          const SizedBox(height: 10),
+                          Text(
+                            texto,
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 20),
+                      FractionallySizedBox(
+                        widthFactor: 0.85,
+                        child: Column(
+                          children: [
+                            Column(
+                              children: [
+                                FractionallySizedBox(
+                                  widthFactor: 0.96,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Usuariomapa(RUT: RUT)),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
+                                    label: const Text(
+                                      'RESERVAR ESTACIONAMIENTO',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                FractionallySizedBox(
+                                  widthFactor: 0.96,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => usuarioReservas(RUT: widget.RUT),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.history, color: Colors.white),
+                                    label: const Text(
+                                      'MIS RESERVAS',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                FractionallySizedBox(
+                                  widthFactor: 0.96,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => actualizarVehiculo(
+                                            RUT: widget.RUT,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.directions_car, color: Colors.white),
+                                    label: const Text(
+                                      'ACTUALIZAR DATOS DE VEHÍCULO',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

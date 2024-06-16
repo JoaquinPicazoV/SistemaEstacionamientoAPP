@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_interpolation_to_compose_strings, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters, no_leading_underscores_for_local_identifiers
+// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -23,7 +23,7 @@ Future<void> funcionSession(context) async {
   Connection _db = DatabaseHelper().connection;
   String? correo = await getSession();
   if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
-    final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo.toString() + "'");
+    final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='${correo.toString()}'");
     String stringRut = testRut[0][0].toString();
     print(stringRut);
     Navigator.push(
@@ -33,7 +33,7 @@ Future<void> funcionSession(context) async {
       ),
     );
   } else if (await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
-    final testRut = await _db.execute("SELECT usua_rut FROM usuario WHERE usua_correo='" + correo.toString() + "'");
+    final testRut = await _db.execute("SELECT usua_rut FROM usuario WHERE usua_correo='${correo.toString()}'");
     String stringRut = testRut[0][0].toString();
     Navigator.push(
       context,
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     saveSession(correo);
 
     if (alumno) {
-      final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='" + correo + "'");
+      final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='$correo'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
       Navigator.of(context, rootNavigator: true).pop('dialog');
@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
       );
     } else {
-      final results = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo + "'");
+      final results = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='$correo'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
       Navigator.of(context, rootNavigator: true).pop('dialog');
@@ -132,8 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
       canPop: false,
       child: Scaffold(
         backgroundColor: Colors.blue.shade900,
-        body: Align(
-          alignment: Alignment.center,
+        body: Center(
           child: SafeArea(
             child: FractionallySizedBox(
               widthFactor: 0.81,
@@ -143,177 +142,176 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      FractionallySizedBox(
-                        widthFactor: 0.6,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 30),
-                          child: Image.asset(
-                            "assets/img/ULAGOS.png",
-                            fit: BoxFit.fitHeight,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        FractionallySizedBox(
+                          widthFactor: 0.6,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 30),
+                            child: Image.asset(
+                              "assets/img/ULAGOS.png",
+                              fit: BoxFit.fitHeight,
+                            ),
                           ),
                         ),
-                      ),
-                      const Text(
-                        "ESTACIONAMIENTOS ULAGOS",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      FractionallySizedBox(
-                        widthFactor: 0.85,
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(vertical: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Flexible(
-                                child: Center(
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                      ),
-                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                      alignment: Alignment.center,
-                                    ),
-                                    onPressed: () {},
-                                    child: const Text(
-                                      'Iniciar sesión',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 16, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Flexible(
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(builder: (context) => Registrarse1()),
-                                      );
-                                    },
-                                    child: const Text(
-                                      "Registrarse",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                        const Text(
+                          "ESTACIONAMIENTOS ULAGOS",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Form(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                child: TextFormField(
-                                  style: const TextStyle(fontSize: 12),
-                                  controller: controladorCorreo,
-                                  decoration: InputDecoration(
-                                    labelText: 'Correo electrónico',
-                                    suffixIcon: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey.shade200,
-                                        border: Border.all(
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                      child: IconButton(
-                                        icon: const Icon(Icons.email, color: Colors.black),
-                                        onPressed: () {},
-                                      ),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue),
-                                    ),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              SizedBox(
-                                height: 40,
-                                child: Stack(
-                                  children: [
-                                    TextFormField(
-                                      obscureText: obscurePassword,
-                                      controller: controladorContrasena,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Contraseña',
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 50,
-                                      top: 0,
-                                      bottom: 0,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(4),
-                                        ),
-                                        child: IconButton(
-                                          icon: Icon(
-                                            obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                            color: Colors.black,
+                        const SizedBox(height: 30),
+                        FractionallySizedBox(
+                          widthFactor: 0.85,
+                          child: Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: Center(
+                                    child: ElevatedButton(
+                                      style: ButtonStyle(
+                                        shape: MaterialStateProperty.all(
+                                          RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
-                                          onPressed: () {
-                                            setState(() {
-                                              obscurePassword = !obscurePassword;
-                                            });
-                                          },
+                                        ),
+                                        backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                        alignment: Alignment.center,
+                                      ),
+                                      onPressed: () {},
+                                      child: const Text(
+                                        'Iniciar sesión',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 16, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Flexible(
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) => Registrarse1()),
+                                        );
+                                      },
+                                      child: const Text(
+                                        "Registrarse",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.black,
                                         ),
                                       ),
                                     ),
-                                    Positioned(
-                                      right: 0,
-                                      top: 0,
-                                      bottom: 0,
-                                      child: Container(
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Form(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 40,
+                                  child: TextFormField(
+                                    style: const TextStyle(fontSize: 12),
+                                    controller: controladorCorreo,
+                                    decoration: InputDecoration(
+                                      labelText: 'Correo electrónico',
+                                      suffixIcon: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.grey.shade200,
-                                          borderRadius: BorderRadius.circular(4),
                                           border: Border.all(
                                             color: Colors.blue,
                                           ),
                                         ),
                                         child: IconButton(
-                                          icon: const Icon(Icons.lock, color: Colors.black),
+                                          icon: const Icon(Icons.email, color: Colors.black),
                                           onPressed: () {},
                                         ),
                                       ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue),
+                                      ),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                      ),
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: Form(
+                                const SizedBox(height: 20),
+                                SizedBox(
+                                  height: 40,
+                                  child: Stack(
+                                    children: [
+                                      TextFormField(
+                                        obscureText: obscurePassword,
+                                        controller: controladorContrasena,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Contraseña',
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.blue),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 50,
+                                        top: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(4),
+                                          ),
+                                          child: IconButton(
+                                            icon: Icon(
+                                              obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                              color: Colors.black,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                obscurePassword = !obscurePassword;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        bottom: 0,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            borderRadius: BorderRadius.circular(4),
+                                            border: Border.all(
+                                              color: Colors.blue,
+                                            ),
+                                          ),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.lock, color: Colors.black),
+                                            onPressed: () {},
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Form(
                                   child: Column(
                                     children: [
                                       FractionallySizedBox(
@@ -360,6 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                       const SizedBox(
+                                        width: 10,
                                         height: 10,
                                       ),
                                       TextButton(
@@ -380,12 +379,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

@@ -28,7 +28,7 @@ class _RecuperarClave2State extends State<RecuperarClave2> {
 
   StreamSubscription<int> startTimer() {
     final StreamController<int> controller = StreamController<int>();
-    Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       controller.add(--secondsLeft);
       if (secondsLeft == 0) {
         timer.cancel();
@@ -96,7 +96,7 @@ class _RecuperarClave2State extends State<RecuperarClave2> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text(
+                        const Text(
                           '¡ENVIAMOS UN MAIL DE CONFIRMACIÓN A SU CORREO ELECTRÓNICO!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -127,7 +127,7 @@ class _RecuperarClave2State extends State<RecuperarClave2> {
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Tiempo restante',
                           style: TextStyle(
                             fontSize: 20,
@@ -136,7 +136,7 @@ class _RecuperarClave2State extends State<RecuperarClave2> {
                         Center(
                           child: Text(
                             '$minutesStr:$secondsStr',
-                            style: TextStyle(fontSize: 24, color: Colors.black),
+                            style: const TextStyle(fontSize: 24, color: Colors.black),
                           ),
                         ),
                         const Icon(
@@ -224,7 +224,7 @@ class _RecuperarClave2State extends State<RecuperarClave2> {
                                   timerSubscription = startTimer();
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                    const SnackBar(
                                       content: Text(
                                           'Error al enviar el correo electrónico.'),
                                       duration: Duration(seconds: 3),

@@ -262,7 +262,7 @@ class Reservas extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(12),
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20.0),
@@ -276,7 +276,7 @@ class Reservas extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Patente',
                               ),
@@ -288,7 +288,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'RUT',
                               ),
@@ -300,7 +300,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Nombre',
                               ),
@@ -312,7 +312,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Apellidos',
                               ),
@@ -326,7 +326,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Hora llegada',
                               ),
@@ -338,7 +338,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Hora salida',
                               ),
@@ -350,7 +350,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'N° Estacionamiento',
                               ),
@@ -362,7 +362,7 @@ class Reservas extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 'Tipo',
                               ),

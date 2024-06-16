@@ -19,8 +19,7 @@ class _RecuperarClaveState extends State<RecuperarClave> {
 
   Future<bool> buscarCorreo(String correo) async {
     _db = DatabaseHelper().connection;
-    final existe = await _db.execute(
-        "SELECT COUNT(*) FROM USUARIO WHERE usua_correo='${correo.toLowerCase()}'");
+    final existe = await _db.execute("SELECT COUNT(*) FROM USUARIO WHERE usua_correo='${correo.toLowerCase()}'");
 
     if (existe[0][0] == 1) {
       return true;
@@ -87,8 +86,7 @@ class _RecuperarClaveState extends State<RecuperarClave> {
                                 child: TextFormField(
                                   style: const TextStyle(fontSize: 12),
                                   controller: _emailController,
-                                  autovalidateMode:
-                                      AutovalidateMode.onUserInteraction,
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
                                   validator: (value) {
                                     if (value!.isEmpty) {
                                       return 'Ingrese un correo';
@@ -106,18 +104,13 @@ class _RecuperarClaveState extends State<RecuperarClave> {
                                           color: Colors.blue,
                                         ),
                                       ),
-                                      child: const IconButton(
-                                          icon: Icon(Icons.email,
-                                              color: Colors.black),
-                                          onPressed: null),
+                                      child: const IconButton(icon: Icon(Icons.email, color: Colors.black), onPressed: null),
                                     ),
                                     enabledBorder: const OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue),
+                                      borderSide: BorderSide(color: Colors.blue),
                                     ),
                                     focusedBorder: const OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.blue, width: 1.0),
+                                      borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                     ),
                                   ),
                                 ),
@@ -133,34 +126,26 @@ class _RecuperarClaveState extends State<RecuperarClave> {
                           child: ElevatedButton.icon(
                             onPressed: () async {
                               if (_formKey.currentState?.validate() ?? false) {
-                                final existe =
-                                    await buscarCorreo(_emailController.text);
+                                final existe = await buscarCorreo(_emailController.text);
                                 if (existe) {
                                   String codigo = generarCodigo();
-                                  bool enviado = await sendEmail(
-                                      _emailController.text, codigo);
+                                  bool enviado = await sendEmail(_emailController.text, codigo);
                                   if (enviado) {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => RecuperarClave2(
-                                              codigo: codigo,
-                                              email: _emailController.text
-                                                  .toLowerCase())),
+                                      MaterialPageRoute(builder: (context) => RecuperarClave2(codigo: codigo, email: _emailController.text.toLowerCase())),
                                     );
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                        content:
-                                            Text('No se pudo enviar el correo'),
+                                        content: Text('No se pudo enviar el correo'),
                                       ),
                                     );
                                   }
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text(
-                                          'El correo ingresado no está registrado'),
+                                      content: Text('El correo ingresado no está registrado'),
                                     ),
                                   );
                                 }
@@ -219,11 +204,11 @@ Future<bool> sendEmail(String recipientEmail, String codigo) async {
     ..recipients.add(recipientEmail)
     ..subject = 'Codigo de verificación'
     ..text = 'Codigo de verificación: $codigo'
-    ..html = "<h1>Codigo de verificación: ${codigo}</h1>";
+    ..html = "<h1>Codigo de verificación: $codigo</h1>";
 
   try {
     final sendReport = await send(message, smtpServer);
-    print('Mensaje enviado: ' + sendReport.toString());
+    print('Mensaje enviado: ${sendReport.toString()}');
     return true;
   } on MailerException catch (e) {
     print('Mensaje no enviado. ${e.toString()}');

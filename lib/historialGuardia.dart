@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/historialGuardiaResultados.dart';

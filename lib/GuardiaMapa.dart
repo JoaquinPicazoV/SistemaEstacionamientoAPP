@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/ReservarGuardia.dart';
 import 'package:flutter_application_1/database.dart';
-import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:postgres/postgres.dart';
 
 class GuardiaMapa extends StatefulWidget {
