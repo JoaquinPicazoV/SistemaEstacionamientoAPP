@@ -63,8 +63,8 @@ class _codigoReserva extends State<codigoReserva> {
     Connection _db = DatabaseHelper().connection;
     final datos = await _db.execute("SELECT rese_id, rese_esta_id FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
 
-    final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_numero='" + nEst + "'");
-    final eliminar = await _db.execute("DELETE FROM RESERVA WHERE rese_id='" + datos[0][0].toString() + "'");
+    final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_numero='$nEst'");
+    final eliminar = await _db.execute("DELETE FROM RESERVA WHERE rese_id='${datos[0][0]}'");
   }
 
   Future<void> Reservar(RUT) async {

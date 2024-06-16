@@ -46,13 +46,50 @@ class _Registrarse2State extends State<Registrarse2> {
     contrasenasCoinciden = password == confirmacion;
 
     // Verificar si se cumplen todos los requisitos
-    mostrarAdvertencia = !tieneAlMenos8Caracteres ||
-        !tieneMayuscula ||
-        !tieneMinuscula ||
-        !tieneNumero;
+    mostrarAdvertencia = !tieneAlMenos8Caracteres || !tieneMayuscula || !tieneMinuscula || !tieneNumero;
 
     // Actualizar la interfaz de usuario
     setState(() {});
+  }
+
+  Future<bool> sendEmail(String recipientEmail, String codigo) async {
+    String username = 'estacionamientosulagos@gmail.com';
+    String password = 'yotv rves zpzg lpkq';
+
+    // Configurar el servidor SMTP
+    final smtpServer = gmail(username, password);
+
+    // Crear el mensaje
+    final message = Message()
+      ..from = Address(username, username)
+      ..recipients.add(recipientEmail)
+      ..subject = 'Codigo de verificación'
+      ..text = 'Codigo de verificación: $codigo'
+      ..html = "<h1>Codigo de verificación: $codigo</h1>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Mensaje enviado: $sendReport');
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      return true;
+    } on MailerException catch (e) {
+      print('Mensaje no enviado. ${e.toString()}');
+      for (var p in e.problems) {
+        print('Problema: ${p.code}: ${p.msg}');
+      }
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      return false;
+    }
+  }
+
+  String generarCodigo() {
+    Random nRandom = Random();
+    String codigo = '';
+    for (int i = 0; i < 6; i++) {
+      codigo += nRandom.nextInt(10).toString();
+    }
+    print(codigo);
+    return codigo;
   }
 
   @override
@@ -121,13 +158,10 @@ class _Registrarse2State extends State<Registrarse2> {
                         obscureText: !contrasena1Visible,
                         onChanged: onPasswordChanged,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena1Visible
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(contrasena1Visible ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 contrasena1Visible = !contrasena1Visible;
@@ -160,13 +194,10 @@ class _Registrarse2State extends State<Registrarse2> {
                         obscureText: !contrasena2Visible,
                         onChanged: onConfirmationChanged,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 16),
+                          contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           border: InputBorder.none,
                           suffixIcon: IconButton(
-                            icon: Icon(contrasena2Visible
-                                ? Icons.visibility_off
-                                : Icons.visibility),
+                            icon: Icon(contrasena2Visible ? Icons.visibility_off : Icons.visibility),
                             onPressed: () {
                               setState(() {
                                 contrasena2Visible = !contrasena2Visible;
@@ -177,23 +208,15 @@ class _Registrarse2State extends State<Registrarse2> {
                       ),
                     ),
                     // Requisitos de contraseña
-                    buildRequirement("Debe contener al menos 8 caracteres",
-                        tieneAlMenos8Caracteres),
-                    buildRequirement(
-                        "Debe contener al menos una letra mayúscula.",
-                        tieneMayuscula),
-                    buildRequirement(
-                        "Debe contener al menos una letra minúscula.",
-                        tieneMinuscula),
-                    buildRequirement(
-                        "Debe contener al menos un número.", tieneNumero),
-                    buildRequirement(
-                        "Las contraseñas coinciden.", contrasenasCoinciden),
+                    buildRequirement("Debe contener al menos 8 caracteres", tieneAlMenos8Caracteres),
+                    buildRequirement("Debe contener al menos una letra mayúscula.", tieneMayuscula),
+                    buildRequirement("Debe contener al menos una letra minúscula.", tieneMinuscula),
+                    buildRequirement("Debe contener al menos un número.", tieneNumero),
+                    buildRequirement("Las contraseñas coinciden.", contrasenasCoinciden),
                     // Mensaje de advertencia
                     if (mostrarAdvertencia)
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                         color: Colors.red,
                         child: Text(
                           "La contraseña no cumple con los requisitos mínimos.",
@@ -205,8 +228,7 @@ class _Registrarse2State extends State<Registrarse2> {
                       ),
                     // Botón para crear contraseña
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                       child: ElevatedButton.icon(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
@@ -216,14 +238,33 @@ class _Registrarse2State extends State<Registrarse2> {
                                     ? Colors.grey
                                     : Colors.blue.shade700,
                           ),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ),
                         onPressed: () async {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) => const AlertDialog(
+                                content: SizedBox(
+                                  height: 250,
+                                  child: Center(
+                                    child: SizedBox(
+                                      height: 100,
+                                      width: 100,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 7,
+                                        semanticsLabel: 'Circular progress indicator',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                elevation: 24,
+                              ),
+                            );
                           if (contrasenasCoinciden) {
                             llenarPassword(passwordController.text);
                             List<String> registro = getRegistro();
@@ -232,15 +273,12 @@ class _Registrarse2State extends State<Registrarse2> {
                             if (enviado) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => Registrarse3(
-                                        codigo: codigo, email: email)),
+                                MaterialPageRoute(builder: (context) => Registrarse3(codigo: codigo, email: email)),
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(
-                                      'Error al enviar el correo electrónico.'),
+                                  content: Text('Error al enviar el correo electrónico.'),
                                   duration: Duration(seconds: 3),
                                 ),
                               );
@@ -248,6 +286,7 @@ class _Registrarse2State extends State<Registrarse2> {
                           } else {
                             // Mostrar mensaje de error o realizar alguna acción adicional
                             setState(() {
+                              Navigator.of(context, rootNavigator: true).pop('dialog');
                               mostrarAdvertencia = true;
                             });
                           }
@@ -343,42 +382,4 @@ void main() {
   runApp(MaterialApp(
     home: Registrarse2(),
   ));
-}
-
-Future<bool> sendEmail(String recipientEmail, String codigo) async {
-  String username = 'estacionamientosulagos@gmail.com';
-  String password = 'yotv rves zpzg lpkq';
-
-  // Configurar el servidor SMTP
-  final smtpServer = gmail(username, password);
-
-  // Crear el mensaje
-  final message = Message()
-    ..from = Address(username, username)
-    ..recipients.add(recipientEmail)
-    ..subject = 'Codigo de verificación'
-    ..text = 'Codigo de verificación: $codigo'
-    ..html = "<h1>Codigo de verificación: ${codigo}</h1>";
-
-  try {
-    final sendReport = await send(message, smtpServer);
-    print('Mensaje enviado: ' + sendReport.toString());
-    return true;
-  } on MailerException catch (e) {
-    print('Mensaje no enviado. ${e.toString()}');
-    for (var p in e.problems) {
-      print('Problema: ${p.code}: ${p.msg}');
-    }
-    return false;
-  }
-}
-
-String generarCodigo() {
-  Random nRandom = Random();
-  String codigo = '';
-  for (int i = 0; i < 6; i++) {
-    codigo += nRandom.nextInt(10).toString();
-  }
-  print(codigo);
-  return codigo;
 }

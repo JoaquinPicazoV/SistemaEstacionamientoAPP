@@ -51,6 +51,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
         // ignore: prefer_is_empty
         if (result.length == 0) {
           if (fecha.isNotEmpty) {
+            
             return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
           } else {
             return 'No se encontraron registros asociados a la patente ingresada';
@@ -301,6 +302,26 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                   ),
                   onPressed: () async {
                     if (_formKey.currentState?.validate() ?? false) {
+                      showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) => const AlertDialog(
+                          content: SizedBox(
+                            height: 250,
+                            child: Center(
+                              child: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 7,
+                                  semanticsLabel: 'Circular progress indicator',
+                                ),
+                              ),
+                            ),
+                          ),
+                          elevation: 24,
+                        ),
+                      );
                       final result = await buscarHistorialPorPatente(_plateController.text, _dateController.text);
                       if (result is String) {
                         showDialog(

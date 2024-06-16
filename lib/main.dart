@@ -115,9 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (coincidencias == 1 && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo)) {
       print("CONTRASEÑA CORRECTA alumno");
       buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim(), true);
-
-      /* TAMBIEN FALTA CREAR SESIONES Y ASI TRABAJAR MAS FACIL CON 
-                                            LAS INTERFACES SIGUIENTES PARA NO INICIAR SESION MUCHAS VECES*/
     } else if (coincidencias == 1 && RegExp(r'@ulagos.cl').hasMatch(correo)) {
       print("CONTRASEÑA CORRECTA guardia");
       buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim(), false);
@@ -131,263 +128,265 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     funcionSession(context);
     vaciarRegistro();
-    return Scaffold(
-      backgroundColor: Colors.blue.shade900,
-      body: Align(
-        alignment: Alignment.center,
-        child: SafeArea(
-          child: FractionallySizedBox(
-            widthFactor: 0.81,
-            heightFactor: 0.7,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FractionallySizedBox(
-                      widthFactor: 0.6,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 30),
-                        child: Image.asset(
-                          "assets/img/ULAGOS.png",
-                          fit: BoxFit.fitHeight,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade900,
+        body: Align(
+          alignment: Alignment.center,
+          child: SafeArea(
+            child: FractionallySizedBox(
+              widthFactor: 0.81,
+              heightFactor: 0.7,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FractionallySizedBox(
+                        widthFactor: 0.6,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 30),
+                          child: Image.asset(
+                            "assets/img/ULAGOS.png",
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
                       ),
-                    ),
-                    const Text(
-                      "ESTACIONAMIENTOS ULAGOS",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 30),
-                    FractionallySizedBox(
-                      widthFactor: 0.85,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Flexible(
-                              child: Center(
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                    ),
-                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
-                                    alignment: Alignment.center,
-                                  ),
-                                  onPressed: () {},
-                                  child: const Text(
-                                    'Iniciar sesión',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(fontSize: 16, color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Flexible(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => Registrarse1()),
-                                    );
-                                  },
-                                  child: const Text(
-                                    "Registrarse",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                      const Text(
+                        "ESTACIONAMIENTOS ULAGOS",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Form(
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              child: TextFormField(
-                                style: const TextStyle(fontSize: 12),
-                                controller: controladorCorreo,
-                                decoration: InputDecoration(
-                                  labelText: 'Correo electrónico',
-                                  suffixIcon: Container(
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      border: Border.all(
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.email, color: Colors.black),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                  enabledBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue),
-                                  ),
-                                  focusedBorder: const OutlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            SizedBox(
-                              height: 40,
-                              child: Stack(
-                                children: [
-                                  TextFormField(
-                                    obscureText: obscurePassword,
-                                    controller: controladorContrasena,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Contraseña',
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue, width: 1.0),
-                                      ),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    right: 50,
-                                    top: 0,
-                                    bottom: 0,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      child: IconButton(
-                                        icon: Icon(
-                                          obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                          color: Colors.black,
+                      const SizedBox(height: 30),
+                      FractionallySizedBox(
+                        widthFactor: 0.85,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: Center(
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
-                                        onPressed: () {
-                                          setState(() {
-                                            obscurePassword = !obscurePassword;
-                                          });
-                                        },
+                                      ),
+                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                      alignment: Alignment.center,
+                                    ),
+                                    onPressed: () {},
+                                    child: const Text(
+                                      'Iniciar sesión',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 16, color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => Registrarse1()),
+                                      );
+                                    },
+                                    child: const Text(
+                                      "Registrarse",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    bottom: 0,
-                                    child: Container(
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Form(
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 40,
+                                child: TextFormField(
+                                  style: const TextStyle(fontSize: 12),
+                                  controller: controladorCorreo,
+                                  decoration: InputDecoration(
+                                    labelText: 'Correo electrónico',
+                                    suffixIcon: Container(
                                       decoration: BoxDecoration(
                                         color: Colors.grey.shade200,
-                                        borderRadius: BorderRadius.circular(4),
                                         border: Border.all(
                                           color: Colors.blue,
                                         ),
                                       ),
                                       child: IconButton(
-                                        icon: const Icon(Icons.lock, color: Colors.black),
+                                        icon: const Icon(Icons.email, color: Colors.black),
                                         onPressed: () {},
                                       ),
                                     ),
+                                    enabledBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue),
+                                    ),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue, width: 1.0),
+                                    ),
                                   ),
-                                ],
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 20),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Form(
-                                child: Column(
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                height: 40,
+                                child: Stack(
                                   children: [
-                                    FractionallySizedBox(
-                                      widthFactor: 0.85,
-                                      child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          String email = controladorCorreo.text.trim();
-                                          String clave = controladorContrasena.text.trim();
-                                          showDialog(
-                                            //if set to true allow to close popup by tapping out of the popup
-                                            barrierDismissible: false,
-                                            context: context,
-                                            builder: (BuildContext context) => const AlertDialog(
-                                              content: SizedBox(
-                                                height: 250,
-                                                child: Center(
-                                                  child: SizedBox(
-                                                    height: 100,
-                                                    width: 100,
-                                                    child: CircularProgressIndicator(
-                                                      strokeWidth: 7,
-                                                      semanticsLabel: 'Circular progress indicator',
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              elevation: 24,
-                                            ),
-                                          );
-                                          AnalizarCredenciales(email, clave);
-                                        },
-                                        icon: const Icon(Icons.login, color: Colors.white),
-                                        label: const Text(
-                                          'INGRESAR',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
+                                    TextFormField(
+                                      obscureText: obscurePassword,
+                                      controller: controladorContrasena,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Contraseña',
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.blue),
                                         ),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.blue.shade700,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(10),
-                                          ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(color: Colors.blue, width: 1.0),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
+                                    Positioned(
+                                      right: 50,
+                                      top: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(
+                                            obscurePassword ? Icons.visibility_off : Icons.visibility,
+                                            color: Colors.black,
+                                          ),
+                                          onPressed: () {
+                                            setState(() {
+                                              obscurePassword = !obscurePassword;
+                                            });
+                                          },
+                                        ),
+                                      ),
                                     ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => RecuperarClave(),
-                                            ));
-                                      },
-                                      child: const Text(
-                                        "¿Olvidaste tu contraseña?",
-                                        style: TextStyle(
-                                          color: Colors.blue,
+                                    Positioned(
+                                      right: 0,
+                                      top: 0,
+                                      bottom: 0,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.shade200,
+                                          borderRadius: BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                        child: IconButton(
+                                          icon: const Icon(Icons.lock, color: Colors.black),
+                                          onPressed: () {},
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                child: Form(
+                                  child: Column(
+                                    children: [
+                                      FractionallySizedBox(
+                                        widthFactor: 0.85,
+                                        child: ElevatedButton.icon(
+                                          onPressed: () {
+                                            String email = controladorCorreo.text.trim();
+                                            String clave = controladorContrasena.text.trim();
+                                            showDialog(
+                                              barrierDismissible: false,
+                                              context: context,
+                                              builder: (BuildContext context) => const AlertDialog(
+                                                content: SizedBox(
+                                                  height: 250,
+                                                  child: Center(
+                                                    child: SizedBox(
+                                                      height: 100,
+                                                      width: 100,
+                                                      child: CircularProgressIndicator(
+                                                        strokeWidth: 7,
+                                                        semanticsLabel: 'Circular progress indicator',
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                elevation: 24,
+                                              ),
+                                            );
+                                            AnalizarCredenciales(email, clave);
+                                          },
+                                          icon: const Icon(Icons.login, color: Colors.white),
+                                          label: const Text(
+                                            'INGRESAR',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: Colors.blue.shade700,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) => RecuperarClave(),
+                                              ));
+                                        },
+                                        child: const Text(
+                                          "¿Olvidaste tu contraseña?",
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

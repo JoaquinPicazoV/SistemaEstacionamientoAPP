@@ -54,8 +54,10 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         // ignore: prefer_is_empty
         if (result.length == 0) {
           if (fecha.isNotEmpty) {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
           } else {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada';
           }
         } else {
@@ -74,6 +76,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                   })
               .toList();
           print(reservations);
+          Navigator.of(context, rootNavigator: true).pop('dialog');
           return reservations;
         }
       }
@@ -106,8 +109,10 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         // ignore: prefer_is_empty
         if (result.length == 0) {
           if (fecha.isNotEmpty) {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados al RUT ingresado y la fecha seleccionada';
           } else {
+            Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados al RUT ingresado';
           }
         } else {
@@ -126,6 +131,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                   })
               .toList();
           print(reservations);
+          Navigator.of(context, rootNavigator: true).pop('dialog');
           return reservations;
         }
       }
@@ -149,6 +155,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
       // ignore: prefer_is_empty
 
       if (result.length == 0) {
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         return 'No se encontraron registros asociados a la fecha seleccionada';
       } else {
         List<Map<String, dynamic>> reservations = result
@@ -165,6 +172,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                   'usua_tipo': row[9],
                 })
             .toList();
+        Navigator.of(context, rootNavigator: true).pop('dialog');
         return reservations;
       }
     } catch (e) {
@@ -356,6 +364,26 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         ),
                       ),
                       onPressed: () async {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => const AlertDialog(
+                            content: SizedBox(
+                              height: 250,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 7,
+                                    semanticsLabel: 'Circular progress indicator',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            elevation: 24,
+                          ),
+                        );
                         if (_formKey.currentState?.validate() ?? false) {
                           final result = await buscarHistorialPorPatente(_plateController.text, _dateController.text);
                           if (result is String) {
@@ -573,6 +601,26 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         ),
                       ),
                       onPressed: () async {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => const AlertDialog(
+                            content: SizedBox(
+                              height: 250,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 7,
+                                    semanticsLabel: 'Circular progress indicator',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            elevation: 24,
+                          ),
+                        );
                         if (_formKey2.currentState?.validate() ?? false) {
                           final result = await buscarHistorialPorRut(_rutController.text, _dateController2.text);
                           if (result is String) {
@@ -737,6 +785,26 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         ),
                       ),
                       onPressed: () async {
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => const AlertDialog(
+                            content: SizedBox(
+                              height: 250,
+                              child: Center(
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 7,
+                                    semanticsLabel: 'Circular progress indicator',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            elevation: 24,
+                          ),
+                        );
                         if (_formKey3.currentState?.validate() ?? false) {
                           final result = await buscarHistorialPorFecha(_dateController3.text);
                           if (result is String) {
