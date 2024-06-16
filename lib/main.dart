@@ -89,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='" + correo + "'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
+      Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
@@ -97,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final results = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo + "'");
       RUT = results[0][0].toString();
       while (RUT == '') {}
+      Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => menuGuardia(RUT: RUT)),
@@ -123,6 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
       buscarRut(controladorCorreo.text.trim(), controladorContrasena.text.trim(), false);
     } else {
       print("CONTRASEÑA INCORRECTA");
+      Navigator.of(context, rootNavigator: true).pop('dialog');
     }
   }
 
@@ -322,6 +325,27 @@ class _MyHomePageState extends State<MyHomePage> {
                                         onPressed: () {
                                           String email = controladorCorreo.text.trim();
                                           String clave = controladorContrasena.text.trim();
+                                          showDialog(
+                                            //if set to true allow to close popup by tapping out of the popup
+                                            barrierDismissible: false,
+                                            context: context,
+                                            builder: (BuildContext context) => const AlertDialog(
+                                              content: SizedBox(
+                                                height: 250,
+                                                child: Center(
+                                                  child: SizedBox(
+                                                    height: 100,
+                                                    width: 100,
+                                                    child: CircularProgressIndicator(
+                                                      strokeWidth: 7,
+                                                      semanticsLabel: 'Circular progress indicator',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              elevation: 24,
+                                            ),
+                                          );
                                           AnalizarCredenciales(email, clave);
                                         },
                                         icon: const Icon(Icons.login, color: Colors.white),
@@ -347,8 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RecuperarClave(),
+                                              builder: (context) => RecuperarClave(),
                                             ));
                                       },
                                       child: const Text(
