@@ -109,7 +109,6 @@ class _Registrarse1State extends State<Registrarse1> {
                                       MaterialPageRoute(
                                           builder: (context) => const MyApp()),
                                     );
-                                    print('Iniciar');
                                   },
                                   child: const Text(
                                     "Iniciar sesión",
@@ -135,7 +134,6 @@ class _Registrarse1State extends State<Registrarse1> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    print('Registrarse');
                                   },
                                   child: const Text(
                                     'Registrarse',
@@ -352,7 +350,6 @@ class _Registrarse1State extends State<Registrarse1> {
                                                 telefonoEditingController.text);
                                             llenarAuto(
                                                 patenteEditingController.text);
-                                            print(getRegistro());
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(

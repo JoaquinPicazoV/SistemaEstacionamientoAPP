@@ -58,7 +58,6 @@ class registrarse4 extends StatelessWidget {
                                       MaterialPageRoute(
                                           builder: (context) => MyApp()),
                                     );
-                                    print('Iniciar');
                                   },
                                   child: const Text(
                                     "Iniciar sesión",
@@ -84,7 +83,6 @@ class registrarse4 extends StatelessWidget {
                                         Colors.blue.shade700),
                                   ),
                                   onPressed: (){
-                                    print('Registrarse');
                                   },
                                   child: const Text(
                                     'Registrarse',

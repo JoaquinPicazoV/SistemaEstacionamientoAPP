@@ -60,6 +60,12 @@ class _menuUsuarioState extends State<menuUsuario> {
     });
   }
 
+  Future<void> test() async {
+    _db = DatabaseHelper().connection;
+    final capacidad = await _db.execute("EXPLAIN (ANALYZE, BUFFERS) SELECT esta_estado FROM ESTACIONAMIENTO");
+    print(capacidad);
+  }
+
   @override
   Widget build(BuildContext context) {
     ConsultarDisponibilidad();
@@ -186,6 +192,12 @@ class _menuUsuarioState extends State<menuUsuario> {
                       children: [
                         Column(
                           children: [
+                            ElevatedButton(
+                          onPressed: () async {
+                            await test();
+                          },
+                          child: Text(''),
+                        ),
                             FractionallySizedBox(
                               widthFactor: 0.96,
                               child: ElevatedButton.icon(

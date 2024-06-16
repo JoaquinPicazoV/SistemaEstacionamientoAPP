@@ -17,13 +17,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Asegura la inicialización
   await DatabaseHelper().initialize();
   runApp(const MyApp());
-  print('has connection!');
 }
 
 Future<void> funcionSession(context) async {
   Connection _db = DatabaseHelper().connection;
   String? correo = await getSession();
-  print(await getSession());
   if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
     final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='" + correo.toString() + "'");
     String stringRut = testRut[0][0].toString();

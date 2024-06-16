@@ -19,6 +19,7 @@ class codigoReserva extends StatefulWidget {
 
 class _codigoReserva extends State<codigoReserva> {
   late String nEst = '';
+  bool cargando = true;
   @override
   void initState() {
     RUT = widget.RUT;
@@ -54,6 +55,7 @@ class _codigoReserva extends State<codigoReserva> {
       estacionamiento = nEst;
       txtestacionamiento = 'ESTACIONAMIENTO: $estacionamiento';
       txthorarioMaximo = 'HORARIO MÁXIMO DE LLEGADA: $horarioMaximo';
+      cargando = false;
     });
   }
 
@@ -196,20 +198,24 @@ class _codigoReserva extends State<codigoReserva> {
                     ),
                   ),
                   // Textos de estacionamiento y horario máximo de llegada
-                  Text(
-                    '$txtestacionamiento',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                  if(!cargando)
+                    Text(
+                      '$txtestacionamiento',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '$txthorarioMaximo',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                    Text(
+                      '$txthorarioMaximo',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
+                  if(cargando)
+                    CircularProgressIndicator(),
+                    
                   SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {

@@ -16,8 +16,7 @@ class Usuariomapa extends StatefulWidget {
   _Usuariomapa createState() => _Usuariomapa();
 }
 
-class _Usuariomapa extends State<Usuariomapa>
-    with SingleTickerProviderStateMixin {
+class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixin {
   late String RUT = '';
   late Connection _db;
   int tamA = 0;
@@ -31,6 +30,7 @@ class _Usuariomapa extends State<Usuariomapa>
   List<String> D = [];
   List<String> E = [];
   int nEst = 0;
+  bool cargando = true;
 
   Future<void> BuscarNombre(rut) async {
     _db = DatabaseHelper().connection;
@@ -45,19 +45,13 @@ class _Usuariomapa extends State<Usuariomapa>
   Future<void> ObtenerTam() async {
     _db = DatabaseHelper().connection;
 
-    final a = await _db.execute(
-        "SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN A'");
-    final b = await _db.execute(
-        "SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN B'");
-    final c = await _db.execute(
-        "SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN C'");
-    final d = await _db.execute(
-        "SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN D'");
-    final e = await _db.execute(
-        "SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN E'");
+    final a = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN A'");
+    final b = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN B'");
+    final c = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN C'");
+    final d = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN D'");
+    final e = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN E'");
 
-    final estacionamientos = await _db.execute(
-        'SELECT esta_estado FROM ESTACIONAMIENTO ORDER BY esta_numero ASC');
+    final estacionamientos = await _db.execute('SELECT esta_estado FROM ESTACIONAMIENTO ORDER BY esta_numero ASC');
 
     int posInicial = 0;
 
@@ -99,6 +93,54 @@ class _Usuariomapa extends State<Usuariomapa>
     setState(() {});
   }
 
+  Future<void> ObtenerTam2() async {
+    _db = DatabaseHelper().connection;
+
+    final capacidad = await _db.execute("SELECT secc_capacidad FROM SECCION");
+
+    final estacionamientos = await _db.execute("SELECT esta_estado FROM ESTACIONAMIENTO ORDER BY esta_numero ASC");
+
+    int posInicial = 0;
+
+    // Sección A
+    for (int i = 0; i < int.parse(capacidad[0][0].toString()); i++) {
+      A.add(estacionamientos[posInicial + i][0].toString());
+    }
+    posInicial += int.parse(capacidad[0][0].toString());
+    tamA = int.parse(capacidad[0][0].toString());
+
+    // Sección B
+    for (int i = 0; i < int.parse(capacidad[1][0].toString()); i++) {
+      B.add(estacionamientos[posInicial + i][0].toString());
+    }
+    posInicial += int.parse(capacidad[1][0].toString());
+    tamB = int.parse(capacidad[1][0].toString());
+
+    // Sección C
+    for (int i = 0; i < int.parse(capacidad[2][0].toString()); i++) {
+      C.add(estacionamientos[posInicial + i][0].toString());
+    }
+    posInicial += int.parse(capacidad[2][0].toString());
+    tamC = int.parse(capacidad[2][0].toString());
+
+    // Sección D
+    for (int i = 0; i < int.parse(capacidad[3][0].toString()); i++) {
+      D.add(estacionamientos[posInicial + i][0].toString());
+    }
+    posInicial += int.parse(capacidad[3][0].toString());
+    tamD = int.parse(capacidad[3][0].toString());
+
+    // Sección E
+    for (int i = 0; i < int.parse(capacidad[4][0].toString()); i++) {
+      E.add(estacionamientos[posInicial + i][0].toString());
+    }
+    posInicial += int.parse(capacidad[4][0].toString());
+    tamE = int.parse(capacidad[4][0].toString());
+
+    cargando = false;
+    setState(() {});
+  }
+
   String nombreUsuario = 'Buscando...';
   late TabController ControlladorBarra;
   late List<bool> estaSeleccionado;
@@ -110,7 +152,7 @@ class _Usuariomapa extends State<Usuariomapa>
     super.initState();
     ControlladorBarra = TabController(length: 5, vsync: this);
     estaSeleccionado = List.generate(104, (index) => false);
-    ObtenerTam();
+    ObtenerTam2();
   }
 
   @override
@@ -219,301 +261,40 @@ class _Usuariomapa extends State<Usuariomapa>
                             Tab(text: 'E'),
                           ],
                         ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: ControlladorBarra,
-                            children: [
-                              GridView.count(
-                                crossAxisCount: 4,
-                                children: List.generate(
-                                  tamA,
-                                  (index) {
-                                    String estado = A[index];
-                                    bool ocupado = estado == "OCUPADO";
-                                    bool noDisp = estado == "NO DISPONIBLE";
-                                    bool reservado = estado == 'RESERVADO';
-                                    bool seleccionado = estaSeleccionado[index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (!ocupado && !noDisp && !reservado) {
-                                          _handleTap(index);
-                                          nEst = index;
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: ocupado
-                                              ? Colors.red
-                                              : noDisp
-                                                  ? Colors.grey
-                                                  : reservado
-                                                      ? Colors.yellow
-                                                      : seleccionado
-                                                          ? Colors
-                                                              .lightBlueAccent
-                                                          : Colors.green,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            (index + 1).toString(),
-                                            style: TextStyle(
-                                              color: seleccionado
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                        if (cargando == true)
+                          Expanded(
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          )
+                        else
+                          Expanded(
+                            child: TabBarView(
+                              controller: ControlladorBarra,
+                              children: [
+                                GridView.count(
+                                  crossAxisCount: 4,
+                                  children: zona(tamA, A),
                                 ),
-                              ),
-                              GridView.count(
-                                crossAxisCount: 4,
-                                children: List.generate(
-                                  tamB,
-                                  (index) {
-                                    String estado = B[index];
-                                    bool ocupado = estado == "OCUPADO";
-                                    bool noDisp = estado == "NO DISPONIBLE";
-                                    bool reservado = estado == 'RESERVADO';
-
-                                    bool seleccionado =
-                                        estaSeleccionado[tamA + index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (!ocupado && !noDisp && !reservado) {
-                                          _handleTap(tamA + index);
-                                          nEst = tamA + index;
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                    
-                                        margin: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: ocupado
-                                              ? Colors.red
-                                              : noDisp
-                                                  ? Colors.grey
-                                                  : reservado
-                                                      ? Colors.yellow
-                                                      : seleccionado
-                                                          ? Colors
-                                                              .lightBlueAccent
-                                                          : Colors.green,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            (tamA + index + 1).toString(),
-                                            style: TextStyle(
-                                              color: seleccionado
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                GridView.count(
+                                  crossAxisCount: 4,
+                                  children: zona(tamB, B),
                                 ),
-                              ),
-                              GridView.count(
-                                crossAxisCount: 4,
-                                children: List.generate(
-                                  tamC,
-                                  (index) {
-                                    String estado = C[index];
-                                    bool ocupado = estado == "OCUPADO";
-                                    bool noDisp = estado == "NO DISPONIBLE";
-                                    bool reservado = estado == 'RESERVADO';
-
-                                    bool seleccionado =
-                                        estaSeleccionado[tamA + tamB + index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (!ocupado && !noDisp && !reservado) {
-                                          _handleTap(tamA + tamB + index);
-                                          nEst = tamA + tamB + index;
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: ocupado
-                                              ? Colors.red
-                                              : noDisp
-                                                  ? Colors.grey
-                                                  : reservado
-                                                      ? Colors.yellow
-                                                      : seleccionado
-                                                          ? Colors
-                                                              .lightBlueAccent
-                                                          : Colors.green,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            (tamA + tamB + index + 1)
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: seleccionado
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                GridView.count(
+                                  crossAxisCount: 4,
+                                  children: zona(tamC, C)
                                 ),
-                              ),
-                              GridView.count(
-                                crossAxisCount: 4,
-                                children: List.generate(
-                                  tamD,
-                                  (index) {
-                                    String estado = D[index];
-                                    bool ocupado = estado == "OCUPADO";
-                                    bool noDisp = estado == "NO DISPONIBLE";
-                                    bool reservado = estado == 'RESERVADO';
-
-                                    bool seleccionado = estaSeleccionado[
-                                        tamA + tamB + tamC + index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (!ocupado && !noDisp && !reservado) {
-                                          _handleTap(
-                                              tamA + tamB + tamC + index);
-                                          nEst = tamA + tamB + tamC + index;
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: ocupado
-                                              ? Colors.red
-                                              : noDisp
-                                                  ? Colors.grey
-                                                  : reservado
-                                                      ? Colors.yellow
-                                                      : seleccionado
-                                                          ? Colors
-                                                              .lightBlueAccent
-                                                          : Colors.green,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            (tamA + tamB + tamC + index + 1)
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: seleccionado
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                GridView.count(
+                                  crossAxisCount: 4,
+                                  children: zona(tamD, D)
                                 ),
-                              ),
-                              GridView.count(
-                                crossAxisCount: 4,
-                                children: List.generate(
-                                  tamE,
-                                  (index) {
-                                    String estado = E[index];
-                                    bool ocupado = estado == "OCUPADO";
-                                    bool noDisp = estado == "NO DISPONIBLE";
-                                    bool reservado = estado == 'RESERVADO';
-
-                                    bool seleccionado = estaSeleccionado[
-                                        tamA + tamB + tamC + tamD + index];
-
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (!ocupado && !noDisp && !reservado) {
-                                          _handleTap(tamA +
-                                              tamB +
-                                              tamC +
-                                              tamD +
-                                              index);
-                                          nEst =
-                                              tamA + tamB + tamC + tamD + index;
-                                        }
-                                      },
-                                      child: Container(
-                                        width: 20,
-                                        height: 20,
-                                        margin: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(10),
-                                          color: ocupado
-                                              ? Colors.red
-                                              : noDisp
-                                                  ? Colors.grey
-                                                  : reservado
-                                                      ? Colors.yellow
-                                                      : seleccionado
-                                                          ? Colors
-                                                              .lightBlueAccent
-                                                          : Colors.green,
-                                          border:
-                                              Border.all(color: Colors.black),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            (tamA +
-                                                    tamB +
-                                                    tamC +
-                                                    tamD +
-                                                    index +
-                                                    1)
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: seleccionado
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                GridView.count(
+                                  crossAxisCount: 4,
+                                  children: zona(tamE,E)
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
                         SizedBox(
                           height: 20,
                         ),
@@ -636,7 +417,7 @@ class _Usuariomapa extends State<Usuariomapa>
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => codigoReserva(nEst: (nEst+1).toString(), RUT:RUT),
+                                builder: (context) => codigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
                               ),
                             );
                           },
@@ -655,16 +436,17 @@ class _Usuariomapa extends State<Usuariomapa>
                             ),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(
+                          height: 20,
+                        ),
                         ElevatedButton.icon(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => menuUsuario(RUT:RUT),
+                                builder: (context) => menuUsuario(RUT: RUT),
                               ),
                             );
-                            
                           },
                           icon: Icon(
                             Icons.home,
@@ -690,6 +472,55 @@ class _Usuariomapa extends State<Usuariomapa>
           ),
         ),
       ),
+    );
+  }
+
+  List<Widget> zona(int tamSeccion, List<String> seccion) {
+    return List.generate(
+      tamSeccion,
+      (index) {
+        String estado = seccion[index];
+        bool ocupado = estado == "OCUPADO";
+        bool noDisp = estado == "NO DISPONIBLE";
+        bool reservado = estado == 'RESERVADO';
+        bool seleccionado = estaSeleccionado[index];
+
+        return GestureDetector(
+          onTap: () {
+            if (!ocupado && !noDisp && !reservado) {
+              _handleTap(index);
+              nEst = index;
+            }
+          },
+          child: Container(
+            width: 20,
+            height: 20,
+            margin: EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: ocupado
+                  ? Colors.red
+                  : noDisp
+                      ? Colors.grey
+                      : reservado
+                          ? Colors.yellow
+                          : seleccionado
+                              ? Colors.lightBlueAccent
+                              : Colors.green,
+              border: Border.all(color: Colors.black),
+            ),
+            child: Center(
+              child: Text(
+                (index + 1).toString(),
+                style: TextStyle(
+                  color: seleccionado ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

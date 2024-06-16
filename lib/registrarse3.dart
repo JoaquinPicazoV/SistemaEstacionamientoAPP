@@ -119,7 +119,6 @@ class _Registrarse3State extends State<Registrarse3> {
                                               builder: (context) =>
                                                   const MyApp()),
                                         );
-                                        print('Iniciar');
                                       },
                                       child: const Text(
                                         "Iniciar sesión",
@@ -146,7 +145,6 @@ class _Registrarse3State extends State<Registrarse3> {
                                         ),
                                       ),
                                       onPressed: () {
-                                        print('Registrarse');
                                       },
                                       child: const Text(
                                         'Registrarse',
