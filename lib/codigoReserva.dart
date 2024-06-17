@@ -5,6 +5,7 @@ import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
+import 'package:flutter_application_1/testSeesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
 
@@ -48,7 +49,6 @@ class _codigoReserva extends State<codigoReserva> {
     Connection _db = DatabaseHelper().connection;
     final datosReserva =
         await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
-
 
     setState(() {
       horarioMaximo = datosReserva[0][1].toString();
@@ -96,8 +96,6 @@ class _codigoReserva extends State<codigoReserva> {
     print(estadoEstacionamiento);
     DatosReserva(RUT);
   }
-
-
 
   late String RUT;
 
@@ -198,7 +196,7 @@ class _codigoReserva extends State<codigoReserva> {
                     ),
                   ),
                   // Textos de estacionamiento y horario máximo de llegada
-                  if(!cargando)
+                  if (!cargando)
                     Text(
                       '$txtestacionamiento',
                       style: TextStyle(
@@ -206,16 +204,15 @@ class _codigoReserva extends State<codigoReserva> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      '$txthorarioMaximo',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    '$txthorarioMaximo',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
                     ),
-                  if(cargando)
-                    CircularProgressIndicator(),
-                    
+                  ),
+                  if (cargando) CircularProgressIndicator(),
+
                   SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
@@ -228,14 +225,18 @@ class _codigoReserva extends State<codigoReserva> {
                             content: Text('Reserva cancelada.'),
                             actions: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  String? authNombreFuture = getSessionNombre().toString();
+                                  String authNombre = authNombreFuture.toString();
                                   Navigator.of(context).pop();
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => menuUsuario(
-                                              RUT: RUT,
-                                            )),
+                                      builder: (context) => menuUsuario(
+                                        RUT: RUT,
+                                        nombreUsuario: authNombre,
+                                      ),
+                                    ),
                                   );
                                 },
                                 child: Text('¡Entendido!'),
@@ -260,10 +261,11 @@ class _codigoReserva extends State<codigoReserva> {
                   SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {
+                      String authNombre = getSessionNombre().toString();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => menuUsuario(RUT: RUT),
+                          builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: authNombre),
                         ),
                       );
                     },

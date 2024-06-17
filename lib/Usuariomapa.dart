@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
+import 'package:flutter_application_1/testSeesion.dart';
 import 'package:postgres/postgres.dart';
 
 class Usuariomapa extends StatefulWidget {
   final String RUT;
+  final String nombreUsuario;
 
-  const Usuariomapa({Key? key, required this.RUT}) : super(key: key);
+  const Usuariomapa({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
   @override
   _Usuariomapa createState() => _Usuariomapa();
 }
@@ -29,16 +31,6 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
   List<String> E = [];
   int nEst = 0;
   bool cargando = true;
-
-  Future<void> BuscarNombre(rut) async {
-    _db = DatabaseHelper().connection;
-
-    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
-
-    setState(() {
-      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
-    });
-  }
 
   Future<void> ObtenerTam() async {
     _db = DatabaseHelper().connection;
@@ -139,14 +131,15 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
     setState(() {});
   }
 
-  String nombreUsuario = 'Buscando...';
+  late String nombreUsuario;
   late TabController ControlladorBarra;
   late List<bool> estaSeleccionado;
+
 
   @override
   void initState() {
     RUT = widget.RUT;
-    BuscarNombre(RUT);
+    nombreUsuario = widget.nombreUsuario;
     super.initState();
     ControlladorBarra = TabController(length: 5, vsync: this);
     estaSeleccionado = List.generate(104, (index) => false);
@@ -278,18 +271,9 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
                                   crossAxisCount: 4,
                                   children: zona(tamB, B),
                                 ),
-                                GridView.count(
-                                  crossAxisCount: 4,
-                                  children: zona(tamC, C)
-                                ),
-                                GridView.count(
-                                  crossAxisCount: 4,
-                                  children: zona(tamD, D)
-                                ),
-                                GridView.count(
-                                  crossAxisCount: 4,
-                                  children: zona(tamE,E)
-                                ),
+                                GridView.count(crossAxisCount: 4, children: zona(tamC, C)),
+                                GridView.count(crossAxisCount: 4, children: zona(tamD, D)),
+                                GridView.count(crossAxisCount: 4, children: zona(tamE, E)),
                               ],
                             ),
                           ),
@@ -442,7 +426,7 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => menuUsuario(RUT: RUT),
+                                builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
                               ),
                             );
                           },

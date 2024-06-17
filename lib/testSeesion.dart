@@ -2,15 +2,21 @@
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<void> saveSession(correo) async {
+Future<void> saveSession(correo, nombre) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('auth_correo', correo);
+  await prefs.setString('auth_nombre', nombre);
   await prefs.setBool('auth_exist', true);
 }
 
-Future<String?> getSession() async {
+Future<String?> getSessionCorreo() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   return prefs.getString('auth_correo');
+}
+
+Future<String?> getSessionNombre() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  return prefs.getString('auth_nombre');
 }
 
 Future<void> clearSession() async {

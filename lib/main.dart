@@ -21,7 +21,7 @@ void main() async {
 
 Future<void> funcionSession(context) async {
   Connection _db = DatabaseHelper().connection;
-  String? correo = await getSession();
+  String? correo = await getSessionCorreo();
   if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
     final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='${correo.toString()}'");
     String stringRut = testRut[0][0].toString();
@@ -35,10 +35,15 @@ Future<void> funcionSession(context) async {
   } else if (await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
     final testRut = await _db.execute("SELECT usua_rut FROM usuario WHERE usua_correo='${correo.toString()}'");
     String stringRut = testRut[0][0].toString();
+    String? authNombreFuture = await getSessionNombre();
+    String authNombre = authNombreFuture.toString();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => menuUsuario(RUT: stringRut),
+        builder: (context) => menuUsuario(
+          RUT: stringRut,
+          nombreUsuario: authNombre,
+        ),
       ),
     );
   }
@@ -76,26 +81,29 @@ class _MyHomePageState extends State<MyHomePage> {
   bool obscurePassword = true;
   int coincidencias = 0;
   String RUT = '';
+  late String authNombre;
   late Connection _db;
 
   Future<void> buscarRut(correo, pswrd, bool alumno) async {
     _db = DatabaseHelper().connection;
 
-    saveSession(correo);
-
     if (alumno) {
-      final results = await _db.execute("SELECT usua_rut FROM USUARIO WHERE usua_correo='$correo'");
+      final results = await _db.execute("SELECT usua_rut, usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_correo='$correo'");
       RUT = results[0][0].toString();
+      authNombre = '${results[0][1].toString()} ${results[0][2].toString()}';
+      saveSession(correo, authNombre);
       while (RUT == '') {}
       Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT)),
+        MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: authNombre)),
       );
     } else {
-      final results = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='$correo'");
+      final results = await _db.execute("SELECT guar_rut, guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_correo='$correo'");
       RUT = results[0][0].toString();
+      authNombre = '${results[0][1].toString()} ${results[0][2].toString()} ${results[0][3].toString()}';
       while (RUT == '') {}
+      saveSession(correo, authNombre);
       Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,

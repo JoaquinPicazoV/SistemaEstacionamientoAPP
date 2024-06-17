@@ -12,43 +12,26 @@ import 'package:postgres/postgres.dart';
 
 class menuUsuario extends StatefulWidget {
   final String RUT;
+  final String nombreUsuario;
 
-  const menuUsuario({Key? key, required this.RUT}) : super(key: key);
+  const menuUsuario({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
   @override
   _menuUsuarioState createState() => _menuUsuarioState();
 }
 
 class _menuUsuarioState extends State<menuUsuario> {
   late String RUT = 'BUSCANDO';
+  late String nombreUsuario;
   @override
   void initState() {
     RUT = widget.RUT;
-    BuscarNombre(RUT);
+    nombreUsuario = widget.nombreUsuario;
     super.initState();
   }
 
   int estacionamientosDisponibles = 0;
   late Connection _db;
   String texto = 'Consultando disponibilidad...';
-  String nombreUsuario = 'Buscando nombre...';
-
-  Future<void> BuscarNombre(rut) async {
-    _db = await Connection.open(
-      Endpoint(
-        host: 'ep-sparkling-dream-a5pwwhsb.us-east-2.aws.neon.tech',
-        database: 'estacionamientosUlagos',
-        username: 'estacionamientosUlagos_owner',
-        password: 'D7HQdX0nweTx',
-      ),
-      settings: const ConnectionSettings(sslMode: SslMode.require),
-    );
-
-    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
-
-    setState(() {
-      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
-    });
-  }
 
   Future<void> ConsultarDisponibilidad() async {
     _db = DatabaseHelper().connection;
@@ -60,10 +43,8 @@ class _menuUsuarioState extends State<menuUsuario> {
     });
   }
 
-  Future<void> test() async {
-    _db = DatabaseHelper().connection;
-    final capacidad = await _db.execute("EXPLAIN (ANALYZE, BUFFERS) SELECT esta_estado FROM ESTACIONAMIENTO");
-    print(capacidad);
+  Future<void> funcionSession() async {
+    if (await getExistSession()) {}
   }
 
   @override
@@ -122,7 +103,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                       FractionallySizedBox(
                         widthFactor: 0.85,
                         child: Padding(
-                          padding: const EdgeInsets.only(top:10.0),
+                          padding: const EdgeInsets.only(top: 10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -232,7 +213,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Usuariomapa(RUT: RUT)),
+                                        MaterialPageRoute(builder: (context) => Usuariomapa(RUT: RUT, nombreUsuario: widget.nombreUsuario,)),
                                       );
                                     },
                                     icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
@@ -289,6 +270,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                         MaterialPageRoute(
                                           builder: (context) => actualizarVehiculo(
                                             RUT: widget.RUT,
+                                            nombreUsuario: widget.nombreUsuario,
                                           ),
                                         ),
                                       );

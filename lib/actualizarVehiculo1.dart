@@ -6,8 +6,9 @@ import 'package:postgres/postgres.dart';
 
 class actualizarVehiculo extends StatefulWidget {
   final String RUT;
+  final String nombreUsuario;
 
-  const actualizarVehiculo({Key? key, required this.RUT}) : super(key: key);
+  const actualizarVehiculo({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
   @override
   _ActualizarVehiculoState createState() => _ActualizarVehiculoState();
 }
@@ -16,10 +17,11 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
   List<Map<String, dynamic>> _vehicles = [];
   bool _isLoading = true;
   late String RUT = 'BUSCANDO';
-  String nombreUsuario = 'Buscando nombre...';
+  late String nombreUsuario;
   @override
   void initState() {
     RUT = widget.RUT;
+    nombreUsuario = widget.nombreUsuario;
     _connectToDatabase();
     super.initState();
   }
@@ -27,14 +29,9 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
   Future<void> _connectToDatabase() async {
     Connection _db = DatabaseHelper().connection;
 
-    String rut = widget.RUT;
-
     final results = await _db.execute(
-        "SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio FROM vehiculo v JOIN registrousuariovehiculo ruv ON v.vehi_patente = ruv.regi_vehi_patente WHERE ruv.regi_usua_rut = '$rut'");
-    final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
-
+        "SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio FROM vehiculo v JOIN registrousuariovehiculo ruv ON v.vehi_patente = ruv.regi_vehi_patente WHERE ruv.regi_usua_rut = '$RUT'");
     setState(() {
-      nombreUsuario = '${nombre[0][0]} ${nombre[0][1]}';
       _vehicles = [];
       for (List<dynamic> row in results) {
         Map<String, dynamic> vehicleMap = {
