@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/Usuariomapa.dart';
+import 'package:flutter_application_1/usuarioMapa.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/sesion.dart';
 import 'package:flutter_application_1/usuarioReservas.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
@@ -41,10 +41,6 @@ class _menuUsuarioState extends State<menuUsuario> {
       estacionamientosDisponibles = int.parse(results[0][0].toString());
       texto = '¡$estacionamientosDisponibles estacionamientos disponibles!';
     });
-  }
-
-  Future<void> funcionSession() async {
-    if (await getExistSession()) {}
   }
 
   @override
@@ -213,7 +209,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => Usuariomapa(RUT: RUT, nombreUsuario: widget.nombreUsuario,)),
+                                        MaterialPageRoute(builder: (context) => UsuarioMapa(RUT: RUT, nombreUsuario: widget.nombreUsuario,)),
                                       );
                                     },
                                     icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
@@ -239,7 +235,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => usuarioReservas(RUT: widget.RUT),
+                                          builder: (context) => usuarioReservas(RUT: widget.RUT, nombreUsuario: nombreUsuario),
                                         ),
                                       );
                                     },

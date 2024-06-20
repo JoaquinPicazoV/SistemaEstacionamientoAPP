@@ -5,7 +5,7 @@ import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
-import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/sesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
 

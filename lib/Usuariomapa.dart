@@ -3,32 +3,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
 import 'package:flutter_application_1/database.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
-import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/sesion.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:postgres/postgres.dart';
 
-class Usuariomapa extends StatefulWidget {
+class UsuarioMapa extends StatefulWidget {
   final String RUT;
   final String nombreUsuario;
 
-  const Usuariomapa({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
+  const UsuarioMapa({super.key, required this.RUT, required this.nombreUsuario});
   @override
-  _Usuariomapa createState() => _Usuariomapa();
+  _UsuarioMapa createState() => _UsuarioMapa();
 }
 
-class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixin {
+class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixin {
   late String RUT = '';
   late Connection _db;
-  int tamA = 0;
-  int tamB = 0;
-  int tamC = 0;
-  int tamD = 0;
-  int tamE = 0;
-  List<String> A = [];
-  List<String> B = [];
-  List<String> C = [];
-  List<String> D = [];
-  List<String> E = [];
+  int tamA = 0, tamB = 0, tamC = 0, tamD = 0, tamE = 0;
+  List<String> A = [], B = [], C = [], D = [], E = [];
   int nEst = 0;
   bool cargando = true;
 
@@ -135,7 +129,6 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
   late TabController ControlladorBarra;
   late List<bool> estaSeleccionado;
 
-
   @override
   void initState() {
     RUT = widget.RUT;
@@ -165,290 +158,311 @@ class _Usuariomapa extends State<Usuariomapa> with SingleTickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue.shade900,
-      body: Align(
-        alignment: Alignment.center,
-        child: SafeArea(
-          child: FractionallySizedBox(
-            widthFactor: 0.81,
-            heightFactor: 0.95,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Image.asset(
-                                'assets/img/LogoSolo.png',
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              nombreUsuario,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.blue.shade900,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.exit_to_app,
-                                color: Colors.red,
-                              ),
-                              label: Text(
-                                'Cerrar Sesión',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.75,
-                          child: Image.asset(
-                            'assets/img/Mapa.png',
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        TabBar(
-                          controller: ControlladorBarra,
-                          indicatorColor: Colors.blue.shade900,
-                          labelColor: Colors.blue.shade900,
-                          unselectedLabelColor: Colors.grey,
-                          tabs: [
-                            Tab(text: 'A'),
-                            Tab(text: 'B'),
-                            Tab(text: 'C'),
-                            Tab(text: 'D'),
-                            Tab(text: 'E'),
-                          ],
-                        ),
-                        if (cargando == true)
-                          Expanded(
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          )
-                        else
-                          Expanded(
-                            child: TabBarView(
-                              controller: ControlladorBarra,
-                              children: [
-                                GridView.count(
-                                  crossAxisCount: 4,
-                                  children: zona(tamA, A),
-                                ),
-                                GridView.count(
-                                  crossAxisCount: 4,
-                                  children: zona(tamB, B),
-                                ),
-                                GridView.count(crossAxisCount: 4, children: zona(tamC, C)),
-                                GridView.count(crossAxisCount: 4, children: zona(tamD, D)),
-                                GridView.count(crossAxisCount: 4, children: zona(tamE, E)),
-                              ],
-                            ),
-                          ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Row(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        dispose();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
+          ),
+        );
+      },
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade900,
+        body: Align(
+          alignment: Alignment.center,
+          child: SafeArea(
+            child: FractionallySizedBox(
+              widthFactor: 0.81,
+              heightFactor: 0.95,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    FractionallySizedBox(
+                      widthFactor: 0.85,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black),
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Disponible',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
                                 ),
                               ],
                             ),
                             Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black),
-                                    color: Colors.yellow,
-                                  ),
-                                ),
                                 Text(
-                                  'Reservado',
+                                  nombreUsuario,
                                   style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
+                                    fontSize: 16,
+                                    color: Colors.blue.shade900,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black),
+                                TextButton.icon(
+                                  style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
+                                  onPressed: () {
+                                    clearSession();
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const MyApp(),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(
+                                    Icons.exit_to_app,
                                     color: Colors.red,
                                   ),
-                                ),
-                                Text(
-                                  'Ocupado',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black),
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                Text(
-                                  'No disponible',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border: Border.all(color: Colors.black),
-                                    color: Colors.blue,
-                                  ),
-                                ),
-                                Text(
-                                  'Seleccionado',
-                                  style: TextStyle(
-                                    fontSize: 8,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                  label: const Text(
+                                    'Cerrar Sesión',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            print(nEst + 1);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => codigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            'RESERVAR',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
-                              ),
-                            );
-                          },
-                          icon: Icon(
-                            Icons.home,
-                            color: Colors.white,
-                          ),
-                          label: Text(
-                            'VOLVER AL MENÚ',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue.shade700,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.75,
+                            child: Image.asset(
+                              'assets/img/Mapa.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          TabBar(
+                            controller: ControlladorBarra,
+                            indicatorColor: Colors.blue.shade900,
+                            labelColor: Colors.blue.shade900,
+                            unselectedLabelColor: Colors.grey,
+                            tabs: [
+                              Tab(text: 'A'),
+                              Tab(text: 'B'),
+                              Tab(text: 'C'),
+                              Tab(text: 'D'),
+                              Tab(text: 'E'),
+                            ],
+                          ),
+                          if (cargando == true)
+                            Expanded(
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            )
+                          else
+                            Expanded(
+                              child: TabBarView(
+                                controller: ControlladorBarra,
+                                children: [
+                                  GridView.count(
+                                    crossAxisCount: 4,
+                                    children: zona(tamA, A),
+                                  ),
+                                  GridView.count(
+                                    crossAxisCount: 4,
+                                    children: zona(tamB, B),
+                                  ),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamC, C)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamD, D)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamE, E)),
+                                ],
+                              ),
+                            ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Disponible',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black),
+                                      color: Colors.yellow,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Reservado',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black),
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Ocupado',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black),
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Text(
+                                    'No disponible',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(color: Colors.black),
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Seleccionado',
+                                    style: TextStyle(
+                                      fontSize: 8,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              print(nEst + 1);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => codigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'RESERVAR',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.home,
+                              color: Colors.white,
+                            ),
+                            label: Text(
+                              'VOLVER AL MENÚ',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

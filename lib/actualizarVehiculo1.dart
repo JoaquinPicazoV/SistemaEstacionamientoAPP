@@ -1,14 +1,20 @@
-// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, file_names, camel_case_types, use_key_in_widget_constructors, no_leading_underscores_for_local_identifiers
+// ignore_for_file: library_private_types_in_public_api, file_names, camel_case_types, use_key_in_widget_constructors, no_leading_underscores_for_local_identifiers
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/database.dart';
+import 'package:flutter_application_1/main.dart';
+import 'package:flutter_application_1/menuUsuario.dart';
+import 'package:flutter_application_1/sesion.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
 class actualizarVehiculo extends StatefulWidget {
   final String RUT;
   final String nombreUsuario;
 
-  const actualizarVehiculo({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
+  const actualizarVehiculo({super.key, required this.RUT, required this.nombreUsuario});
   @override
   _ActualizarVehiculoState createState() => _ActualizarVehiculoState();
 }
@@ -48,88 +54,155 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue.shade900,
-      body: Align(
-        alignment: Alignment.center,
-        child: SafeArea(
-          child: FractionallySizedBox(
-            widthFactor: 0.81,
-            heightFactor: 0.95,
-            child: SingleChildScrollView(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade900,
+        body: Center(
+          child: SafeArea(
+            child: FractionallySizedBox(
+              widthFactor: 0.81,
+              heightFactor: 0.95,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      FractionallySizedBox(
+                        widthFactor: 0.85,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SizedBox(
-                                width: 60,
-                                height: 60,
-                                child: Image.asset('assets/img/LogoSolo.png'),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                nombreUsuario,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.blue.shade900,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextButton.icon(
-                                onPressed: () {
-                                  // Aquí va tu lógica para cerrar sesión
-                                },
-                                icon: Icon(
-                                  Icons.exit_to_app,
-                                  color: Colors.red,
-                                ),
-                                label: Text(
-                                  'Cerrar Sesión',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.red,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: 50,
+                                    height: 50,
+                                    child: SvgPicture.asset('assets/img/logo.87d5c665 1.svg', semanticsLabel: 'Logo Ulagos'),
                                   ),
-                                ),
+                                ],
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    nombreUsuario,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue.shade900,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  TextButton.icon(
+                                    style: TextButton.styleFrom(padding: EdgeInsets.zero, tapTargetSize: MaterialTapTargetSize.shrinkWrap, alignment: Alignment.centerRight),
+                                    onPressed: () {
+                                      clearSession();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => const MyApp(),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(
+                                      Icons.exit_to_app,
+                                      color: Colors.red,
+                                    ),
+                                    label: const Text(
+                                      'Cerrar Sesión',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          "DATOS VEHÍCULO",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
-                      SizedBox(height: 30),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: _isLoading ? [Center(child: CircularProgressIndicator())] : _vehicles.map((vehicle) => _buildVehicleContainer(vehicle)).toList(),
+                      const SizedBox(height: 30),
+                      const Text(
+                        "DATOS VEHÍCULO",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      SizedBox(height: 200),
+                      const SizedBox(height: 30),
+                      FractionallySizedBox(
+                        widthFactor: 0.97,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: _isLoading
+                              ? [
+                                  const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                                ]
+                              : _vehicles.map((vehicle) => _buildVehicleContainer(vehicle)).toList(),
+                        ),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          'Añadir',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade700,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                        width: 20,
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.home,
+                          color: Colors.white,
+                        ),
+                        label: const Text(
+                          'VOLVER AL MENÚ',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue.shade700,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -143,8 +216,8 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
 
   Widget _buildVehicleContainer(Map<String, dynamic> vehicleData) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      padding: EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.green, width: 2), // Ajusta el ancho del borde aquí
@@ -156,7 +229,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
           _buildDataRow("Marca:", vehicleData["vehi_marca"]),
           _buildDataRow("Modelo:", vehicleData["vehi_modelo"]),
           _buildDataRow("Año:", vehicleData["vehi_anio"].toString()),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -168,7 +241,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
               }, Colors.red), // Color rojo para el botón "Eliminar"
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -197,7 +270,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
         ),
         label: Text(
           text,
-          style: TextStyle(color: Colors.white), // Color blanco para el texto del botón
+          style: const TextStyle(color: Colors.white), // Color blanco para el texto del botón
         ),
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.transparent, // Establece el color transparente para el botón
@@ -213,15 +286,15 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
       children: [
         Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 6),
+        const SizedBox(height: 6),
         Text(
           data ?? '',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.grey,
             fontSize: 16,
           ),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/historialGuardiaResultados.dart';
@@ -8,7 +9,8 @@ import 'package:intl/intl.dart';
 
 class usuarioReservas extends StatefulWidget {
   final String RUT;
-  const usuarioReservas({Key? key, required this.RUT}) : super(key: key);
+  final String nombreUsuario;
+  const usuarioReservas({super.key, required this.RUT,required this.nombreUsuario});
   @override
   _usuarioReservas createState() => _usuarioReservas();
 }
@@ -22,9 +24,10 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
   TextEditingController _dateController3 = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKey3 = GlobalKey<FormState>();
-
+  late String nombreUsuario;
   @override
   void initState() {
+    nombreUsuario = widget.nombreUsuario;
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
   }
@@ -124,64 +127,71 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue.shade900,
-      body: Align(
-        child: SafeArea(
-          child: FractionallySizedBox(
-            widthFactor: 0.95,
-            heightFactor: 0.95,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FractionallySizedBox(
-                      widthFactor: 0.6,
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 30),
-                        child: Image.asset(
-                          "assets/img/ULAGOS.png",
-                          fit: BoxFit.fitHeight,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => menuUsuario(RUT: widget.RUT, nombreUsuario: nombreUsuario)),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.blue.shade900,
+        body: Align(
+          child: SafeArea(
+            child: FractionallySizedBox(
+              widthFactor: 0.95,
+              heightFactor: 0.95,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FractionallySizedBox(
+                        widthFactor: 0.6,
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(vertical: 30),
+                          child: Image.asset(
+                            "assets/img/ULAGOS.png",
+                            fit: BoxFit.fitHeight,
+                          ),
                         ),
                       ),
-                    ),
-                    const Text(
-                      "HISTORIAL RESERVAS",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                      const Text(
+                        "HISTORIAL RESERVAS",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const Text(
-                      "Buscar por",
-                      style: TextStyle(
-                        fontSize: 20,
+                      const Text(
+                        "Buscar por",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
                       ),
-                    ),
-                    TabBar(
-                      controller: _tabController,
-                      tabs: [
-                        Tab(text: 'Fecha'),
-                        Tab(text: 'Patente'),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 600,
-                      child: TabBarView(
+                      TabBar(
                         controller: _tabController,
-                        children: [
-                          // Aquí va el formulario de búsqueda por fecha
-                          buildFechaSearchForm(),
-                          // Aquí va el formulario de búsqueda por patente
-                          buildPatenteSearchForm(),
+                        tabs: [
+                          Tab(text: 'Fecha'),
+                          Tab(text: 'Patente'),
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(
+                        height: 600,
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            // Aquí va el formulario de búsqueda por fecha
+                            buildFechaSearchForm(),
+                            // Aquí va el formulario de búsqueda por patente
+                            buildPatenteSearchForm(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -510,25 +520,25 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     ),
                     onPressed: () async {
                       showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) => const AlertDialog(
-                            content: SizedBox(
-                              height: 250,
-                              child: Center(
-                                child: SizedBox(
-                                  height: 100,
-                                  width: 100,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 7,
-                                    semanticsLabel: 'Circular progress indicator',
-                                  ),
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (BuildContext context) => const AlertDialog(
+                          content: SizedBox(
+                            height: 250,
+                            child: Center(
+                              child: SizedBox(
+                                height: 100,
+                                width: 100,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 7,
+                                  semanticsLabel: 'Circular progress indicator',
                                 ),
                               ),
                             ),
-                            elevation: 24,
                           ),
-                        );
+                          elevation: 24,
+                        ),
+                      );
                       if (_formKey3.currentState?.validate() ?? false) {
                         final result = await buscarHistorialPorFecha(_dateController3.text);
                         if (result is String) {

@@ -5,7 +5,7 @@ import 'package:flutter_application_1/adminGuardia1.dart';
 import 'package:flutter_application_1/confirmarReserva1.dart';
 import 'package:flutter_application_1/historialGuardia.dart';
 import 'package:flutter_application_1/main.dart';
-import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/sesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/database.dart';

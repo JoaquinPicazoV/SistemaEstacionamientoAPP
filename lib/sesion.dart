@@ -22,7 +22,7 @@ Future<String?> getSessionNombre() async {
 Future<void> clearSession() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('auth_correo');
-  await prefs.setBool('auth_exist', true);
+  await prefs.setBool('auth_exist', false);
 }
 
 Future<bool> getExistSession() async {

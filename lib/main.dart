@@ -5,7 +5,7 @@ import 'package:flutter_application_1/menuUsuario.dart';
 import 'package:flutter_application_1/menuGuardia.dart';
 import 'package:flutter_application_1/recuperarClave.dart';
 import 'package:flutter_application_1/registrarse1.dart';
-import 'package:flutter_application_1/testSeesion.dart';
+import 'package:flutter_application_1/sesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/newRegistro.dart';
 import 'package:flutter_application_1/database.dart';
@@ -138,6 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
     vaciarRegistro();
     return PopScope(
       canPop: false,
+      onPopInvoked: (didPop) => {},
       child: Scaffold(
         backgroundColor: Colors.blue.shade900,
         body: Center(
