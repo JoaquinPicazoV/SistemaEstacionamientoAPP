@@ -204,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (context) => Registrarse1()),
+                                          MaterialPageRoute(builder: (context) => const Registrarse1()),
                                         );
                                       },
                                       child: const Text(
@@ -371,7 +371,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
-                                                builder: (context) => RecuperarClave(),
+                                                builder: (context) => const RecuperarClave(),
                                               ));
                                         },
                                         child: const Text(

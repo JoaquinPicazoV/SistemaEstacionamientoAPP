@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api, file_names
 
 import 'package:flutter/material.dart';
 import 'package:postgres/postgres.dart';
@@ -17,11 +17,11 @@ class _HistorialGuardiaState extends State<HistorialGuardia> with TickerProvider
   late Connection _db;
   List<List<dynamic>> reservas = [];
   late TabController _tabController;
-  TextEditingController _plateController = TextEditingController();
-  TextEditingController _rutController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _dateController2 = TextEditingController();
-  TextEditingController _dateController3 = TextEditingController();
+  final TextEditingController _plateController = TextEditingController();
+  final TextEditingController _rutController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController2 = TextEditingController();
+  final TextEditingController _dateController3 = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKey3 = GlobalKey<FormState>();

@@ -355,7 +355,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      Registrarse2()),
+                                                      const Registrarse2()),
                                             );
                                           } else {
                                             ScaffoldMessenger.of(context)

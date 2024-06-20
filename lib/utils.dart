@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:math';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
@@ -15,11 +17,11 @@ Future<bool> sendEmail(String recipientEmail, String codigo) async {
     ..recipients.add(recipientEmail)
     ..subject = 'Codigo de verificación'
     ..text = 'Codigo de verificación: $codigo'
-    ..html = "<h1>Codigo de verificación: ${codigo}</h1>";
+    ..html = "<h1>Codigo de verificación: $codigo</h1>";
 
   try {
     final sendReport = await send(message, smtpServer);
-    print('Mensaje enviado: ' + sendReport.toString());
+    print('Mensaje enviado: ${sendReport.toString()}');
     return true;
   } on MailerException catch (e) {
     print('Mensaje no enviado. ${e.toString()}');
