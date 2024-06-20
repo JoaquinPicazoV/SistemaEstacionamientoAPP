@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print, no_leading_underscores_for_local_identifiers
+// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api, camel_case_types, use_build_context_synchronously, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -7,21 +7,21 @@ import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/historialGuardiaResultados.dart';
 import 'package:intl/intl.dart';
 
-class usuarioReservas extends StatefulWidget {
+class UsuarioReservas extends StatefulWidget {
   final String RUT;
   final String nombreUsuario;
-  const usuarioReservas({super.key, required this.RUT,required this.nombreUsuario});
+  const UsuarioReservas({super.key, required this.RUT, required this.nombreUsuario});
   @override
   _usuarioReservas createState() => _usuarioReservas();
 }
 
-class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMixin {
+class _usuarioReservas extends State<UsuarioReservas> with TickerProviderStateMixin {
   late Connection _db;
   List<List<dynamic>> reservas = [];
   late TabController _tabController;
-  TextEditingController _plateController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
-  TextEditingController _dateController3 = TextEditingController();
+  final TextEditingController _plateController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _dateController3 = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKey3 = GlobalKey<FormState>();
   late String nombreUsuario;
@@ -51,8 +51,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
         }
 
         final result = await _db.execute(query);
-        // ignore: prefer_is_empty
-        if (result.length == 0) {
+        if (result.isEmpty) {
           if (fecha.isNotEmpty) {
             Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
@@ -97,9 +96,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
 
       final result = await _db.execute(query);
 
-      // ignore: prefer_is_empty
-
-      if (result.length == 0) {
+      if (result.isEmpty) {
         Navigator.of(context, rootNavigator: true).pop('dialog');
         return 'No se encontraron registros asociados a la fecha seleccionada';
       } else {
@@ -131,7 +128,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
       canPop: false,
       onPopInvoked: (didPop) => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => menuUsuario(RUT: widget.RUT, nombreUsuario: nombreUsuario)),
+        MaterialPageRoute(builder: (context) => MenuUsuario(RUT: widget.RUT, nombreUsuario: nombreUsuario)),
       ),
       child: Scaffold(
         backgroundColor: Colors.blue.shade900,
@@ -173,7 +170,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                       ),
                       TabBar(
                         controller: _tabController,
-                        tabs: [
+                        tabs: const [
                           Tab(text: 'Fecha'),
                           Tab(text: 'Patente'),
                         ],
@@ -206,13 +203,13 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
       key: _formKey,
       child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Patente',
                 ),
                 TextFormField(
@@ -228,15 +225,15 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     }
                   },
                   keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Ej: GGXX20',
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                    contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                     floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: const OutlineInputBorder(),
-                    enabledBorder: const OutlineInputBorder(
+                    border: OutlineInputBorder(),
+                    enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue),
                     ),
-                    focusedBorder: const OutlineInputBorder(
+                    focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.blue, width: 1.0),
                     ),
                     counterText: '',
@@ -247,11 +244,11 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Fecha (opcional)', textAlign: TextAlign.start),
+                const Text('Fecha (opcional)', textAlign: TextAlign.start),
                 TextFormField(
                   controller: _dateController,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -284,7 +281,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     counterText: '',
                     suffixIcon: _dateController.text.isNotEmpty
                         ? IconButton(
-                            icon: Icon(Icons.clear),
+                            icon: const Icon(Icons.clear),
                             onPressed: () {
                               setState(() {
                                 _dateController.clear();
@@ -303,9 +300,9 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
               ],
             ),
           ),
-          SizedBox(height: 75),
+          const SizedBox(height: 75),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 ElevatedButton(
@@ -342,14 +339,14 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Error'),
+                              title: const Text('Error'),
                               content: Text(result),
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('OK'),
+                                  child: const Text('OK'),
                                 ),
                               ],
                             );
@@ -369,11 +366,11 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     }
                   },
                   child: Container(
-                    padding: EdgeInsets.all(12),
-                    child: Row(
+                    padding: const EdgeInsets.all(12),
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.search,
                           color: Colors.white,
@@ -389,7 +386,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
@@ -400,11 +397,11 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     Navigator.of(context).pop();
                   },
                   child: Container(
-                    padding: EdgeInsets.all(12),
-                    child: Row(
+                    padding: const EdgeInsets.all(12),
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.exit_to_app,
                           color: Colors.white,
@@ -449,13 +446,13 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
       key: _formKey3,
       child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
-            padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Fecha', textAlign: TextAlign.start),
+                const Text('Fecha', textAlign: TextAlign.start),
                 TextFormField(
                   controller: _dateController3,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -488,7 +485,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     counterText: '',
                     suffixIcon: _dateController3.text.isNotEmpty
                         ? IconButton(
-                            icon: Icon(Icons.clear),
+                            icon: const Icon(Icons.clear),
                             onPressed: () {
                               setState(() {
                                 _dateController3.clear();
@@ -507,9 +504,9 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
               ],
             ),
           ),
-          SizedBox(height: 75),
+          const SizedBox(height: 75),
           Container(
-            padding: EdgeInsets.all(12),
+            padding: const EdgeInsets.all(12),
             child: Column(
               children: [
                 ElevatedButton(
@@ -546,14 +543,14 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Error'),
+                                title: const Text('Error'),
                                 content: Text(result),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
                                     },
-                                    child: Text('OK'),
+                                    child: const Text('OK'),
                                   ),
                                 ],
                               );
@@ -573,11 +570,11 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                       }
                     },
                     child: Container(
-                      padding: EdgeInsets.all(12),
-                      child: Row(
+                      padding: const EdgeInsets.all(12),
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(
                             Icons.search,
                             color: Colors.white,
@@ -592,7 +589,7 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                         ],
                       ),
                     )),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStatePropertyAll(
@@ -603,11 +600,11 @@ class _usuarioReservas extends State<usuarioReservas> with TickerProviderStateMi
                     Navigator.of(context).pop();
                   },
                   child: Container(
-                    padding: EdgeInsets.all(12),
-                    child: Row(
+                    padding: const EdgeInsets.all(12),
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
+                      children: [
                         Icon(
                           Icons.exit_to_app,
                           color: Colors.white,

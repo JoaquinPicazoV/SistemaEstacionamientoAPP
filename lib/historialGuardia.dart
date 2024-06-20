@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, file_names, use_key_in_widget_constructors, camel_case_types, library_private_types_in_public_api, avoid_print, no_leading_underscores_for_local_identifiers
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:postgres/postgres.dart';
@@ -6,12 +6,14 @@ import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/historialGuardiaResultados.dart';
 import 'package:intl/intl.dart';
 
-class historialGuardia extends StatefulWidget {
+class HistorialGuardia extends StatefulWidget {
+  const HistorialGuardia({super.key});
+
   @override
   _HistorialGuardiaState createState() => _HistorialGuardiaState();
 }
 
-class _HistorialGuardiaState extends State<historialGuardia> with TickerProviderStateMixin {
+class _HistorialGuardiaState extends State<HistorialGuardia> with TickerProviderStateMixin {
   late Connection _db;
   List<List<dynamic>> reservas = [];
   late TabController _tabController;
@@ -34,8 +36,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
     try {
       _db = DatabaseHelper().connection;
       final existeVehiculo = await _db.execute("SELECT * FROM VEHICULO WHERE vehi_patente = '${patente.toUpperCase()}'");
-      // ignore: prefer_is_empty
-      if (existeVehiculo.length == 0) {
+      if (existeVehiculo.isEmpty) {
         return 'El vehículo no se encuentra registrado en la base de datos';
       } else {
         var query =
@@ -50,8 +51,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         }
 
         final result = await _db.execute(query);
-        // ignore: prefer_is_empty
-        if (result.length == 0) {
+        if (result.isEmpty) {
           if (fecha.isNotEmpty) {
             Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados a la patente ingresada y la fecha seleccionada';
@@ -88,8 +88,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
     try {
       _db = DatabaseHelper().connection;
       final existeVehiculo = await _db.execute("SELECT * FROM USUARIO WHERE usua_rut = '${rut.toUpperCase()}'");
-      // ignore: prefer_is_empty
-      if (existeVehiculo.length == 0) {
+      if (existeVehiculo.isEmpty) {
         return 'El usuario no se encuentra registrado en la base de datos';
       } else {
         var query =
@@ -105,8 +104,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
 
         final result = await _db.execute(query);
 
-        // ignore: prefer_is_empty
-        if (result.length == 0) {
+        if (result.isEmpty) {
           if (fecha.isNotEmpty) {
             Navigator.of(context, rootNavigator: true).pop('dialog');
             return 'No se encontraron registros asociados al RUT ingresado y la fecha seleccionada';
@@ -151,9 +149,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
 
       final result = await _db.execute(query);
 
-      // ignore: prefer_is_empty
-
-      if (result.length == 0) {
+      if (result.isEmpty) {
         Navigator.of(context, rootNavigator: true).pop('dialog');
         return 'No se encontraron registros asociados a la fecha seleccionada';
       } else {
@@ -221,7 +217,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                     ),
                     TabBar(
                       controller: _tabController,
-                      tabs: [
+                      tabs: const[
                         Tab(text: 'Fecha'),
                         Tab(text: 'Patente'),
                         Tab(text: 'Rut'),
@@ -256,13 +252,13 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         key: _formKey,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Patente',
                     ),
                     TextFormField(
@@ -278,15 +274,15 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         }
                       },
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Ej: GGXX20',
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
-                        border: const OutlineInputBorder(),
-                        enabledBorder: const OutlineInputBorder(
+                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
-                        focusedBorder: const OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
@@ -296,11 +292,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                   ],
                 )),
             Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Fecha (opcional)', textAlign: TextAlign.start),
+                    const Text('Fecha (opcional)', textAlign: TextAlign.start),
                     TextFormField(
                       controller: _dateController,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -333,7 +329,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         counterText: '',
                         suffixIcon: _dateController.text.isNotEmpty
                             ? IconButton(
-                                icon: Icon(Icons.clear),
+                                icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   setState(() {
                                     _dateController.clear();
@@ -351,9 +347,9 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                     ),
                   ],
                 )),
-            SizedBox(height: 75),
+            const SizedBox(height: 75),
             Container(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   ElevatedButton(
@@ -390,14 +386,14 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Error'),
+                                  title: const Text('Error'),
                                   content: Text(result),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 );
@@ -417,11 +413,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.search,
                               color: Colors.white,
@@ -436,7 +432,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                           ],
                         ),
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
@@ -447,11 +443,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         Navigator.of(context).pop();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.exit_to_app,
                               color: Colors.white,
@@ -494,13 +490,13 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         key: _formKey2,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'RUT',
                     ),
                     TextFormField(
@@ -515,15 +511,15 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         }
                       },
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Ej: 20545267-1',
-                        contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                        contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
                         floatingLabelBehavior: FloatingLabelBehavior.never,
-                        border: const OutlineInputBorder(),
-                        enabledBorder: const OutlineInputBorder(
+                        border: OutlineInputBorder(),
+                        enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue),
                         ),
-                        focusedBorder: const OutlineInputBorder(
+                        focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.blue, width: 1.0),
                         ),
                         counterText: '',
@@ -533,11 +529,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                   ],
                 )),
             Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Fecha (opcional)', textAlign: TextAlign.start),
+                    const Text('Fecha (opcional)', textAlign: TextAlign.start),
                     TextFormField(
                       controller: _dateController2,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -570,7 +566,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         counterText: '',
                         suffixIcon: _dateController2.text.isNotEmpty
                             ? IconButton(
-                                icon: Icon(Icons.clear),
+                                icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   setState(() {
                                     _dateController2.clear();
@@ -588,9 +584,9 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                     ),
                   ],
                 )),
-            SizedBox(height: 75),
+            const SizedBox(height: 75),
             Container(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   ElevatedButton(
@@ -627,14 +623,14 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Error'),
+                                  title: const Text('Error'),
                                   content: Text(result),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 );
@@ -654,11 +650,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.search,
                               color: Colors.white,
@@ -673,7 +669,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                           ],
                         ),
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
@@ -684,11 +680,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         Navigator.of(context).pop();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.exit_to_app,
                               color: Colors.white,
@@ -715,13 +711,13 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
         key: _formKey3,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-                padding: EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+                padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Fecha', textAlign: TextAlign.start),
+                    const Text('Fecha', textAlign: TextAlign.start),
                     TextFormField(
                       controller: _dateController3,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -754,7 +750,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         counterText: '',
                         suffixIcon: _dateController3.text.isNotEmpty
                             ? IconButton(
-                                icon: Icon(Icons.clear),
+                                icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   setState(() {
                                     _dateController3.clear();
@@ -772,9 +768,9 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                     ),
                   ],
                 )),
-            SizedBox(height: 75),
+            const SizedBox(height: 75),
             Container(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 children: [
                   ElevatedButton(
@@ -811,14 +807,14 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Error'),
+                                  title: const Text('Error'),
                                   content: Text(result),
                                   actions: <Widget>[
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
-                                      child: Text('OK'),
+                                      child: const Text('OK'),
                                     ),
                                   ],
                                 );
@@ -838,11 +834,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         }
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.search,
                               color: Colors.white,
@@ -857,7 +853,7 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                           ],
                         ),
                       )),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll(
@@ -868,11 +864,11 @@ class _HistorialGuardiaState extends State<historialGuardia> with TickerProvider
                         Navigator.of(context).pop();
                       },
                       child: Container(
-                        padding: EdgeInsets.all(12),
-                        child: Row(
+                        padding: const EdgeInsets.all(12),
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.exit_to_app,
                               color: Colors.white,

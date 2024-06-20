@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, non_constant_identifier_names
+// ignore_for_file: library_private_types_in_public_api, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/reservarGuardia.dart';
@@ -6,6 +6,8 @@ import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
 
 class GuardiaMapa extends StatefulWidget {
+  const GuardiaMapa({super.key});
+
   @override
   _GuardiaMapaState createState() => _GuardiaMapaState();
 }
@@ -25,7 +27,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
   List<String> E = [];
   int nEst = 0;
 
-  Future<void> ObtenerTam() async {
+  Future<void> obtenerTam() async {
     _db = DatabaseHelper().connection;
 
     final a = await _db.execute(
@@ -83,20 +85,20 @@ class _GuardiaMapaState extends State<GuardiaMapa>
   }
 
   String nombreUsuario = 'Buscando...';
-  late TabController ControlladorBarra;
+  late TabController controlladorBarra;
   late List<bool> estaSeleccionado;
 
   @override
   void initState() {
     super.initState();
-    ControlladorBarra = TabController(length: 5, vsync: this);
+    controlladorBarra = TabController(length: 5, vsync: this);
     estaSeleccionado = List.generate(104, (index) => false);
-    ObtenerTam();
+    obtenerTam();
   }
 
   @override
   void dispose() {
-    ControlladorBarra.dispose();
+    controlladorBarra.dispose();
     super.dispose();
   }
 
@@ -160,11 +162,11 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                             ),
                             TextButton.icon(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.exit_to_app,
                                 color: Colors.red,
                               ),
-                              label: Text(
+                              label: const Text(
                                 'Cerrar Sesión',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -188,11 +190,11 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                           ),
                         ),
                         TabBar(
-                          controller: ControlladorBarra,
+                          controller: controlladorBarra,
                           indicatorColor: Colors.blue.shade900,
                           labelColor: Colors.blue.shade900,
                           unselectedLabelColor: Colors.grey,
-                          tabs: [
+                          tabs:const [
                             Tab(text: 'A'),
                             Tab(text: 'B'),
                             Tab(text: 'C'),
@@ -202,7 +204,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                         ),
                         Expanded(
                           child: TabBarView(
-                            controller: ControlladorBarra,
+                            controller: controlladorBarra,
                             children: [
                               GridView.count(
                                 crossAxisCount: 4,
@@ -225,7 +227,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                       child: Container(
                                         width: 20,
                                         height: 20,
-                                        margin: EdgeInsets.all(2),
+                                        margin: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           color: ocupado
@@ -281,7 +283,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                         width: 20,
                                         height: 20,
                                     
-                                        margin: EdgeInsets.all(2),
+                                        margin: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           color: ocupado
@@ -336,7 +338,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                       child: Container(
                                         width: 20,
                                         height: 20,
-                                        margin: EdgeInsets.all(2),
+                                        margin: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           color: ocupado
@@ -393,7 +395,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                       child: Container(
                                         width: 20,
                                         height: 20,
-                                        margin: EdgeInsets.all(2),
+                                        margin: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           color: ocupado
@@ -454,7 +456,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                       child: Container(
                                         width: 20,
                                         height: 20,
-                                        margin: EdgeInsets.all(2),
+                                        margin: const EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
                                           color: ocupado
@@ -495,7 +497,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                             ],
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Row(
@@ -512,7 +514,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                     color: Colors.white,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'Disponible',
                                   style: TextStyle(
                                     fontSize: 8,
@@ -533,7 +535,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                     color: Colors.yellow,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'Reservado',
                                   style: TextStyle(
                                     fontSize: 8,
@@ -554,7 +556,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                     color: Colors.red,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'Ocupado',
                                   style: TextStyle(
                                     fontSize: 8,
@@ -575,7 +577,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                     color: Colors.grey,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'No disponible',
                                   style: TextStyle(
                                     fontSize: 8,
@@ -596,7 +598,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                                     color: Colors.blue,
                                   ),
                                 ),
-                                Text(
+                                const Text(
                                   'Seleccionado',
                                   style: TextStyle(
                                     fontSize: 8,
@@ -608,7 +610,7 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         ElevatedButton.icon(
@@ -622,11 +624,11 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                               ),
                             );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.add,
                             color: Colors.white,
                           ),
-                          label: Text(
+                          label: const Text(
                             'RESERVAR',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -637,17 +639,17 @@ class _GuardiaMapaState extends State<GuardiaMapa>
                             ),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        const SizedBox(height: 20,),
                         ElevatedButton.icon(
                           onPressed: () {
                      
                             
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.home,
                             color: Colors.white,
                           ),
-                          label: Text(
+                          label: const Text(
                             'VOLVER AL MENÚ',
                             style: TextStyle(color: Colors.white),
                           ),

@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, prefer_const_constructors, camel_case_types, non_constant_identifier_names, use_super_parameters, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/adminGuardia1.dart';
@@ -10,21 +10,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 import 'package:flutter_application_1/database.dart';
 
-class menuGuardia extends StatefulWidget {
+class MenuGuardia extends StatefulWidget {
   final String RUT;
 
-  const menuGuardia({Key? key, required this.RUT}) : super(key: key);
+  const MenuGuardia({super.key, required this.RUT});
   @override
-  _menuGuardiaState createState() => _menuGuardiaState();
+  _MenuGuardiaState createState() => _MenuGuardiaState();
 }
 
-class _menuGuardiaState extends State<menuGuardia> {
+class _MenuGuardiaState extends State<MenuGuardia> {
   late String RUT = RUT;
   @override
   void initState() {
     RUT = widget.RUT;
-    BuscarNombre();
-    ConsultarDisponibilidad();
+    buscarNombre();
+    consultarDisponibilidad();
     super.initState();
   }
 
@@ -33,7 +33,7 @@ class _menuGuardiaState extends State<menuGuardia> {
   String texto = 'Consultando disponibilidad...';
   String nombreUsuario = 'Buscando nombre...';
 
-  Future<void> BuscarNombre() async {
+  Future<void> buscarNombre() async {
     _db = DatabaseHelper().connection;
 
     final nombre = await _db.execute("SELECT guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_rut='$RUT'");
@@ -43,7 +43,7 @@ class _menuGuardiaState extends State<menuGuardia> {
     });
   }
 
-  Future<void> ConsultarDisponibilidad() async {
+  Future<void> consultarDisponibilidad() async {
     _db = DatabaseHelper().connection;
 
     final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
@@ -62,14 +62,14 @@ class _menuGuardiaState extends State<menuGuardia> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Confirmación'),
-              content: Text('¿Quiere salir?'),
+              title: const Text('Confirmación'),
+              content: const Text('¿Quiere salir?'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancelar'),
+                  child: const Text('Cancelar'),
                 ),
                 TextButton(
                   onPressed: () {
@@ -82,7 +82,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                       ),
                     );
                   },
-                  child: Text('Si'),
+                  child: const Text('Si'),
                 ),
               ],
             );
@@ -213,11 +213,11 @@ class _menuGuardiaState extends State<menuGuardia> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => adminGuardia1(),
+                                    builder: (context) => AdminGuardia1(),
                                   ));
                             },
-                            icon: Icon(Icons.car_crash_outlined, color: Colors.white),
-                            label: Text(
+                            icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
+                            label: const Text(
                               'ADMINISTRAR ESTACIONAMIENTO',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -241,11 +241,11 @@ class _menuGuardiaState extends State<menuGuardia> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => historialGuardia(),
+                                    builder: (context) => const HistorialGuardia(),
                                   ));
                             },
-                            icon: Icon(Icons.history, color: Colors.white),
-                            label: Text(
+                            icon: const Icon(Icons.history, color: Colors.white),
+                            label: const Text(
                               'HISTORIAL DE RESERVAS',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -269,7 +269,7 @@ class _menuGuardiaState extends State<menuGuardia> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => confirmarReserva(),
+                                  builder: (context) => ConfirmarReserva(),
                                 ),
                               );
                             },

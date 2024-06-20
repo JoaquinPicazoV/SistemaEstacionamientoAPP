@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, use_build_context_synchronously, prefer_const_constructors_in_immutables, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:postgres/postgres.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_application_1/recuperarClave4.dart';
 
 class RecuperarClave3 extends StatefulWidget {
   final String email;
-  RecuperarClave3({required this.email, Key? key}) : super(key: key);
+  RecuperarClave3({required this.email, super.key});
   @override
   _RecuperarClave3State createState() => _RecuperarClave3State();
 }
@@ -98,13 +100,10 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           obscureText: !contrasena1Visible,
                           onChanged: onPasswordChanged,
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 16),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
-                              icon: Icon(contrasena1Visible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(contrasena1Visible ? Icons.visibility_off : Icons.visibility),
                               onPressed: () {
                                 setState(() {
                                   contrasena1Visible = !contrasena1Visible;
@@ -137,13 +136,10 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           obscureText: !contrasena2Visible,
                           onChanged: onConfirmationChanged,
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 16),
+                            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                             border: InputBorder.none,
                             suffixIcon: IconButton(
-                              icon: Icon(contrasena2Visible
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
+                              icon: Icon(contrasena2Visible ? Icons.visibility_off : Icons.visibility),
                               onPressed: () {
                                 setState(() {
                                   contrasena2Visible = !contrasena2Visible;
@@ -155,23 +151,15 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                       ),
                       const SizedBox(height: 16),
                       // Requisitos de contraseña
-                      buildRequirement("Debe contener al menos 8 caracteres",
-                          tieneAlMenos8Caracteres),
-                      buildRequirement(
-                          "Debe contener al menos una letra mayúscula.",
-                          tieneMayuscula),
-                      buildRequirement(
-                          "Debe contener al menos una letra minúscula.",
-                          tieneMinuscula),
-                      buildRequirement(
-                          "Debe contener al menos un número.", tieneNumero),
-                      buildRequirement(
-                          "Las contraseñas coinciden.", contrasenasCoinciden),
+                      buildRequirement("Debe contener al menos 8 caracteres", tieneAlMenos8Caracteres),
+                      buildRequirement("Debe contener al menos una letra mayúscula.", tieneMayuscula),
+                      buildRequirement("Debe contener al menos una letra minúscula.", tieneMinuscula),
+                      buildRequirement("Debe contener al menos un número.", tieneNumero),
+                      buildRequirement("Las contraseñas coinciden.", contrasenasCoinciden),
                       // Mensaje de advertencia
                       if (mostrarAdvertencia)
                         Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                           color: Colors.red,
                           child: const Text(
                             "La contraseña no cumple con los requisitos mínimos.",
@@ -183,8 +171,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                         ),
                       // Botón para crear contraseña
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 15),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                         child: ElevatedButton.icon(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
@@ -194,8 +181,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                                       ? Colors.grey
                                       : Colors.blue.shade700,
                             ),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
@@ -203,19 +189,16 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
                           ),
                           onPressed: () async {
                             if (contrasenasCoinciden) {
-                              final resultado = await actualizarClaveUsuario(
-                                  widget.email, passwordController.text);
+                              final resultado = await actualizarClaveUsuario(widget.email, passwordController.text);
                               if (resultado) {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const recuperarClave4()),
+                                  MaterialPageRoute(builder: (context) => const RecuperarClave4()),
                                 );
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text(
-                                        'Ha ocurrido un error al actualizar la clave'),
+                                    content: Text('Ha ocurrido un error al actualizar la clave'),
                                   ),
                                 );
                               }
@@ -265,10 +248,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
     contrasenasCoinciden = password == confirmacion;
 
     // Verificar si se cumplen todos los requisitos
-    mostrarAdvertencia = !tieneAlMenos8Caracteres ||
-        !tieneMayuscula ||
-        !tieneMinuscula ||
-        !tieneNumero;
+    mostrarAdvertencia = !tieneAlMenos8Caracteres || !tieneMayuscula || !tieneMinuscula || !tieneNumero;
 
     // Actualizar la interfaz de usuario
     setState(() {});
@@ -330,8 +310,7 @@ class _RecuperarClave3State extends State<RecuperarClave3> {
     try {
       _db = DatabaseHelper().connection;
 
-      var query =
-          "SELECT * FROM usuario WHERE usua_correo = '${correo.toLowerCase()}'";
+      var query = "SELECT * FROM usuario WHERE usua_correo = '${correo.toLowerCase()}'";
 
       final resultado = await _db.execute(query);
       if (resultado.affectedRows == 1) {

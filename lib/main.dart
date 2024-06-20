@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously, non_constant_identifier_names, use_super_parameters, no_leading_underscores_for_local_identifiers
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -29,7 +29,7 @@ Future<void> funcionSession(context) async {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => menuGuardia(RUT: stringRut),
+        builder: (context) => MenuGuardia(RUT: stringRut),
       ),
     );
   } else if (await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
@@ -40,7 +40,7 @@ Future<void> funcionSession(context) async {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => menuUsuario(
+        builder: (context) => MenuUsuario(
           RUT: stringRut,
           nombreUsuario: authNombre,
         ),
@@ -50,7 +50,7 @@ Future<void> funcionSession(context) async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({super.key, required this.title});
 
   final String title;
 
@@ -76,12 +76,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String dropdownValue = list.first;
-  TextEditingController controladorCorreo = TextEditingController();
-  TextEditingController controladorContrasena = TextEditingController();
+  TextEditingController controladorCorreo = TextEditingController(), controladorContrasena = TextEditingController();
   bool obscurePassword = true;
   int coincidencias = 0;
-  String RUT = '';
-  late String authNombre;
+  late String RUT, authNombre;
   late Connection _db;
 
   Future<void> buscarRut(correo, pswrd, bool alumno) async {
@@ -92,27 +90,25 @@ class _MyHomePageState extends State<MyHomePage> {
       RUT = results[0][0].toString();
       authNombre = '${results[0][1].toString()} ${results[0][2].toString()}';
       saveSession(correo, authNombre);
-      while (RUT == '') {}
       Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: authNombre)),
+        MaterialPageRoute(builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: authNombre)),
       );
     } else {
       final results = await _db.execute("SELECT guar_rut, guar_nombre, guar_apellido_paterno, guar_apellido_materno FROM guardia WHERE guar_correo='$correo'");
       RUT = results[0][0].toString();
       authNombre = '${results[0][1].toString()} ${results[0][2].toString()} ${results[0][3].toString()}';
-      while (RUT == '') {}
       saveSession(correo, authNombre);
       Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => menuGuardia(RUT: RUT)),
+        MaterialPageRoute(builder: (context) => MenuGuardia(RUT: RUT)),
       );
     }
   }
 
-  Future<void> AnalizarCredenciales(correo, pswrd) async {
+  Future<void> analizarCredenciales(correo, pswrd) async {
     print('inicio funcion');
     _db = DatabaseHelper().connection;
 
@@ -349,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 elevation: 24,
                                               ),
                                             );
-                                            AnalizarCredenciales(email, clave);
+                                            analizarCredenciales(email, clave);
                                           },
                                           icon: const Icon(Icons.login, color: Colors.white),
                                           label: const Text(

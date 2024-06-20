@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 
 class HistorialGuardiaresultados extends StatefulWidget {
@@ -6,17 +8,16 @@ class HistorialGuardiaresultados extends StatefulWidget {
   final ScrollController controller = ScrollController();
 
   HistorialGuardiaresultados({
+    super.key,
     required this.texto,
     required this.historial,
   });
 
   @override
-  _HistorialGuardiaresultadosState createState() =>
-      _HistorialGuardiaresultadosState();
+  _HistorialGuardiaresultadosState createState() => _HistorialGuardiaresultadosState();
 }
 
-class _HistorialGuardiaresultadosState
-    extends State<HistorialGuardiaresultados> {
+class _HistorialGuardiaresultadosState extends State<HistorialGuardiaresultados> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,23 +71,18 @@ class _HistorialGuardiaresultadosState
                       itemBuilder: (BuildContext context, int index) {
                         final reserva = widget.historial[index];
                         return Container(
-                          margin: const EdgeInsets.only(
-                              bottom: 20), // Agrega espacio entre cada elemento
+                          margin: const EdgeInsets.only(bottom: 20), // Agrega espacio entre cada elemento
                           child: Reservas(
                               //Se le pasan todos estos datos a la clase MiWidget
                               patente: reserva['rese_vehi_patente'],
                               rutUsuario: reserva['rese_usua_rut'],
                               nombreUsuario: reserva['usua_nombre'],
-                              apellidoPatUsuario:
-                                  reserva['usua_apellido_paterno'],
-                              apellidoMatUsuario:
-                                  reserva['usua_apellido_materno'],
+                              apellidoPatUsuario: reserva['usua_apellido_paterno'],
+                              apellidoMatUsuario: reserva['usua_apellido_materno'],
                               numeroEstacionamiento: reserva['esta_numero'],
                               fechaReserva: reserva['rese_fecha'],
-                              horaLlegada:
-                                  reserva['rese_hora_llegada'].toString(),
-                              horaSalida:
-                                  reserva['rese_hora_salida'].toString(),
+                              horaLlegada: reserva['rese_hora_llegada'].toString(),
+                              horaSalida: reserva['rese_hora_salida'].toString(),
                               tipo: reserva['usua_tipo']),
                         );
                       },
@@ -184,37 +180,14 @@ class Reservas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String horaLlegadaFormateada =
-        horaLlegada != 'null' ? horaLlegada.substring(5, 13) : horaLlegada;
-    String horaSalidaFormateada =
-        horaSalida != 'null' ? horaSalida.substring(5, 13) : horaSalida;
+    String horaLlegadaFormateada = horaLlegada != 'null' ? horaLlegada.substring(5, 13) : horaLlegada;
+    String horaSalidaFormateada = horaSalida != 'null' ? horaSalida.substring(5, 13) : horaSalida;
     int numeroDia = fechaReserva.day;
     int anio = fechaReserva.year;
     int numeroDiaDeLaSemana = fechaReserva.weekday;
     int numeroMes = fechaReserva.month;
-    final nombreDia = [
-      "Lunes",
-      "Martes",
-      "Miércoles",
-      "Jueves",
-      "Viernes",
-      "Sábado",
-      "Domingo"
-    ];
-    final nombreMes = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre"
-    ];
+    final nombreDia = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
+    final nombreMes = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
     return Builder(builder: (BuildContext context) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 3.0),
@@ -270,8 +243,7 @@ class Reservas extends StatelessWidget {
                     ),
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 5.0), // Espacio vertical entre las filas
+                    padding: const EdgeInsets.symmetric(vertical: 5.0), // Espacio vertical entre las filas
                     child: Column(
                       children: [
                         Row(

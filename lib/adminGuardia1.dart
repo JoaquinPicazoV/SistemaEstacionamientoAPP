@@ -1,14 +1,16 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: file_names, library_private_types_in_public_api, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/GuardiaMapa.dart';
 
-class adminGuardia1 extends StatefulWidget {
+class AdminGuardia1 extends StatefulWidget {
+  const AdminGuardia1({super.key});
+
   @override
   _AdminGuardia1State createState() => _AdminGuardia1State();
 }
 
-class _AdminGuardia1State extends State<adminGuardia1> {
+class _AdminGuardia1State extends State<AdminGuardia1> {
   late String RUT = '';
   String nombreUsuario = 'Buscando...';
 
@@ -65,14 +67,12 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 ),
                               ),
                               TextButton.icon(
-                                onPressed: () {
-         
-                                },
-                                icon: Icon(
+                                onPressed: () {},
+                                icon: const Icon(
                                   Icons.exit_to_app,
                                   color: Colors.red,
                                 ),
-                                label: Text(
+                                label: const Text(
                                   'Cerrar Sesión',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -85,8 +85,8 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Text(
+                    const SizedBox(height: 20),
+                    const Text(
                       'Otorgar estacionamiento',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -99,7 +99,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -116,7 +116,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                     color: Colors.blue.shade500,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "1",
                                       style: TextStyle(
@@ -126,8 +126,8 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Text(
+                                const SizedBox(width: 10),
+                                const Text(
                                   "Completar datos",
                                   style: TextStyle(
                                     color: Colors.white,
@@ -137,14 +137,14 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
-                          Text(
+                          const SizedBox(height: 20),
+                          const Text(
                             "DATOS CONDUCTOR",
                             textAlign: TextAlign.start,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 20),
-                          Text(
+                          const SizedBox(height: 20),
+                          const Text(
                             "Nombre",
                             textAlign: TextAlign.start,
                           ),
@@ -157,16 +157,15 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 width: 1,
                               ),
                             ),
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
-                          SizedBox(height: 8),
-                          Text(
+                          const SizedBox(height: 8),
+                          const Text(
                             "Apellidos",
                             textAlign: TextAlign.start,
                           ),
@@ -179,16 +178,15 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 width: 1,
                               ),
                             ),
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
-                          SizedBox(height: 8),
-                          Text(
+                          const SizedBox(height: 8),
+                          const Text(
                             "RUT",
                             textAlign: TextAlign.start,
                           ),
@@ -201,26 +199,25 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 width: 1,
                               ),
                             ),
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
-                          Text(
+                          const Text(
                             "DATOS VEHÍCULO",
                             textAlign: TextAlign.start,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
-                          Text(
+                          const Text(
                             "Patente",
                             textAlign: TextAlign.start,
                           ),
@@ -233,10 +230,9 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 width: 1,
                               ),
                             ),
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -244,7 +240,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton.icon(
@@ -252,14 +248,14 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => GuardiaMapa(),
+                              builder: (context) => const GuardiaMapa(),
                             ));
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.add,
                         color: Colors.white,
                       ),
-                      label: Text(
+                      label: const Text(
                         'RESERVAR',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -270,7 +266,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
@@ -278,10 +274,10 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                       height: 1,
                       color: Colors.black,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
-                    Text(
+                    const Text(
                       'Liberar estacionamiento',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -294,7 +290,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -311,7 +307,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                     color: Colors.blue.shade500,
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Center(
+                                  child: const Center(
                                     child: Text(
                                       "1",
                                       style: TextStyle(
@@ -321,8 +317,8 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Text(
+                                const SizedBox(width: 10),
+                                const Text(
                                   "Completar datos",
                                   style: TextStyle(
                                     color: Colors.white,
@@ -332,14 +328,14 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                               ],
                             ),
                           ),
-                          SizedBox(height: 20),
-                          Text(
+                          const SizedBox(height: 20),
+                          const Text(
                             "DATOS CONDUCTOR",
                             textAlign: TextAlign.start,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 20),
-                          Text(
+                          const SizedBox(height: 20),
+                          const Text(
                             "Patente",
                             textAlign: TextAlign.start,
                           ),
@@ -352,10 +348,9 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                                 width: 1,
                               ),
                             ),
-                            child: TextField(
+                            child: const TextField(
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                                 border: InputBorder.none,
                               ),
                             ),
@@ -363,16 +358,16 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         ],
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     ElevatedButton.icon(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.delete,
                         color: Colors.white,
                       ),
-                      label: Text(
+                      label: const Text(
                         'LIBERAR ESTACIONAMIENTO',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -383,7 +378,7 @@ class _AdminGuardia1State extends State<adminGuardia1> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                   ],

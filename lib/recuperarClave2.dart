@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/recuperarClave3.dart';
 import 'package:pinput/pinput.dart';
@@ -7,8 +9,7 @@ import 'dart:async';
 class RecuperarClave2 extends StatefulWidget {
   String codigo;
   final String email;
-  RecuperarClave2({required this.codigo, required this.email, Key? key})
-      : super(key: key);
+  RecuperarClave2({required this.codigo, required this.email, super.key});
 
   @override
   _RecuperarClave2State createState() => _RecuperarClave2State();

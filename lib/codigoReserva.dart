@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable, unnecessary_string_interpolations, non_constant_identifier_names, use_build_context_synchronously, avoid_print, prefer_const_declarations, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names, no_leading_underscores_for_local_identifiers
+// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, avoid_print, camel_case_types, library_private_types_in_public_api, file_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
@@ -13,7 +13,7 @@ class codigoReserva extends StatefulWidget {
   final String RUT;
   final String nEst;
 
-  const codigoReserva({Key? key, required this.nEst, required this.RUT}) : super(key: key);
+  const codigoReserva({super.key, required this.nEst, required this.RUT});
   @override
   _codigoReserva createState() => _codigoReserva();
 }
@@ -62,7 +62,6 @@ class _codigoReserva extends State<codigoReserva> {
   Future<void> CancelarReserva(RUT) async {
     Connection _db = DatabaseHelper().connection;
     final datos = await _db.execute("SELECT rese_id, rese_esta_id FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
-
     final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_numero='$nEst'");
     final eliminar = await _db.execute("DELETE FROM RESERVA WHERE rese_id='${datos[0][0]}'");
   }
@@ -136,7 +135,7 @@ class _codigoReserva extends State<codigoReserva> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text(
-                              '$nombreUsuario',
+                              nombreUsuario,
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.blue.shade900,
@@ -147,14 +146,14 @@ class _codigoReserva extends State<codigoReserva> {
                               onPressed: () {
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => MyApp()),
+                                  MaterialPageRoute(builder: (context) => const MyApp()),
                                 );
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.exit_to_app,
                                 color: Colors.red,
                               ),
-                              label: Text(
+                              label: const Text(
                                 'Cerrar Sesión',
                                 style: TextStyle(
                                   fontSize: 16,
@@ -167,8 +166,8 @@ class _codigoReserva extends State<codigoReserva> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
                     child: Text(
                       'SU CÓDIGO QR ES:',
                       style: TextStyle(
@@ -183,8 +182,8 @@ class _codigoReserva extends State<codigoReserva> {
                     width: 250,
                     height: 250,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.0),
                     child: Center(
                       child: Text(
                         'AL INGRESAR PRESENTE QR',
@@ -198,22 +197,22 @@ class _codigoReserva extends State<codigoReserva> {
                   // Textos de estacionamiento y horario máximo de llegada
                   if (!cargando)
                     Text(
-                      '$txtestacionamiento',
-                      style: TextStyle(
+                      txtestacionamiento,
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   Text(
-                    '$txthorarioMaximo',
-                    style: TextStyle(
+                    txthorarioMaximo,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (cargando) CircularProgressIndicator(),
+                  if (cargando) const CircularProgressIndicator(),
 
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
                       CancelarReserva(RUT);
@@ -221,8 +220,8 @@ class _codigoReserva extends State<codigoReserva> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('AVISO'),
-                            content: Text('Reserva cancelada.'),
+                            title: const Text('AVISO'),
+                            content: const Text('Reserva cancelada.'),
                             actions: [
                               TextButton(
                                 onPressed: () async {
@@ -232,22 +231,22 @@ class _codigoReserva extends State<codigoReserva> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => menuUsuario(
+                                      builder: (context) => MenuUsuario(
                                         RUT: RUT,
                                         nombreUsuario: authNombre,
                                       ),
                                     ),
                                   );
                                 },
-                                child: Text('¡Entendido!'),
+                                child: const Text('¡Entendido!'),
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    icon: Icon(Icons.delete, color: Colors.white),
-                    label: Text(
+                    icon: const Icon(Icons.delete, color: Colors.white),
+                    label: const Text(
                       'CANCELAR RESERVA',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -258,19 +257,19 @@ class _codigoReserva extends State<codigoReserva> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {
                       String authNombre = getSessionNombre().toString();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: authNombre),
+                          builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: authNombre),
                         ),
                       );
                     },
-                    icon: Icon(Icons.home, color: Colors.white),
-                    label: Text(
+                    icon: const Icon(Icons.home, color: Colors.white),
+                    label: const Text(
                       'VOLVER AL INICIO',
                       style: TextStyle(color: Colors.white),
                     ),

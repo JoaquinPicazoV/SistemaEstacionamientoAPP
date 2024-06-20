@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_final_fields, prefer_const_constructors, avoid_print, unused_element, library_private_types_in_public_api, use_key_in_widget_constructors
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
@@ -8,6 +8,8 @@ import 'package:flutter_application_1/newRegistro.dart';
 import 'package:postgres/postgres.dart';
 
 class Registrarse1 extends StatefulWidget {
+  const Registrarse1({super.key});
+
   @override
   _Registrarse1State createState() => _Registrarse1State();
 }
@@ -23,10 +25,9 @@ class _Registrarse1State extends State<Registrarse1> {
   TextEditingController patenteEditingController = TextEditingController();
 
   List<bool> camposValidos = [false, false, false, false, false, false, false];
-  bool _isButtonDisabled = false;
+  final bool _isButtonDisabled = false;
 
   RegExp get _emailRegex => RegExp(r'^\S+@\S+$');
-  RegExp get _numerosRegex => RegExp(r'^[0-9]*$');
   RegExp get _patenteRegex => RegExp(r'^[a-zA-Z]{4}\d{2}$');
   RegExp get _telefonoRegex => RegExp(r'^9[0-9]{8}$');
   RegExp get _nombreApellidoRegex => RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚüÜñÑ\s]+$');
@@ -43,7 +44,7 @@ class _Registrarse1State extends State<Registrarse1> {
     valueDropdown = 'Estudiante';
   }
 
-  Future<void> BuscarCorreo(String correo) async {
+  Future<void> buscarCorreo(String correo) async {
     _db = DatabaseHelper().connection;
     final existe = await _db
         .execute("SELECT COUNT(*) FROM USUARIO WHERE usua_correo='$correo'");
@@ -359,7 +360,7 @@ class _Registrarse1State extends State<Registrarse1> {
                                           } else {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
-                                              SnackBar(
+                                              const SnackBar(
                                                 content: Text(
                                                     'Por favor, complete todos los campos antes de continuar.'),
                                                 duration: Duration(seconds: 1),
@@ -429,7 +430,7 @@ class _Registrarse1State extends State<Registrarse1> {
                     valido = true;
                   });
                 } else {
-                  BuscarCorreo(value);
+                  buscarCorreo(value);
                 }
               }
             },

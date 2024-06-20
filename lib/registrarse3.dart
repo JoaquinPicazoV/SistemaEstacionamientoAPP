@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, must_be_immutable, use_build_context_synchronously, curly_braces_in_flow_control_structures, prefer_const_constructors, library_private_types_in_public_api, use_super_parameters
+// ignore_for_file: must_be_immutable, library_private_types_in_public_api, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
@@ -14,8 +14,7 @@ import 'dart:async';
 class Registrarse3 extends StatefulWidget {
   String codigo;
   final String email;
-  Registrarse3({required this.codigo, required this.email, Key? key})
-      : super(key: key);
+  Registrarse3({required this.codigo, required this.email, super.key});
 
   @override
   _Registrarse3State createState() => _Registrarse3State();
@@ -36,7 +35,7 @@ class _Registrarse3State extends State<Registrarse3> {
 
   StreamSubscription<int> startTimer() {
     final StreamController<int> controller = StreamController<int>();
-    Timer.periodic(Duration(seconds: 1), (Timer timer) {
+    Timer.periodic(const Duration(seconds: 1), (Timer timer) {
       controller.add(--secondsLeft);
       if (secondsLeft == 0) {
         timer.cancel();
@@ -54,8 +53,7 @@ class _Registrarse3State extends State<Registrarse3> {
 
   @override
   void dispose() {
-    timerSubscription
-        .cancel(); // Cancelar la suscripción al stream cuando se destruye el widget
+    timerSubscription.cancel(); // Cancelar la suscripción al stream cuando se destruye el widget
     super.dispose();
   }
 
@@ -115,9 +113,7 @@ class _Registrarse3State extends State<Registrarse3> {
                                       onPressed: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const MyApp()),
+                                          MaterialPageRoute(builder: (context) => const MyApp()),
                                         );
                                       },
                                       child: const Text(
@@ -135,17 +131,12 @@ class _Registrarse3State extends State<Registrarse3> {
                                     alignment: Alignment.center,
                                     child: ElevatedButton(
                                       style: ButtonStyle(
-                                        shape: MaterialStateProperty.all(
-                                            RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10))),
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
+                                        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                                        backgroundColor: MaterialStateProperty.all(
                                           Colors.blue.shade700,
                                         ),
                                       ),
-                                      onPressed: () {
-                                      },
+                                      onPressed: () {},
                                       child: const Text(
                                         'Registrarse',
                                         style: TextStyle(
@@ -165,8 +156,7 @@ class _Registrarse3State extends State<Registrarse3> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             margin: const EdgeInsets.only(bottom: 20),
-                            decoration:
-                                BoxDecoration(color: Colors.blue.shade700),
+                            decoration: BoxDecoration(color: Colors.blue.shade700),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -198,7 +188,7 @@ class _Registrarse3State extends State<Registrarse3> {
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           '¡ENVIAMOS UN MAIL DE CONFIRMACIÓN A SU CORREO ELECTRÓNICO!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
@@ -218,8 +208,7 @@ class _Registrarse3State extends State<Registrarse3> {
                                 textStyle: const TextStyle(fontSize: 20),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                    color:
-                                        const Color.fromRGBO(234, 239, 243, 1),
+                                    color: const Color.fromRGBO(234, 239, 243, 1),
                                   ),
                                 ),
                               ),
@@ -229,7 +218,7 @@ class _Registrarse3State extends State<Registrarse3> {
                             ),
                           ),
                         ),
-                        Text(
+                        const Text(
                           'Tiempo restante',
                           style: TextStyle(
                             fontSize: 20,
@@ -238,7 +227,7 @@ class _Registrarse3State extends State<Registrarse3> {
                         Center(
                           child: Text(
                             '$minutesStr:$secondsStr',
-                            style: TextStyle(fontSize: 24, color: Colors.black),
+                            style: const TextStyle(fontSize: 24, color: Colors.black),
                           ),
                         ),
                         const Icon(
@@ -263,12 +252,10 @@ class _Registrarse3State extends State<Registrarse3> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.blue.shade700),
+                                backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                               ),
                               onPressed: () async {
-                                if (pinTextEditingController.text ==
-                                    widget.codigo) {
+                                if (pinTextEditingController.text == widget.codigo) {
                                   _db = DatabaseHelper().connection;
                                   await _db.execute(
                                     r'INSERT INTO usuario VALUES ($1,$2,$3,$4,$5,$6,$7,$8)',
@@ -281,8 +268,7 @@ class _Registrarse3State extends State<Registrarse3> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const registrarse4(),
+                                      builder: (context) => const Registrarse4(),
                                     ),
                                   );
                                 } else {
@@ -311,28 +297,24 @@ class _Registrarse3State extends State<Registrarse3> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Colors.blue.shade700),
+                                backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                               ),
                               onPressed: () async {
                                 setState(() {
                                   widget.codigo = generarCodigo();
                                 });
-                                bool enviado = await sendEmail(
-                                    widget.email, widget.codigo);
+                                bool enviado = await sendEmail(widget.email, widget.codigo);
                                 if (enviado) {
                                   setState(() {
                                     mostrarBotonConfirmar = true;
                                     secondsLeft = 300;
                                   });
-                                  timerSubscription
-                                      .cancel(); // Cancela el temporizador actual
+                                  timerSubscription.cancel(); // Cancela el temporizador actual
                                   timerSubscription = startTimer();
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                          'Error al enviar el correo electrónico.'),
+                                    const SnackBar(
+                                      content: Text('Error al enviar el correo electrónico.'),
                                       duration: Duration(seconds: 3),
                                     ),
                                   );

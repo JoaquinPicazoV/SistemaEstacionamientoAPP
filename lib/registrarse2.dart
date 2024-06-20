@@ -1,4 +1,5 @@
-// ignore_for_file: avoid_print, prefer_const_constructors, library_private_types_in_public_api
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/newRegistro.dart';
 import 'package:flutter_application_1/registrarse3.dart';
@@ -7,6 +8,8 @@ import 'package:mailer/smtp_server.dart';
 import 'dart:math';
 
 class Registrarse2 extends StatefulWidget {
+  const Registrarse2({super.key});
+
   @override
   _Registrarse2State createState() => _Registrarse2State();
 }
@@ -129,12 +132,12 @@ class _Registrarse2State extends State<Registrarse2> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
-                        child: const Text(
+                        child: Text(
                           "Contraseña",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -143,7 +146,7 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
@@ -171,15 +174,15 @@ class _Registrarse2State extends State<Registrarse2> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.centerLeft,
-                        child: const Text("Confirmar Contraseña"),
+                        child: Text("Confirmar Contraseña"),
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
@@ -218,7 +221,7 @@ class _Registrarse2State extends State<Registrarse2> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                         color: Colors.red,
-                        child: Text(
+                        child: const Text(
                           "La contraseña no cumple con los requisitos mínimos.",
                           style: TextStyle(
                             color: Colors.white,
@@ -277,7 +280,7 @@ class _Registrarse2State extends State<Registrarse2> {
                               );
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text('Error al enviar el correo electrónico.'),
                                   duration: Duration(seconds: 3),
                                 ),
@@ -291,11 +294,11 @@ class _Registrarse2State extends State<Registrarse2> {
                             });
                           }
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.check,
                           color: Colors.white,
                         ),
-                        label: Text(
+                        label: const Text(
                           'Crear contraseña',
                           style: TextStyle(
                             color: Colors.white,
@@ -323,7 +326,7 @@ class _Registrarse2State extends State<Registrarse2> {
           Row(
             children: [
               buildIcon(condition),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Flexible(
                 child: Text(
                   text,
@@ -379,7 +382,7 @@ class _Registrarse2State extends State<Registrarse2> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: Registrarse2(),
   ));
 }

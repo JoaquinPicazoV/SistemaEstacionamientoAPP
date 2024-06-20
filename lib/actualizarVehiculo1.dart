@@ -1,8 +1,6 @@
-// ignore_for_file: library_private_types_in_public_api, file_names, camel_case_types, use_key_in_widget_constructors, no_leading_underscores_for_local_identifiers
+// ignore_for_file: file_names, library_private_types_in_public_api, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -10,16 +8,16 @@ import 'package:flutter_application_1/sesion.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
-class actualizarVehiculo extends StatefulWidget {
+class ActualizarVehiculo extends StatefulWidget {
   final String RUT;
   final String nombreUsuario;
 
-  const actualizarVehiculo({super.key, required this.RUT, required this.nombreUsuario});
+  const ActualizarVehiculo({super.key, required this.RUT, required this.nombreUsuario});
   @override
   _ActualizarVehiculoState createState() => _ActualizarVehiculoState();
 }
 
-class _ActualizarVehiculoState extends State<actualizarVehiculo> {
+class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
   List<Map<String, dynamic>> _vehicles = [];
   bool _isLoading = true;
   late String RUT = 'BUSCANDO';
@@ -59,7 +57,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
       onPopInvoked: (didPop) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
+          builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
         ),
       ),
       child: Scaffold(
@@ -184,7 +182,7 @@ class _ActualizarVehiculoState extends State<actualizarVehiculo> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
+                              builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
                             ),
                           );
                         },

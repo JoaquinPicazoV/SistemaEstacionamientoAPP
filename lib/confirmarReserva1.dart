@@ -1,13 +1,15 @@
-// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, prefer_const_constructors, prefer_interpolation_to_compose_strings, non_constant_identifier_names, file_names, use_key_in_widget_constructors, camel_case_types
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/confirmacionRealizada.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
 
-class confirmarReserva extends StatelessWidget {
+class ConfirmarReserva extends StatelessWidget {
   final controladorRUT = TextEditingController();
   final controladorDV = TextEditingController();
+
+  ConfirmarReserva({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class confirmarReserva extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => confirmacionRealizada(RUT: RUT.toString()),
+              builder: (context) => ConfirmacionRealizada(RUT: RUT.toString()),
             ),
           );
         }
@@ -65,7 +67,7 @@ class confirmarReserva extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         const Text(
                           'Ingrese el RUT que le otorgará el cliente para confirmar su llegada al estacionamiento de la Universidad de Los Lagos Campus Chinquihue',
                           textAlign: TextAlign.center,
@@ -73,7 +75,7 @@ class confirmarReserva extends StatelessWidget {
                             fontSize: 16,
                           ),
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Row(
@@ -84,22 +86,19 @@ class confirmarReserva extends StatelessWidget {
                                 height: 50,
                                 child: TextField(
                                   controller: controladorRUT,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     hintText: 'RUT sin DV',
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue),
+                                      borderSide: BorderSide(color: Colors.blue),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue),
+                                      borderSide: BorderSide(color: Colors.blue),
                                     ),
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
                                 child: Text(
                                   "-",
                                   style: TextStyle(
@@ -113,15 +112,13 @@ class confirmarReserva extends StatelessWidget {
                                 height: 50,
                                 child: TextField(
                                   controller: controladorDV,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     hintText: 'DV',
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue),
+                                      borderSide: BorderSide(color: Colors.blue),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          BorderSide(color: Colors.blue),
+                                      borderSide: BorderSide(color: Colors.blue),
                                     ),
                                   ),
                                 ),
@@ -129,25 +126,24 @@ class confirmarReserva extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         ElevatedButton.icon(
                           onPressed: () {
                             String rut = controladorRUT.text;
                             String dv = controladorDV.text;
-                            rut = rut + '-' + dv;
+                            rut = '$rut-$dv';
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    confirmacionRealizada(RUT: rut),
+                                builder: (context) => ConfirmacionRealizada(RUT: rut),
                               ),
                             );
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.check,
                             color: Colors.white,
                           ),
-                          label: Text(
+                          label: const Text(
                             'CONFIRMAR',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -158,16 +154,16 @@ class confirmarReserva extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 50),
+                        const SizedBox(height: 50),
                         ElevatedButton.icon(
                           onPressed: () {
                             _scanQR();
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.qr_code,
                             color: Colors.white,
                           ),
-                          label: Text(
+                          label: const Text(
                             '¿USA QR? HAZ CLICK AQUÍ',
                             style: TextStyle(color: Colors.white),
                           ),
@@ -185,7 +181,7 @@ class confirmarReserva extends StatelessWidget {
                     left: 10,
                     top: 10,
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back),
+                      icon: const Icon(Icons.arrow_back),
                       color: Colors.blue.shade900,
                       onPressed: () {
                         Navigator.of(context).pop();

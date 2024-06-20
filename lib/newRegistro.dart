@@ -1,12 +1,12 @@
 // ignore_for_file: file_names
 
-late String nombre, apellidoPaterno, apellidoMaterno, rut, tipoUsuario, email, password, telefono, patente;
+late String nombre, apellidoPaterno, apellidoMaterno, registroRut, tipoUsuario, email, password, telefono, patente;
 
 void vaciarRegistro() {
   nombre = "";
   apellidoPaterno = "";
   apellidoMaterno = "";
-  rut = "";
+  registroRut = "";
   tipoUsuario = "";
   email = "";
   password = "";
@@ -14,7 +14,7 @@ void vaciarRegistro() {
 }
 
 void llenarRegistro(String rut0, String tipoUsuario0, String nombre0, String apellidoPaterno0, String apellidoMaterno0, String email0, String telefono0) {
-  rut = rut0;
+  registroRut = rut0;
   tipoUsuario = tipoUsuario0;
   nombre = nombre0;
   apellidoPaterno = apellidoPaterno0;
@@ -28,7 +28,7 @@ void llenarPassword(String password0) {
 }
 
 List<String> getRegistro() {
-  return [rut, tipoUsuario, nombre, apellidoPaterno, apellidoMaterno, email, password, telefono];
+  return [registroRut, tipoUsuario, nombre, apellidoPaterno, apellidoMaterno, email, password, telefono];
 }
 
 void llenarAuto(String patente0) {

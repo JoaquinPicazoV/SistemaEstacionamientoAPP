@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_string_interpolations, non_constant_identifier_names, camel_case_types, library_private_types_in_public_api, use_super_parameters, file_names
+// ignore_for_file: non_constant_identifier_names, file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/usuarioMapa.dart';
@@ -10,16 +10,16 @@ import 'package:flutter_application_1/usuarioReservas.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
-class menuUsuario extends StatefulWidget {
+class MenuUsuario extends StatefulWidget {
   final String RUT;
   final String nombreUsuario;
 
-  const menuUsuario({Key? key, required this.RUT, required this.nombreUsuario}) : super(key: key);
+  const MenuUsuario({super.key, required this.RUT, required this.nombreUsuario});
   @override
-  _menuUsuarioState createState() => _menuUsuarioState();
+  _MenuUsuarioState createState() => _MenuUsuarioState();
 }
 
-class _menuUsuarioState extends State<menuUsuario> {
+class _MenuUsuarioState extends State<MenuUsuario> {
   late String RUT = 'BUSCANDO';
   late String nombreUsuario;
   @override
@@ -209,7 +209,11 @@ class _menuUsuarioState extends State<menuUsuario> {
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => UsuarioMapa(RUT: RUT, nombreUsuario: widget.nombreUsuario,)),
+                                        MaterialPageRoute(
+                                            builder: (context) => UsuarioMapa(
+                                                  RUT: RUT,
+                                                  nombreUsuario: widget.nombreUsuario,
+                                                )),
                                       );
                                     },
                                     icon: const Icon(Icons.car_crash_outlined, color: Colors.white),
@@ -235,7 +239,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => usuarioReservas(RUT: widget.RUT, nombreUsuario: nombreUsuario),
+                                          builder: (context) => UsuarioReservas(RUT: widget.RUT, nombreUsuario: nombreUsuario),
                                         ),
                                       );
                                     },
@@ -264,7 +268,7 @@ class _menuUsuarioState extends State<menuUsuario> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => actualizarVehiculo(
+                                          builder: (context) => ActualizarVehiculo(
                                             RUT: widget.RUT,
                                             nombreUsuario: widget.nombreUsuario,
                                           ),

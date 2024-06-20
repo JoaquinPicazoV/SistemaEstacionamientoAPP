@@ -1,10 +1,8 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, camel_case_types
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
 
-class registrarse4 extends StatelessWidget {
-  const registrarse4({super.key});
+class Registrarse4 extends StatelessWidget {
+  const Registrarse4({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +53,7 @@ class registrarse4 extends StatelessWidget {
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MyApp()),
+                                      MaterialPageRoute(builder: (context) => const MyApp()),
                                     );
                                   },
                                   child: const Text(
@@ -79,11 +76,9 @@ class registrarse4 extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     ),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blue.shade700),
+                                    backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                                   ),
-                                  onPressed: (){
-                                  },
+                                  onPressed: () {},
                                   child: const Text(
                                     'Registrarse',
                                     style: TextStyle(
@@ -117,7 +112,7 @@ class registrarse4 extends StatelessWidget {
                               ),
                               child: CircleAvatar(
                                 backgroundColor: Colors.blue.shade500,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.check,
                                   color: Colors.black,
                                 ),
@@ -137,14 +132,14 @@ class registrarse4 extends StatelessWidget {
                     CircleAvatar(
                       radius: 80,
                       backgroundColor: Colors.blue.shade700,
-                      child: Icon(
+                      child: const Icon(
                         Icons.check,
                         color: Colors.white,
                         size: 100,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Text(
+                    const Text(
                       "¡SE HA REGISTRADO EXITOSAMENTE!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -157,17 +152,16 @@ class registrarse4 extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
+                          MaterialPageRoute(builder: (context) => const MyApp()),
                         );
                       },
-                      icon: Icon(Icons.home, color: Colors.white),
-                      label: Text(
+                      icon: const Icon(Icons.home, color: Colors.white),
+                      label: const Text(
                         "VOLVER AL INICIO",
                         style: TextStyle(color: Colors.white),
                       ),
                       style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(Colors.blue.shade700),
+                        backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),

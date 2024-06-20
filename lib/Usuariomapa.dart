@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, prefer_const_literals_to_create_immutables, non_constant_identifier_names
+// ignore_for_file: file_names, non_constant_identifier_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
@@ -165,7 +165,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
+            builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: nombreUsuario),
           ),
         );
       },
@@ -257,7 +257,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                             indicatorColor: Colors.blue.shade900,
                             labelColor: Colors.blue.shade900,
                             unselectedLabelColor: Colors.grey,
-                            tabs: [
+                            tabs: const [
                               Tab(text: 'A'),
                               Tab(text: 'B'),
                               Tab(text: 'C'),
@@ -266,7 +266,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                             ],
                           ),
                           if (cargando == true)
-                            Expanded(
+                            const Expanded(
                               child: Center(
                                 child: CircularProgressIndicator(),
                               ),
@@ -290,7 +290,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                 ],
                               ),
                             ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Row(
@@ -307,7 +307,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Disponible',
                                     style: TextStyle(
                                       fontSize: 8,
@@ -328,7 +328,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                       color: Colors.yellow,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Reservado',
                                     style: TextStyle(
                                       fontSize: 8,
@@ -349,7 +349,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                       color: Colors.red,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Ocupado',
                                     style: TextStyle(
                                       fontSize: 8,
@@ -370,7 +370,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                       color: Colors.grey,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'No disponible',
                                     style: TextStyle(
                                       fontSize: 8,
@@ -391,7 +391,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                       color: Colors.blue,
                                     ),
                                   ),
-                                  Text(
+                                  const Text(
                                     'Seleccionado',
                                     style: TextStyle(
                                       fontSize: 8,
@@ -403,7 +403,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               ),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           ElevatedButton.icon(
@@ -416,11 +416,11 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                 ),
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                               color: Colors.white,
                             ),
-                            label: Text(
+                            label: const Text(
                               'RESERVAR',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -431,7 +431,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           ElevatedButton.icon(
@@ -439,15 +439,15 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => menuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
+                                  builder: (context) => MenuUsuario(RUT: RUT, nombreUsuario: widget.nombreUsuario),
                                 ),
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.home,
                               color: Colors.white,
                             ),
-                            label: Text(
+                            label: const Text(
                               'VOLVER AL MENÚ',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -491,7 +491,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
           child: Container(
             width: 20,
             height: 20,
-            margin: EdgeInsets.all(2),
+            margin: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               color: ocupado

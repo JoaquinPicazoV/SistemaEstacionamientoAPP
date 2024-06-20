@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, library_private_types_in_public_api, use_build_context_synchronously, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/recuperarClave2.dart';
@@ -7,6 +9,8 @@ import 'package:mailer/smtp_server.dart';
 import 'dart:math';
 
 class RecuperarClave extends StatefulWidget {
+  const RecuperarClave({super.key});
+
   @override
   _RecuperarClaveState createState() => _RecuperarClaveState();
 }

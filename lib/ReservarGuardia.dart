@@ -1,4 +1,5 @@
-// ignore_for_file: prefer_const_constructors, avoid_print, camel_case_types, library_private_types_in_public_api, use_super_parameters
+
+// ignore_for_file: library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/main.dart';
@@ -6,7 +7,7 @@ import 'package:flutter_application_1/main.dart';
 class ReservarGuardia extends StatefulWidget {
   final String nEsta;
 
-  const ReservarGuardia({Key? key, required this.nEsta}) : super(key: key);
+  const ReservarGuardia({super.key, required this.nEsta});
   @override
   _ReservarGuardia createState() => _ReservarGuardia();
 }
@@ -50,14 +51,14 @@ class _ReservarGuardia extends State<ReservarGuardia> {
                     CircleAvatar(
                       radius: 80,
                       backgroundColor: Colors.blue.shade700,
-                      child: Icon(
+                      child: const Icon(
                         Icons.check,
                         color: Colors.white,
                         size: 100,
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Text(
+                    const Text(
                       "¡RESERVA EXITOSA!",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -69,21 +70,21 @@ class _ReservarGuardia extends State<ReservarGuardia> {
                     Text(
                       "Estacionamiento reservado: $nEsta",
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton.icon(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
+                          MaterialPageRoute(builder: (context) => const MyApp()),
                         );
                       },
-                      icon: Icon(Icons.home, color: Colors.white),
-                      label: Text(
+                      icon: const Icon(Icons.home, color: Colors.white),
+                      label: const Text(
                         "VOLVER AL INICIO",
                         style: TextStyle(color: Colors.white),
                       ),
