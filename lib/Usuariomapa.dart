@@ -412,7 +412,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => codigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
+                                  builder: (context) => CodigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
                                 ),
                               );
                             },

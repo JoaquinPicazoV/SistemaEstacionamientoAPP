@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, use_build_context_synchronously, avoid_print, camel_case_types, library_private_types_in_public_api, file_names, no_leading_underscores_for_local_identifiers
+// ignore_for_file: library_private_types_in_public_api, camel_case_types, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/database.dart';
@@ -9,25 +9,25 @@ import 'package:flutter_application_1/sesion.dart';
 import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
 
-class codigoReserva extends StatefulWidget {
+class CodigoReserva extends StatefulWidget {
   final String RUT;
   final String nEst;
 
-  const codigoReserva({super.key, required this.nEst, required this.RUT});
+  const CodigoReserva({super.key, required this.nEst, required this.RUT});
   @override
   _codigoReserva createState() => _codigoReserva();
 }
 
-class _codigoReserva extends State<codigoReserva> {
+class _codigoReserva extends State<CodigoReserva> {
   late String nEst = '';
   bool cargando = true;
   @override
   void initState() {
     RUT = widget.RUT;
     nEst = widget.nEst;
-    BuscarNombre(RUT);
+    buscarNombre(RUT);
     super.initState();
-    Reservar(RUT);
+    reservar(RUT);
   }
 
   String txtestacionamiento = '';
@@ -35,7 +35,7 @@ class _codigoReserva extends State<codigoReserva> {
   String horarioMaximo = '';
   String txthorarioMaximo = '';
   String nombreUsuario = 'Buscando nombre...';
-  Future<void> BuscarNombre(rut) async {
+  Future<void> buscarNombre(rut) async {
     Connection _db = DatabaseHelper().connection;
 
     final nombre = await _db.execute("SELECT usua_nombre, usua_apellido_paterno FROM USUARIO WHERE usua_rut='$RUT'");
@@ -45,7 +45,7 @@ class _codigoReserva extends State<codigoReserva> {
     });
   }
 
-  Future<void> DatosReserva(RUT) async {
+  Future<void> datosReserva(RUT) async {
     Connection _db = DatabaseHelper().connection;
     final datosReserva =
         await _db.execute("SELECT rese_esta_id, TO_CHAR(rese_hora_inicio + INTERVAL '30 minutes', 'HH24:MI') AS nueva_hora_ FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
@@ -59,14 +59,14 @@ class _codigoReserva extends State<codigoReserva> {
     });
   }
 
-  Future<void> CancelarReserva(RUT) async {
+  Future<void> cancelarReserva(RUT) async {
     Connection _db = DatabaseHelper().connection;
     final datos = await _db.execute("SELECT rese_id, rese_esta_id FROM RESERVA WHERE rese_usua_rut='$RUT' AND rese_estado='EN ESPERA'");
     final estadoEst = await _db.execute("UPDATE ESTACIONAMIENTO SET esta_estado='LIBRE' WHERE esta_numero='$nEst'");
     final eliminar = await _db.execute("DELETE FROM RESERVA WHERE rese_id='${datos[0][0]}'");
   }
 
-  Future<void> Reservar(RUT) async {
+  Future<void> reservar(RUT) async {
     Connection _db = DatabaseHelper().connection;
     DateTime actual = DateTime.now();
     String fechaFormato = DateFormat('MM-dd-yy').format(actual);
@@ -93,7 +93,7 @@ class _codigoReserva extends State<codigoReserva> {
 
     print(reservar);
     print(estadoEstacionamiento);
-    DatosReserva(RUT);
+    datosReserva(RUT);
   }
 
   late String RUT;
@@ -215,7 +215,7 @@ class _codigoReserva extends State<codigoReserva> {
                   const SizedBox(height: 20),
                   ElevatedButton.icon(
                     onPressed: () {
-                      CancelarReserva(RUT);
+                      cancelarReserva(RUT);
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {

@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/anadir_vehiculo.dart';
 import 'package:flutter_application_1/usuarioMapa.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/database.dart';
@@ -278,6 +279,36 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                                     icon: const Icon(Icons.directions_car, color: Colors.white),
                                     label: const Text(
                                       'ACTUALIZAR DATOS DE VEHÍCULO',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all(Colors.blue.shade700),
+                                      shape: MaterialStateProperty.all(
+                                        RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                ),
+                                FractionallySizedBox(
+                                  widthFactor: 0.96,
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                       Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => AnadirVehiculo(RUT: widget.RUT, nombreUsuario: widget.nombreUsuario),
+                                        ),
+                                      );
+                                    },
+                                    icon: const Icon(Icons.account_circle_sharp, color: Colors.white),
+                                    label: const Text(
+                                      'DATOS',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     style: ButtonStyle(
