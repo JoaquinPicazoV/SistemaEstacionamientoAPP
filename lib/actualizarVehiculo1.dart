@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, library_private_types_in_public_api, non_constant_identifier_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/actualizar_vehiculo2.dart';
 import 'package:flutter_application_1/anadir_vehiculo.dart';
 import 'package:flutter_application_1/database.dart';
 import 'package:flutter_application_1/main.dart';
@@ -240,7 +241,12 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildButton("Editar", Icons.edit, () {
-                // Aquí va la lógica para editar el vehículo
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ActualizarVehiculo2(rut: RUT, nombreUsuario: nombreUsuario, patente: vehicleData["vehi_patente"]),
+                  ),
+                );
               }, Colors.blue), // Color verde para el botón "Editar"
               _buildButton("Eliminar", Icons.delete, () {
                 // Aquí va la lógica para eliminar el vehículo
