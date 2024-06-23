@@ -34,8 +34,8 @@ class _ActualizarVehiculo2 extends State<ActualizarVehiculo2> {
 
   Future<void> editarVehiculo() async {
     db = DatabaseHelper().connection;
+    await db.execute("DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente='$patente' and regi_usua_rut = '$rut'");
     try {
-      await db.execute("DELETE FROM registrousuariovehiculo WHERE regi_vehi_patente='$patente' and regi_usua_rut = '$rut'");
       await db.execute("UPDATE vehiculo SET vehi_patente='${patenteController.text}' where vehi_patente = '$patente'");
     } catch (e) {
       await db.execute("INSERT INTO vehiculo(vehi_patente) VALUES ('${patenteController.text}')");
