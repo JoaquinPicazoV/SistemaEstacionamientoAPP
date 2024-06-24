@@ -6,10 +6,10 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:permission_handler/permission_handler.dart';
 
 class ConfirmarReserva extends StatelessWidget {
-  final controladorRUT = TextEditingController();
-  final controladorDV = TextEditingController();
+  final controladorRUT = TextEditingController(), controladorDV = TextEditingController();
+  final String nombreUsuario;
 
-  ConfirmarReserva({super.key});
+  ConfirmarReserva({super.key, required this.nombreUsuario});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,10 @@ class ConfirmarReserva extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ConfirmacionRealizada(RUT: RUT.toString()),
+              builder: (context) => ConfirmacionRealizada(
+                RUT: RUT.toString(),
+                nombreUsuario: nombreUsuario,
+              ),
             ),
           );
         }
@@ -135,7 +138,7 @@ class ConfirmarReserva extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ConfirmacionRealizada(RUT: rut),
+                                builder: (context) => ConfirmacionRealizada(RUT: rut, nombreUsuario: nombreUsuario),
                               ),
                             );
                           },

@@ -245,8 +245,8 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                     Expanded(
                       child: Column(
                         children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.75,
+                          FractionallySizedBox(
+                            widthFactor: 0.75,
                             child: Image.asset(
                               'assets/img/Mapa.png',
                               fit: BoxFit.contain,
@@ -284,9 +284,18 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                                     crossAxisCount: 4,
                                     children: zona(tamB, B),
                                   ),
-                                  GridView.count(crossAxisCount: 4, children: zona(tamC, C)),
-                                  GridView.count(crossAxisCount: 4, children: zona(tamD, D)),
-                                  GridView.count(crossAxisCount: 4, children: zona(tamE, E)),
+                                  GridView.count(
+                                    crossAxisCount: 4,
+                                    children: zona(tamC, C),
+                                  ),
+                                  GridView.count(
+                                    crossAxisCount: 4,
+                                    children: zona(tamD, D),
+                                  ),
+                                  GridView.count(
+                                    crossAxisCount: 4,
+                                    children: zona(tamE, E),
+                                  ),
                                 ],
                               ),
                             ),

@@ -24,12 +24,13 @@ Future<void> funcionSession(context) async {
   String? correo = await getSessionCorreo();
   if (await getExistSession() && RegExp(r'@ulagos.cl').hasMatch(correo.toString())) {
     final testRut = await _db.execute("SELECT guar_rut FROM guardia WHERE guar_correo='${correo.toString()}'");
+    String? authNombreFuture = await getSessionNombre();
+    String authNombre = authNombreFuture.toString();
     String stringRut = testRut[0][0].toString();
-    print(stringRut);
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MenuGuardia(RUT: stringRut),
+        builder: (context) => MenuGuardia(RUT: stringRut, nombreUsuario: authNombre,),
       ),
     );
   } else if (await getExistSession() && RegExp(r'@alumnos.ulagos.cl').hasMatch(correo.toString())) {
@@ -103,7 +104,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context, rootNavigator: true).pop('dialog');
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => MenuGuardia(RUT: RUT)),
+        MaterialPageRoute(builder: (context) => MenuGuardia(RUT: RUT, nombreUsuario: authNombre)),
       );
     }
   }

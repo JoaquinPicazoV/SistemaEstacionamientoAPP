@@ -7,9 +7,9 @@ import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
 
 class ConfirmacionRealizada extends StatefulWidget {
-  final String RUT;
+  final String RUT, nombreUsuario;
+  const ConfirmacionRealizada({super.key, required this.RUT, required this.nombreUsuario});
 
-  const ConfirmacionRealizada({super.key, required this.RUT});
   @override
   _confirmacionRealizada createState() => _confirmacionRealizada();
 }
@@ -46,7 +46,7 @@ class _confirmacionRealizada extends State<ConfirmacionRealizada> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MenuGuardia(RUT: RUT),
+                      builder: (context) => MenuGuardia(RUT: RUT, nombreUsuario: widget.nombreUsuario),
                     ),
                   );
                 },
@@ -195,7 +195,7 @@ class _confirmacionRealizada extends State<ConfirmacionRealizada> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MenuGuardia(RUT: RUT),
+                            builder: (context) => MenuGuardia(RUT: RUT, nombreUsuario: widget.nombreUsuario),
                           ),
                         );
                       },

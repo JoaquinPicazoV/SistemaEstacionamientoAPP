@@ -19,7 +19,7 @@ class AnadirVehiculo extends StatefulWidget {
 class _AnadirVehiculo extends State<AnadirVehiculo> {
   late String nombreUsuario, RUT;
   TextEditingController patenteController = TextEditingController();
-  bool correcto = false, existe = false;
+  bool correcto = false, existe = false, existe2 = false;
 
   @override
   void initState() {
@@ -39,7 +39,13 @@ class _AnadirVehiculo extends State<AnadirVehiculo> {
       Navigator.of(context, rootNavigator: true).pop('dialog');
       return;
     }
-    await db.execute("INSERT INTO registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado) VALUES('$RUT','${patenteController.text}','inactivo')");
+    try {
+      await db.execute("INSERT INTO registrousuariovehiculo(regi_usua_rut, regi_vehi_patente, regi_estado) VALUES('$RUT','${patenteController.text}','inactivo')");
+    } catch (e) {
+      setState(() {
+        existe2 = true;
+      });
+    }
 
     Navigator.of(context, rootNavigator: true).pop('dialog');
     Navigator.push(
@@ -185,7 +191,7 @@ class _AnadirVehiculo extends State<AnadirVehiculo> {
                           ],
                         ),
                       ),
-                      if (existe)
+                      if (existe || existe2)
                         const Column(
                           children: [
                             SizedBox(
@@ -194,13 +200,6 @@ class _AnadirVehiculo extends State<AnadirVehiculo> {
                             ),
                             Text(
                               'Esta patente ya esta en uso.',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.red,
-                              ),
-                            ),
-                            Text(
-                              'Añadiendo a lista de vehiculos.',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.red,
