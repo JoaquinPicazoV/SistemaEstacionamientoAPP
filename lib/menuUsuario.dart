@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, file_names, library_private_types_in_public_api
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/anadir_vehiculo.dart';
 import 'package:flutter_application_1/usuarioMapa.dart';
 import 'package:flutter_application_1/actualizarVehiculo1.dart';
 import 'package:flutter_application_1/database.dart';
@@ -12,8 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:postgres/postgres.dart';
 
 class MenuUsuario extends StatefulWidget {
-  final String RUT;
-  final String nombreUsuario;
+  final String RUT, nombreUsuario;
 
   const MenuUsuario({super.key, required this.RUT, required this.nombreUsuario});
   @override
@@ -21,12 +19,13 @@ class MenuUsuario extends StatefulWidget {
 }
 
 class _MenuUsuarioState extends State<MenuUsuario> {
-  late String RUT = 'BUSCANDO';
-  late String nombreUsuario;
+  late String RUT, nombreUsuario;
+
   @override
   void initState() {
     RUT = widget.RUT;
     nombreUsuario = widget.nombreUsuario;
+    consultarDisponibilidad();
     super.initState();
   }
 
@@ -34,7 +33,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
   late Connection _db;
   String texto = 'Consultando disponibilidad...';
 
-  Future<void> ConsultarDisponibilidad() async {
+  Future<void> consultarDisponibilidad() async {
     _db = DatabaseHelper().connection;
 
     final results = await _db.execute("SELECT COUNT(*) FROM estacionamiento WHERE esta_estado = 'LIBRE'");
@@ -46,8 +45,6 @@ class _MenuUsuarioState extends State<MenuUsuario> {
 
   @override
   Widget build(BuildContext context) {
-    ConsultarDisponibilidad();
-
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {
@@ -232,7 +229,9 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 20),
+                                const SizedBox(
+                                  height: 20,
+                                ),
                                 FractionallySizedBox(
                                   widthFactor: 0.96,
                                   child: ElevatedButton.icon(
@@ -291,24 +290,23 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                ),
-                                FractionallySizedBox(
+                                /*FractionallySizedBox(
                                   widthFactor: 0.96,
                                   child: ElevatedButton.icon(
                                     onPressed: () {
-                                       Navigator.push(
+                                      Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AnadirVehiculo(RUT: widget.RUT, nombreUsuario: widget.nombreUsuario),
+                                          builder: (context) => TestMapa(
+                                            rut: widget.RUT,
+                                            nombreUsuario: widget.nombreUsuario,
+                                          ),
                                         ),
                                       );
                                     },
-                                    icon: const Icon(Icons.account_circle_sharp, color: Colors.white),
+                                    icon: const Icon(Icons.directions_car, color: Colors.white),
                                     label: const Text(
-                                      'DATOS',
+                                      'MAPA',
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     style: ButtonStyle(
@@ -320,7 +318,7 @@ class _MenuUsuarioState extends State<MenuUsuario> {
                                       ),
                                     ),
                                   ),
-                                ),
+                                ),*/
                               ],
                             ),
                           ],

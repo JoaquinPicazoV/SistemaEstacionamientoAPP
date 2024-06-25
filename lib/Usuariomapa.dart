@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, non_constant_identifier_names, library_private_types_in_public_api
+// ignore_for_file: file_names, non_constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/codigoReserva.dart';
@@ -10,75 +10,25 @@ import 'package:flutter_svg/svg.dart';
 import 'package:postgres/postgres.dart';
 
 class UsuarioMapa extends StatefulWidget {
-  final String RUT;
-  final String nombreUsuario;
+  final String RUT, nombreUsuario;
 
   const UsuarioMapa({super.key, required this.RUT, required this.nombreUsuario});
   @override
-  _UsuarioMapa createState() => _UsuarioMapa();
+  UsuarioMapaState createState() => UsuarioMapaState();
 }
 
-class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixin {
-  late String RUT = '';
+class UsuarioMapaState extends State<UsuarioMapa> with SingleTickerProviderStateMixin {
+  late String RUT;
   late Connection _db;
-  int tamA = 0, tamB = 0, tamC = 0, tamD = 0, tamE = 0;
+  int tamA = 0, tamB = 0, tamC = 0, tamD = 0, tamE = 0, nEst = 0, dispA = 0, dispB = 0, dispC = 0, dispD = 0, dispE = 0;
   List<String> A = [], B = [], C = [], D = [], E = [];
-  int nEst = 0;
   bool cargando = true;
-
-  Future<void> ObtenerTam() async {
-    _db = DatabaseHelper().connection;
-
-    final a = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN A'");
-    final b = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN B'");
-    final c = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN C'");
-    final d = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN D'");
-    final e = await _db.execute("SELECT secc_capacidad FROM SECCION WHERE secc_nombre = 'SECCIÓN E'");
-
-    final estacionamientos = await _db.execute('SELECT esta_estado FROM ESTACIONAMIENTO ORDER BY esta_numero ASC');
-
-    int posInicial = 0;
-
-    // Sección A
-    for (int i = 0; i < int.parse(a[0][0].toString()); i++) {
-      A.add(estacionamientos[posInicial + i][0].toString());
-    }
-    posInicial += int.parse(a[0][0].toString());
-    tamA = int.parse(a[0][0].toString());
-
-    // Sección B
-    for (int i = 0; i < int.parse(b[0][0].toString()); i++) {
-      B.add(estacionamientos[posInicial + i][0].toString());
-    }
-    posInicial += int.parse(b[0][0].toString());
-    tamB = int.parse(b[0][0].toString());
-
-    // Sección C
-    for (int i = 0; i < int.parse(c[0][0].toString()); i++) {
-      C.add(estacionamientos[posInicial + i][0].toString());
-    }
-    posInicial += int.parse(c[0][0].toString());
-    tamC = int.parse(c[0][0].toString());
-
-    // Sección D
-    for (int i = 0; i < int.parse(d[0][0].toString()); i++) {
-      D.add(estacionamientos[posInicial + i][0].toString());
-    }
-    posInicial += int.parse(d[0][0].toString());
-    tamD = int.parse(d[0][0].toString());
-
-    // Sección E
-    for (int i = 0; i < int.parse(e[0][0].toString()); i++) {
-      E.add(estacionamientos[posInicial + i][0].toString());
-    }
-    posInicial += int.parse(e[0][0].toString());
-    tamE = int.parse(e[0][0].toString());
-
-    setState(() {});
-  }
 
   Future<void> ObtenerTam2() async {
     _db = DatabaseHelper().connection;
+
+    final disponibles =
+        await _db.execute("SELECT COUNT(*) AS disponibles FROM estacionamiento WHERE esta_estado = 'LIBRE' AND esta_secc_id IN ('1','2','3','4','5') GROUP BY esta_secc_id ORDER BY esta_secc_id");
 
     final capacidad = await _db.execute("SELECT secc_capacidad FROM SECCION");
 
@@ -90,6 +40,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     for (int i = 0; i < int.parse(capacidad[0][0].toString()); i++) {
       A.add(estacionamientos[posInicial + i][0].toString());
     }
+    dispA = int.parse(disponibles[0][0].toString());
     posInicial += int.parse(capacidad[0][0].toString());
     tamA = int.parse(capacidad[0][0].toString());
 
@@ -97,6 +48,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     for (int i = 0; i < int.parse(capacidad[1][0].toString()); i++) {
       B.add(estacionamientos[posInicial + i][0].toString());
     }
+    dispB = int.parse(disponibles[1][0].toString());
     posInicial += int.parse(capacidad[1][0].toString());
     tamB = int.parse(capacidad[1][0].toString());
 
@@ -104,6 +56,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     for (int i = 0; i < int.parse(capacidad[2][0].toString()); i++) {
       C.add(estacionamientos[posInicial + i][0].toString());
     }
+    dispC = int.parse(disponibles[2][0].toString());
     posInicial += int.parse(capacidad[2][0].toString());
     tamC = int.parse(capacidad[2][0].toString());
 
@@ -111,6 +64,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     for (int i = 0; i < int.parse(capacidad[3][0].toString()); i++) {
       D.add(estacionamientos[posInicial + i][0].toString());
     }
+    dispD = int.parse(disponibles[3][0].toString());
     posInicial += int.parse(capacidad[3][0].toString());
     tamD = int.parse(capacidad[3][0].toString());
 
@@ -118,11 +72,12 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     for (int i = 0; i < int.parse(capacidad[4][0].toString()); i++) {
       E.add(estacionamientos[posInicial + i][0].toString());
     }
+    dispE = int.parse(disponibles[4][0].toString());
     posInicial += int.parse(capacidad[4][0].toString());
     tamE = int.parse(capacidad[4][0].toString());
-
-    cargando = false;
-    setState(() {});
+    setState(() {
+      cargando = false;
+    });
   }
 
   late String nombreUsuario;
@@ -265,6 +220,52 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               Tab(text: 'E'),
                             ],
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '$dispA/$tamA',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '$dispB/$tamB',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '$dispC/$tamC',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '$dispD/$tamD',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Flexible(
+                                flex: 1,
+                                fit: FlexFit.tight,
+                                child: Text(
+                                  '$dispE/$tamE',
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
                           if (cargando == true)
                             const Expanded(
                               child: Center(
@@ -276,26 +277,11 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                               child: TabBarView(
                                 controller: ControlladorBarra,
                                 children: [
-                                  GridView.count(
-                                    crossAxisCount: 4,
-                                    children: zona(tamA, A),
-                                  ),
-                                  GridView.count(
-                                    crossAxisCount: 4,
-                                    children: zona(tamB, B),
-                                  ),
-                                  GridView.count(
-                                    crossAxisCount: 4,
-                                    children: zona(tamC, C),
-                                  ),
-                                  GridView.count(
-                                    crossAxisCount: 4,
-                                    children: zona(tamD, D),
-                                  ),
-                                  GridView.count(
-                                    crossAxisCount: 4,
-                                    children: zona(tamE, E),
-                                  ),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamA, A, 1)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamB, B, tamA + 1)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamC, C, tamA + tamB + 1)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamD, D, tamA + tamB + tamC + 1)),
+                                  GridView.count(crossAxisCount: 4, children: zona(tamE, E, tamA + tamB + tamC + tamD + 1)),
                                 ],
                               ),
                             ),
@@ -417,13 +403,37 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
                           ),
                           ElevatedButton.icon(
                             onPressed: () {
-                              print(nEst + 1);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CodigoReserva(nEst: (nEst + 1).toString(), RUT: RUT),
-                                ),
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Confirmación'),
+                                    content: Text('Estacionamiento: ${nEst + 1}'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: const Text('Cancelar'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          clearSession();
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => CodigoReserva(nEst: (nEst + 1).toString(), RUT: RUT, nombreUsuario: nombreUsuario),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Si'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
+                              print(nEst + 1);
                             },
                             icon: const Icon(
                               Icons.add,
@@ -480,11 +490,11 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
     );
   }
 
-  List<Widget> zona(int tamSeccion, List<String> seccion) {
+  List<Widget> zona(int tamano, List<String> zona, int suma) {
     return List.generate(
-      tamSeccion,
+      tamano,
       (index) {
-        String estado = seccion[index];
+        String estado = zona[index];
         bool ocupado = estado == "OCUPADO";
         bool noDisp = estado == "NO DISPONIBLE";
         bool reservado = estado == 'RESERVADO';
@@ -494,7 +504,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
           onTap: () {
             if (!ocupado && !noDisp && !reservado) {
               _handleTap(index);
-              nEst = index;
+              nEst = index + suma - 1;
             }
           },
           child: Container(
@@ -516,7 +526,7 @@ class _UsuarioMapa extends State<UsuarioMapa> with SingleTickerProviderStateMixi
             ),
             child: Center(
               child: Text(
-                (index + 1).toString(),
+                (index + suma).toString(),
                 style: TextStyle(
                   color: seleccionado ? Colors.white : Colors.black,
                   fontWeight: FontWeight.bold,

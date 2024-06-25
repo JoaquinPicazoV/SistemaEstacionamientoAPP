@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api, camel_case_types, use_build_context_synchronously, file_names
+// ignore_for_file: non_constant_identifier_names, camel_case_types, use_build_context_synchronously, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/menuUsuario.dart';
@@ -8,14 +8,13 @@ import 'package:flutter_application_1/historialGuardiaResultados.dart';
 import 'package:intl/intl.dart';
 
 class UsuarioReservas extends StatefulWidget {
-  final String RUT;
-  final String nombreUsuario;
+  final String RUT, nombreUsuario;
   const UsuarioReservas({super.key, required this.RUT, required this.nombreUsuario});
   @override
-  _usuarioReservas createState() => _usuarioReservas();
+  usuarioReservas createState() => usuarioReservas();
 }
 
-class _usuarioReservas extends State<UsuarioReservas> with TickerProviderStateMixin {
+class usuarioReservas extends State<UsuarioReservas> with TickerProviderStateMixin {
   late Connection _db;
   List<List<dynamic>> reservas = [];
   late TabController _tabController;
@@ -394,7 +393,12 @@ class _usuarioReservas extends State<UsuarioReservas> with TickerProviderStateMi
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MenuUsuario(RUT: widget.RUT, nombreUsuario: nombreUsuario),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(12),
@@ -597,7 +601,12 @@ class _usuarioReservas extends State<UsuarioReservas> with TickerProviderStateMi
                     ),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MenuUsuario(RUT: widget.RUT, nombreUsuario: nombreUsuario),
+                      ),
+                    );
                   },
                   child: Container(
                     padding: const EdgeInsets.all(12),
