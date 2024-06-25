@@ -21,7 +21,7 @@ class ActualizarVehiculo extends StatefulWidget {
 
 class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
   List<Map<String, dynamic>> _vehicles = [];
-  bool _isLoading = true;
+  bool _isLoading = true, activo = true;
   late String RUT = 'BUSCANDO';
   late String nombreUsuario;
   @override
@@ -32,11 +32,31 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
     super.initState();
   }
 
+  Future<void> activar(patente) async {
+    Connection _db = DatabaseHelper().connection;
+    await _db.execute("UPDATE registrousuariovehiculo SET regi_estado = 'activo' WHERE regi_usua_rut = '$RUT' AND regi_vehi_patente = '$patente'");
+  }
+
+  Future<void> desactivar(patente) async {
+    Connection _db = DatabaseHelper().connection;
+    await _db.execute("UPDATE registrousuariovehiculo SET regi_estado = 'inactivo' WHERE regi_usua_rut = '$RUT' AND regi_vehi_patente = '$patente'");
+  }
+
+  Future<void> elimina(patente) async {
+    Connection _db = DatabaseHelper().connection;
+    await _db.execute("DELETE FROM registrousuariovehiculo WHERE regi_usua_rut = '$RUT' AND regi_vehi_patente = '$patente'");
+    try {
+      await _db.execute("DELETE FROM vehiculo WHERE vehi_patente = '$patente'");
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<void> _connectToDatabase() async {
     Connection _db = DatabaseHelper().connection;
 
     final results = await _db.execute(
-        "SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio FROM vehiculo v JOIN registrousuariovehiculo ruv ON v.vehi_patente = ruv.regi_vehi_patente WHERE ruv.regi_usua_rut = '$RUT'");
+        "SELECT v.vehi_patente, v.vehi_marca, v.vehi_modelo, v.vehi_anio, ruv.regi_estado FROM vehiculo v JOIN registrousuariovehiculo ruv ON v.vehi_patente = ruv.regi_vehi_patente WHERE ruv.regi_usua_rut = '$RUT'");
     setState(() {
       _vehicles = [];
       for (List<dynamic> row in results) {
@@ -45,6 +65,7 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
           'vehi_marca': row[1],
           'vehi_modelo': row[2],
           'vehi_anio': row[3],
+          'vehi_activo': row[4],
         };
         _vehicles.add(vehicleMap);
       }
@@ -222,12 +243,16 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
   }
 
   Widget _buildVehicleContainer(Map<String, dynamic> vehicleData) {
+    Color colores = Colors.green;
+    if (vehicleData["vehi_activo"] == 'inactivo') {
+      colores = Colors.red;
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.green, width: 2), // Ajusta el ancho del borde aquí
+        border: Border.all(color: colores, width: 2), // Ajusta el ancho del borde aquí
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +274,10 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
                 );
               }, Colors.blue), // Color verde para el botón "Editar"
               _buildButton("Eliminar", Icons.delete, () {
-                // Aquí va la lógica para eliminar el vehículo
+                setState(() {
+                  elimina(vehicleData["vehi_patente"].toString().toUpperCase());
+                  _connectToDatabase();
+                });
               }, Colors.red), // Color rojo para el botón "Eliminar"
             ],
           ),
@@ -257,8 +285,20 @@ class _ActualizarVehiculoState extends State<ActualizarVehiculo> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildButton("Usar", Icons.verified, () {
-                // Aquí va la lógica para usar el vehículo
+              _buildButton("Usar", Icons.verified, () async {
+                if (vehicleData["vehi_activo"] == 'inactivo') {
+                  activar(vehicleData["vehi_patente"].toString().toUpperCase());
+                  setState(() {
+                    vehicleData['vehi_activo'] = 'activo';
+                    colores = Colors.green;
+                  });
+                } else {
+                  desactivar(vehicleData["vehi_patente"].toString().toUpperCase());
+                  setState(() {
+                    vehicleData['vehi_activo'] = 'inactivo';
+                    colores = Colors.red;
+                  });
+                }
               }, Colors.green), // Color azul para el botón "Usar"
             ],
           ),

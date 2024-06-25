@@ -21,7 +21,7 @@ class CodigoReserva extends StatefulWidget {
 
 class _codigoReserva extends State<CodigoReserva> {
   late String nEst, nombreUsuario, RUT;
-  bool cargando = true, cancelar = false;
+  bool cargando = true, cancelar = false, noPatente = false;
   @override
   void initState() {
     RUT = widget.RUT;
@@ -60,25 +60,32 @@ class _codigoReserva extends State<CodigoReserva> {
   Future<void> reservar(String RUT) async {
     Connection _db = DatabaseHelper().connection;
     DateTime actual = DateTime.now();
-    print('actual: $actual');
     String fechaFormato = DateFormat('MM-dd-yy').format(actual);
-
     String horaFormato = DateFormat('HH:mm:ss').format(actual);
 
-    final no = await _db.execute("SELECT 1 FROM reserva WHERE rese_fecha = DATE '$fechaFormato' AND rese_hora_inicio + INTERVAL '30 minutes' > TIME '$horaFormato'AND rese_usua_rut = '$RUT' LIMIT 1");
-    print(no[0][0]);
-    if (no[0][0] == 1) {
+    final no =
+        await _db.execute("SELECT COUNT(*) FROM reserva WHERE rese_fecha = DATE '$fechaFormato' AND rese_hora_inicio + INTERVAL '30 minutes' > TIME '$horaFormato'AND rese_usua_rut = '$RUT' LIMIT 1");
+    if (int.parse(no[0][0].toString()) >= 1) {
       setState(() {
         cancelar = true;
         cargando = false;
       });
     } else {
+      cancelar = false;
       final patente = await _db.execute("SELECT regi_vehi_patente FROM REGISTROUSUARIOVEHICULO WHERE regi_usua_rut='$RUT' AND regi_estado='activo'");
       final nEstacionamiento = nEst;
       final ID = await _db.execute("SELECT esta_id FROM ESTACIONAMIENTO WHERE esta_numero='$nEstacionamiento'");
       final rutGuardia = '21008896-2';
 
-      print(patente[0][0]);
+      try {
+        print(patente[0][0]);
+      } catch (e) {
+        setState(() {
+          cargando = false;
+          noPatente = true;
+          return;
+        });
+      }
       print(ID[0][0]);
       print(fechaFormato);
       print(horaFormato);
@@ -237,10 +244,20 @@ class _codigoReserva extends State<CodigoReserva> {
                             color: Colors.red,
                           ),
                         ),
+                      if (!cargando && noPatente)
+                        const Text(
+                          'No tiene vehiculos activos',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red,
+                          ),
+                        ),
+
                       if (cargando) const CircularProgressIndicator(),
 
                       const SizedBox(height: 20),
-                      if (!cargando && !cancelar)
+                      if (!cargando && !cancelar && !noPatente)
                         ElevatedButton.icon(
                           onPressed: () {
                             cancelarReserva(RUT);
